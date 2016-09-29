@@ -7,28 +7,30 @@ package ru.terrakok.cicerone;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import ru.terrakok.cicerone.commands.Back;
+import ru.terrakok.cicerone.commands.BackToScreen;
+import ru.terrakok.cicerone.commands.Command;
+import ru.terrakok.cicerone.commands.Forward;
+import ru.terrakok.cicerone.commands.NewChain;
+import ru.terrakok.cicerone.commands.NewRoot;
+import ru.terrakok.cicerone.commands.SystemMessage;
+
 public class Cicerone implements Router, NavigatorHolder {
     private Navigator navigator;
-    private Queue<RouterCommand> pendingCommands = new LinkedList<>();
-
-    public Router getRouter() {
-        return this;
-    }
-
-    public NavigatorHolder getNavigatorHolder() {
-        return this;
-    }
+    private Queue<Command> pendingCommands = new LinkedList<>();
 
     @Override
     public void setNavigator(Navigator navigator) {
         this.navigator = navigator;
-        while (!pendingCommands.isEmpty()) {
-            executeCommand(pendingCommands.poll());
+        if (navigator != null) {
+            while (!pendingCommands.isEmpty()) {
+                executeCommand(pendingCommands.poll());
+            }
         }
     }
 
     @Override
-    public void clearNavigator() {
+    public void removeNavigator() {
         this.navigator = null;
     }
 
@@ -39,12 +41,7 @@ public class Cicerone implements Router, NavigatorHolder {
 
     @Override
     public void navigateTo(String screenKey, Object data) {
-        executeCommand(new RouterCommand(
-                RouterCommandType.NAVIGATE_TO,
-                screenKey,
-                data,
-                null
-        ));
+        executeCommand(new Forward(screenKey, data));
     }
 
     @Override
@@ -54,12 +51,7 @@ public class Cicerone implements Router, NavigatorHolder {
 
     @Override
     public void newScreenChain(String screenKey, Object data) {
-        executeCommand(new RouterCommand(
-                RouterCommandType.NEW_SCREEN_CHAIN,
-                screenKey,
-                data,
-                null
-        ));
+        executeCommand(new NewChain(screenKey, data));
     }
 
     @Override
@@ -69,12 +61,7 @@ public class Cicerone implements Router, NavigatorHolder {
 
     @Override
     public void newRootScreen(String screenKey, Object data) {
-        executeCommand(new RouterCommand(
-                RouterCommandType.NEW_ROOT_SCREEN,
-                screenKey,
-                data,
-                null
-        ));
+        executeCommand(new NewRoot(screenKey, data));
     }
 
     @Override
@@ -84,119 +71,36 @@ public class Cicerone implements Router, NavigatorHolder {
 
     @Override
     public void replaceScreen(String screenKey, Object data) {
-        executeCommand(new RouterCommand(
-                RouterCommandType.REPLACE_SCREEN,
-                screenKey,
-                data,
-                null
-        ));
+        executeCommand(new Back());
+        executeCommand(new Forward(screenKey, data));
     }
 
     @Override
     public void backToScreen(String screenKey) {
-        executeCommand(new RouterCommand(
-                RouterCommandType.BACK_TO_SCREEN,
-                screenKey,
-                null,
-                null
-        ));
+        executeCommand(new BackToScreen(screenKey));
     }
 
     @Override
     public void exit() {
-        executeCommand(new RouterCommand(
-                RouterCommandType.EXIT,
-                null,
-                null,
-                null
-        ));
+        executeCommand(new Back());
     }
 
     @Override
     public void exitWithMessage(String message) {
-        executeCommand(new RouterCommand(
-                RouterCommandType.EXIT_WITH_MESSAGE,
-                null,
-                null,
-                message
-        ));
+        executeCommand(new Back());
+        executeCommand(new SystemMessage(message));
     }
 
     @Override
     public void showSystemMessage(String message) {
-        executeCommand(new RouterCommand(
-                RouterCommandType.SHOW_SYSTEM_MESSAGE,
-                null,
-                null,
-                message
-        ));
+        executeCommand(new SystemMessage(message));
     }
 
-    private void executeCommand(RouterCommand command) {
+    private void executeCommand(Command command) {
         if (navigator != null) {
-            switch (command.type) {
-                case NAVIGATE_TO:
-                    navigator.applyNewTransition(new Navigator.Transition(command.screenKey, Navigator.Transition.Type.DEFAULT, command.data));
-                    break;
-                case NEW_SCREEN_CHAIN:
-                    navigator.applyNewTransition(new Navigator.Transition(command.screenKey, Navigator.Transition.Type.NEW_CHAIN, command.data));
-                    break;
-                case NEW_ROOT_SCREEN:
-                    navigator.applyNewTransition(new Navigator.Transition(command.screenKey, Navigator.Transition.Type.NEW_ROOT, command.data));
-                    break;
-                case REPLACE_SCREEN:
-                    navigator.rollBackLastTransition();
-                    navigator.applyNewTransition(new Navigator.Transition(command.screenKey, Navigator.Transition.Type.DEFAULT, command.data));
-                    break;
-                case BACK_TO_SCREEN:
-                    navigator.rollBackToScreen(command.screenKey);
-                    break;
-                case EXIT:
-                    navigator.rollBackLastTransition();
-                    break;
-                case EXIT_WITH_MESSAGE:
-                    navigator.rollBackLastTransition();
-                    navigator.showSystemMessage(command.message);
-                    break;
-                case SHOW_SYSTEM_MESSAGE:
-                    navigator.showSystemMessage(command.message);
-                    break;
-            }
+            navigator.applyNewCommand(command);
         } else {
             pendingCommands.add(command);
-        }
-    }
-
-    private enum RouterCommandType {
-        NAVIGATE_TO,
-        NEW_SCREEN_CHAIN,
-        NEW_ROOT_SCREEN,
-        REPLACE_SCREEN,
-        BACK_TO_SCREEN,
-        EXIT,
-        EXIT_WITH_MESSAGE,
-        SHOW_SYSTEM_MESSAGE
-    }
-
-    private static class RouterCommand {
-        private RouterCommandType type;
-        private String screenKey;
-        private Object data;
-        private String message;
-
-        RouterCommand(RouterCommandType type, String screenKey, Object data, String message) {
-            this.type = type;
-            this.screenKey = screenKey;
-            this.data = data;
-            this.message = message;
-        }
-
-        @Override
-        public String toString() {
-            return type.toString() + " ["
-                    + screenKey
-                    + (message != null ? (" (" + message + ")") : "")
-                    + "]";
         }
     }
 }

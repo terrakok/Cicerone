@@ -7,5 +7,5 @@ package ru.terrakok.cicerone;
 public interface NavigatorHolder {
     void setNavigator(Navigator navigator);
 
-    void clearNavigator();
+    void removeNavigator();
 }
