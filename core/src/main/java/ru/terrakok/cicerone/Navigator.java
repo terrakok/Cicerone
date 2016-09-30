@@ -7,5 +7,5 @@ package ru.terrakok.cicerone;
 import ru.terrakok.cicerone.commands.Command;
 
 public interface Navigator {
-    void applyNewCommand(Command command);
+    void applyCommand(Command command);
 }

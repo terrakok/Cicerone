@@ -98,7 +98,7 @@ public class Cicerone implements Router, NavigatorHolder {
 
     private void executeCommand(Command command) {
         if (navigator != null) {
-            navigator.applyNewCommand(command);
+            navigator.applyCommand(command);
         } else {
             pendingCommands.add(command);
         }
