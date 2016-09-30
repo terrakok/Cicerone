@@ -22,10 +22,10 @@ public class Cicerone implements Router, NavigatorHolder {
     @Override
     public void setNavigator(Navigator navigator) {
         this.navigator = navigator;
-        if (navigator != null) {
-            while (!pendingCommands.isEmpty()) {
+        while (!pendingCommands.isEmpty()) {
+            if (navigator != null) {
                 executeCommand(pendingCommands.poll());
-            }
+            } else break;
         }
     }
 
@@ -96,7 +96,7 @@ public class Cicerone implements Router, NavigatorHolder {
         executeCommand(new SystemMessage(message));
     }
 
-    private void executeCommand(Command command) {
+    protected void executeCommand(Command command) {
         if (navigator != null) {
             navigator.applyCommand(command);
         } else {
