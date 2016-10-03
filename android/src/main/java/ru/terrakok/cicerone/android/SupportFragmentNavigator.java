@@ -33,7 +33,9 @@ public abstract class SupportFragmentNavigator implements Navigator {
                     .addToBackStack(((Forward) command).getScreenKey())
                     .commit();
         } else if (command instanceof Back) {
-            fragmentManager.popBackStackImmediate();
+            if (fragmentManager.getBackStackEntryCount() > 0) {
+                fragmentManager.popBackStackImmediate();
+            } else exit();
         } else if (command instanceof Replace) {
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
@@ -76,4 +78,6 @@ public abstract class SupportFragmentNavigator implements Navigator {
     protected abstract Fragment createFragment(String key, Object data);
 
     protected abstract void showSystemMessage(String message);
+
+    protected abstract void exit();
 }
