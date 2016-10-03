@@ -21,7 +21,7 @@ public interface Router {
 
     void replaceScreen(String screenKey, Object data);
 
-    void backToScreen(String screenKey);
+    void backTo(String screenKey);
 
     void exit();
 

@@ -4,10 +4,10 @@ package ru.terrakok.cicerone.commands;
  * Created by terrakok on 29.09.16.
  */
 
-public class BackToScreen implements Command{
+public class BackTo implements Command{
     private String screenKey;
 
-    public BackToScreen(String screenKey) {
+    public BackTo(String screenKey) {
         this.screenKey = screenKey;
     }
 
