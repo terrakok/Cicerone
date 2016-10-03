@@ -1,0 +1,16 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion '24'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 24
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-fragment:24.2.1'
+    compile project(':library')
+}
