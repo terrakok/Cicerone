@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+
+repositories {
+    jcenter()
+}
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion '24'
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0.0"
+        applicationId "ru.terrakok.cicerone.sample"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+        }
+    }
+}
+
+ext {
+    supportLibraryVersion = "24.2.1"
+    moxyVersion = "1.0.0"
+}
+
+dependencies {
+    // Support libraries
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:design:$supportLibraryVersion"
+
+    //MVP Moxy
+    compile "com.arello-mobile:moxy:$moxyVersion"
+    compile "com.arello-mobile:moxy-android:$moxyVersion"
+    provided "com.arello-mobile:moxy-compiler:$moxyVersion"
+
+    //Cicerone
+    compile project(':android')
+}
