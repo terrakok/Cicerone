@@ -1,16 +1,7 @@
-apply plugin: 'com.android.library'
-
-android {
-    compileSdkVersion 24
-    buildToolsVersion '24'
-
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 24
-    }
-}
+apply plugin: 'java'
 
 dependencies {
-    compile 'com.android.support:support-fragment:24.2.1'
+    compileOnly 'com.google.android:android:4.0.1.2'
+    compileOnly project(':stub-appcompat')
     compile project(':library')
 }

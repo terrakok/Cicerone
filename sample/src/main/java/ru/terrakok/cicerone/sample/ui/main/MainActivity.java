@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Navigator navigator = new SupportFragmentNavigator(getSupportFragmentManager(), R.id.main_container) {
         @Override
-        protected Fragment createFragment(String key, Object data) {
+        protected Fragment createFragment(String screenKey, Object data) {
             return SampleFragment.getNewInstance((int) data);
         }
 

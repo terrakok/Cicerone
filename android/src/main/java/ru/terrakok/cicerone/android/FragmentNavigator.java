@@ -75,7 +75,7 @@ public abstract class FragmentNavigator implements Navigator {
         }
     }
 
-    protected abstract Fragment createFragment(String key, Object data);
+    protected abstract Fragment createFragment(String screenKey, Object data);
 
     protected abstract void showSystemMessage(String message);
 
