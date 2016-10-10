@@ -6,21 +6,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-
-import java.util.List;
 
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.mvp.main.SamplePresenter;
 import ru.terrakok.cicerone.sample.mvp.main.SampleView;
-import ru.terrakok.cicerone.sample.ui.global.MvpFragment;
 
 /**
  * Created by terrakok 01.10.16
  */
-public class SampleFragment extends MvpFragment implements SampleView {
+public class SampleFragment extends MvpAppCompatFragment implements SampleView {
     private static final String EXTRA_NUMBER = "extra_number";
 
     private Toolbar toolbar;

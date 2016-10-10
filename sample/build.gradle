@@ -35,11 +35,11 @@ ext {
 dependencies {
     // Support libraries
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
-    compile "com.android.support:design:$supportLibraryVersion"
 
     //MVP Moxy
     compile "com.arello-mobile:moxy:$moxyVersion"
     compile "com.arello-mobile:moxy-android:$moxyVersion"
+    compile "com.arello-mobile:moxy-app-compat:$moxyVersion"
     provided "com.arello-mobile:moxy-compiler:$moxyVersion"
 
     //Cicerone

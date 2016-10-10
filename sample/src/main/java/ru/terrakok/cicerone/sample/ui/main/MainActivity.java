@@ -3,9 +3,10 @@ package ru.terrakok.cicerone.sample.ui.main;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.arellomobile.mvp.MvpAppCompatActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import ru.terrakok.cicerone.sample.Screens;
 /**
  * Created by terrakok 01.10.16
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MvpAppCompatActivity {
     private static final String STATE_SCREEN_NAMES = "state_screen_names";
     private List<String> screenNames = new ArrayList<>();
     private TextView screensSchemeTV;
