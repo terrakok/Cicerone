@@ -5,7 +5,8 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 /**
- * Created by terrakok 01.10.16
+ * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * on 11.10.16
  */
 
 @StateStrategyType(AddToEndSingleStrategy.class)

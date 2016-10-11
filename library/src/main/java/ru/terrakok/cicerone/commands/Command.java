@@ -1,7 +1,8 @@
 package ru.terrakok.cicerone.commands;
 
 /**
- * Created by terrakok on 29.09.16.
+ * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * on 11.10.16
  */
 
 public interface Command {

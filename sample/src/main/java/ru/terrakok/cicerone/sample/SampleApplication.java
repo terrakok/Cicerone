@@ -7,8 +7,10 @@ import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 
 /**
- * Created by terrakok 01.10.16
+ * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * on 11.10.16
  */
+
 public class SampleApplication extends MvpApplication {
     public static SampleApplication INSTANCE;
     private Cicerone cicerone;

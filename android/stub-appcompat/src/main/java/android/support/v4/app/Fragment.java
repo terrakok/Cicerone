@@ -3,8 +3,10 @@ package android.support.v4.app;
 import android.os.Bundle;
 
 /**
- * Created by terrakok 10.10.16
+ * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * on 11.10.16
  */
+
 public class Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		throw new RuntimeException("Stub!");

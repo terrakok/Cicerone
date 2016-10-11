@@ -1,8 +1,10 @@
 package android.support.v4.app;
 
 /**
- * Created by terrakok 10.10.16
+ * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * on 11.10.16
  */
+
 public class FragmentManager {
 
     public FragmentTransaction beginTransaction() {

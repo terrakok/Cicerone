@@ -1,9 +1,5 @@
 package ru.terrakok.cicerone;
 
-/*
- * Created by Konstantin Tckhovrebov (aka terrakok) on 29.09.16 17:00.
- */
-
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -13,6 +9,11 @@ import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.commands.SystemMessage;
+
+/**
+ * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * on 11.10.16
+ */
 
 public class Cicerone implements Router, NavigatorHolder {
     private Navigator navigator;

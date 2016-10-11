@@ -13,7 +13,8 @@ import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
 
 /**
- * Created by terrakok 01.10.16
+ * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * on 11.10.16
  */
 
 @InjectViewState

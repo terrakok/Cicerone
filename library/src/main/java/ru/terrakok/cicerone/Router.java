@@ -1,7 +1,8 @@
 package ru.terrakok.cicerone;
 
-/*
- * Created by Konstantin Tckhovrebov (aka terrakok) on 29.09.16 17:00.
+/**
+ * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * on 11.10.16
  */
 
 /**

@@ -12,7 +12,8 @@ import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.commands.SystemMessage;
 
 /**
- * Created by terrakok on 03.10.16.
+ * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * on 11.10.16
  */
 
 public abstract class SupportFragmentNavigator implements Navigator {

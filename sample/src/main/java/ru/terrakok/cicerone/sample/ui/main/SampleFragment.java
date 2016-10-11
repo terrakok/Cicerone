@@ -15,8 +15,10 @@ import ru.terrakok.cicerone.sample.mvp.main.SamplePresenter;
 import ru.terrakok.cicerone.sample.mvp.main.SampleView;
 
 /**
- * Created by terrakok 01.10.16
+ * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * on 11.10.16
  */
+
 public class SampleFragment extends MvpAppCompatFragment implements SampleView {
     private static final String EXTRA_NUMBER = "extra_number";
 
