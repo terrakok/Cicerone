@@ -139,7 +139,8 @@ private Navigator navigator = new SupportFragmentNavigator(
 ```
 ## Sample
 Работу библиотеки, готовых навигаторов и другое можно посмотреть в _sample_ приложении.
-![](https://habrastorage.org/files/2f8/9c7/d60/2f89c7d602b746f2a991553960610ee6.gif)
+
+![](https://habrastorage.org/files/16d/2ee/6e3/16d2ee6e33a0428eb4f0dcab8ce6b294.gif)
 
 ## Dependencies
 ...
