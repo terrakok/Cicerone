@@ -8,6 +8,10 @@ package ru.terrakok.cicerone.commands;
 public class BackTo implements Command{
     private String screenKey;
 
+    /**
+     * Back to screen from current chain if it exist or return on root screen.
+     * @param screenKey screen key
+     */
     public BackTo(String screenKey) {
         this.screenKey = screenKey;
     }

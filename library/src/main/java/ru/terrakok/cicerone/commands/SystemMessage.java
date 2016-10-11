@@ -8,6 +8,10 @@ package ru.terrakok.cicerone.commands;
 public class SystemMessage implements Command {
     private String message;
 
+    /**
+     * Show system message.
+     * @param message message text
+     */
     public SystemMessage(String message) {
         this.message = message;
     }

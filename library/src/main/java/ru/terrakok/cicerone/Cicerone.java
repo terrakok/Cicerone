@@ -97,6 +97,11 @@ public class Cicerone implements Router, NavigatorHolder {
         executeCommand(new SystemMessage(message));
     }
 
+    /**
+     * Send navigation command to active navigator
+     * or add it to pending commands queue.
+     * @param command navigation command
+     */
     protected void executeCommand(Command command) {
         if (navigator != null) {
             navigator.applyCommand(command);

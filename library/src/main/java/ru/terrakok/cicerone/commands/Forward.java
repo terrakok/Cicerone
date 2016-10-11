@@ -9,6 +9,11 @@ public class Forward implements Command {
     private String screenKey;
     private Object transitionData;
 
+    /**
+     * Open new screen.
+     * @param screenKey screen key
+     * @param transitionData initial data
+     */
     public Forward(String screenKey, Object transitionData) {
         this.screenKey = screenKey;
         this.transitionData = transitionData;
