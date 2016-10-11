@@ -106,7 +106,7 @@ public class SampleApplication extends Application {
 ![](https://habrastorage.org/files/a45/4f4/c34/a454f4c340764632ad0669014ad5550d.png)
 + Replace - замена текущего экрана на новый  
 ![](https://habrastorage.org/files/4ae/95c/fee/4ae95cfee4c04f038ad17d358ab08d07.png)
-+ SystemMessage - показ системного сообщения (Allert, Toast, Snack и тд)  
++ SystemMessage - показ системного сообщения (Alert, Toast, Snack и тд)
 ![](https://habrastorage.org/files/6e7/1a6/4ed/6e71a64edec04079bf33faa7ab39606f.png)
 
 ## Готовые навигаторы
@@ -146,4 +146,16 @@ private Navigator navigator = new SupportFragmentNavigator(
 ...
 
 ## Лицензия
-[Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+=======
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
