@@ -139,4 +139,10 @@ private Navigator navigator = new SupportFragmentNavigator(
 ```
 ## Sample
 Работу библиотеки, готовых навигаторов и другое можно посмотреть в _sample_ приложении.
-![](https://habrastorage.org/files/a4e/1b6/9df/a4e1b69df646494987ea1e85858eba60.png)
+![](https://habrastorage.org/files/2f8/9c7/d60/2f89c7d602b746f2a991553960610ee6.gif)
+
+## Dependencies
+...
+
+## Лицензия
+[Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
