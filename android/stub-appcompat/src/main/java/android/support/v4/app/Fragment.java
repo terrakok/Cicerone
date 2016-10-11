@@ -1,6 +1,5 @@
 package android.support.v4.app;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 /**
@@ -31,7 +30,7 @@ public class Fragment {
 		throw new RuntimeException("Stub!");
 	}
 
-	public final Activity getActivity() {
+	public final FragmentActivity getActivity() {
 		throw new RuntimeException("Stub!");
 	}
 }
