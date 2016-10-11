@@ -99,15 +99,15 @@ public class SampleApplication extends Application {
 ## Команды навигатора
 Для большинства задач предоставленных в библиотеке команд должно хватить, но их всегда можно дополнить собственными!  
 + Forward - переход на новый экран  
-![](https://habrastorage.org/files/6e9/8b3/c61/6e98b3c61c104e35962c24fa0d470343.png)
+![](https://habrastorage.org/files/862/77e/b20/86277eb20b574dae8307ac4f64b0f090.png)
 + Back - возврат на предыдущий экран  
-![](https://habrastorage.org/files/2dc/5f1/d67/2dc5f1d672474ae78b6f5425f0488307.png)
+![](https://habrastorage.org/files/059/b63/2d3/059b632d3a7c4515a534b9e5e881c8f0.png)
 + BackTo - возврат к конкретному экрану в цепочке, либо на корневой, если указанный экран не найден  
-![](https://habrastorage.org/files/562/40d/4d6/56240d4d6e4844c9add9a973696519f6.png)
+![](https://habrastorage.org/files/a45/4f4/c34/a454f4c340764632ad0669014ad5550d.png)
 + Replace - замена текущего экрана на новый  
-![](https://habrastorage.org/files/2fe/f5c/b3e/2fef5cb3e24e4504a3bfd9352a9b0377.png)
+![](https://habrastorage.org/files/4ae/95c/fee/4ae95cfee4c04f038ad17d358ab08d07.png)
 + SystemMessage - показ системного сообщения (Allert, Toast, Snack и тд)  
-![](https://habrastorage.org/files/94f/31b/fa9/94f31bfa903c4551a4c6652d71f126e4.png)
+![](https://habrastorage.org/files/6e7/1a6/4ed/6e71a64edec04079bf33faa7ab39606f.png)
 
 ## Готовые навигаторы
 Пакет _android_ предоставляет готовые навигаторы для _Activity_.  
