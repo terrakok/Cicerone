@@ -11,6 +11,12 @@ import ru.terrakok.cicerone.commands.SystemMessage;
  * on 12.10.16
  */
 
+/**
+ * Router is the class for high-level navigation.
+ * Use it to perform needed transitions.<br/>
+ * This implementation covers almost all cases needed for the average app.
+ * Extend it if you need some tricky navigation.
+ */
 public class Router extends BaseRouter {
 
     public Router() {
@@ -104,8 +110,9 @@ public class Router extends BaseRouter {
     }
 
     /**
-     * Return to the previous screen in the chain.
-     * If no screens with passed screenKey will be found then return to the root.
+     * Return back to the needed screen from the chain.
+     * Behavior in the case when no needed screens found depends on
+     * the processing of the {@link BackTo} command in a {@link Navigator} implementation.
      *
      * @param screenKey
      */
@@ -115,6 +122,8 @@ public class Router extends BaseRouter {
 
     /**
      * Return to the previous screen in the chain.
+     * Behavior in the case when the current screen is the root depends on
+     * the processing of the {@link Back} command in a {@link Navigator} implementation.
      */
     public void exit() {
         executeCommand(new Back());

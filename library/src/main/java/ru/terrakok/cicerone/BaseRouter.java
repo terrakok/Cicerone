@@ -7,6 +7,10 @@ import ru.terrakok.cicerone.commands.Command;
  * on 12.10.16
  */
 
+/**
+ * BaseRouter is an abstract class to implement high-level navigation.
+ * Extend it to add needed transition methods.
+ */
 public abstract class BaseRouter {
     private CommandBuffer commandBuffer;
 
@@ -19,8 +23,9 @@ public abstract class BaseRouter {
     }
 
     /**
-     * Send navigation command to CommandBuffer.
-     * @param command navigation command
+     * Sends navigation command to {@link CommandBuffer}.
+     *
+     * @param command navigation command to execute
      */
     protected void executeCommand(Command command) {
         commandBuffer.executeCommand(command);

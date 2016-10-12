@@ -5,13 +5,17 @@ package ru.terrakok.cicerone.commands;
  * on 11.10.16
  */
 
+/**
+ * Opens new screen.
+ */
 public class Forward implements Command {
     private String screenKey;
     private Object transitionData;
 
     /**
-     * Open new screen.
-     * @param screenKey screen key
+     * Creates a {@link Forward} navigation command.
+     *
+     * @param screenKey      screen key
      * @param transitionData initial data
      */
     public Forward(String screenKey, Object transitionData) {
