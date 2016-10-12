@@ -5,10 +5,13 @@ package ru.terrakok.cicerone.commands;
  * on 11.10.16
  */
 
+/**
+ * Rolls back the last transition from the screens chain.
+ */
 public class Back implements Command {
-    
+
     /**
-     * Roll back last transition on screen chain.
+     * Creates a {@link Back} navigation command.
      */
     public Back() {
     }

@@ -5,13 +5,17 @@ package ru.terrakok.cicerone.commands;
  * on 11.10.16
  */
 
+/**
+ * Replaces the current screen.
+ */
 public class Replace implements Command {
     private String screenKey;
     private Object transitionData;
 
     /**
-     * Replace current screen.
-     * @param screenKey screen key
+     * Creates a {@link Replace} navigation command.
+     *
+     * @param screenKey      screen key
      * @param transitionData initial data
      */
     public Replace(String screenKey, Object transitionData) {

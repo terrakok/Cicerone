@@ -7,18 +7,19 @@ package ru.terrakok.cicerone;
 
 /**
  * Navigator holder interface.
- * Use it to provide Navigator for Cicerone.
+ * Use it to connect a {@link Navigator} to the {@link Cicerone}.
  */
 public interface NavigatorHolder {
 
     /**
-     * Set active Navigator for Cicerone and start receive commands.
+     * Set an active Navigator for the Cicerone and start receive commands.
+     *
      * @param navigator new active Navigator
      */
     void setNavigator(Navigator navigator);
 
     /**
-     * Remove current navigator and stop receive commands.
+     * Remove the current Navigator and stop receive commands.
      */
     void removeNavigator();
 }
