@@ -130,12 +130,6 @@ private Navigator navigator = new SupportFragmentNavigator(
     protected void exit() {
         finish();
     }
-    
-    @Override
-    public void applyCommand(Command command) {
-        super.applyCommand(command);
-        updateScreenNames(command);
-    }
 };
 ```
 ## Sample
