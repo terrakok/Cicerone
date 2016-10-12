@@ -10,7 +10,7 @@ import ru.terrakok.cicerone.commands.Command;
  * on 12.10.16
  */
 
-public class CommandBuffer implements NavigatorHolder {
+class CommandBuffer implements NavigatorHolder {
     private Navigator navigator;
     private Queue<Command> pendingCommands = new LinkedList<>();
 

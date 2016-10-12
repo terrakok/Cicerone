@@ -14,7 +14,7 @@ public abstract class BaseRouter {
         this.commandBuffer = new CommandBuffer();
     }
 
-    public CommandBuffer getCommandBuffer() {
+    CommandBuffer getCommandBuffer() {
         return commandBuffer;
     }
 
