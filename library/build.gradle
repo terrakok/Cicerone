@@ -4,3 +4,8 @@ apply plugin: 'java'
 // used. Android can't interpret Java 8 byte code.
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+    compileOnly 'com.google.android:android:4.0.1.2'
+    compileOnly project(':stub-appcompat')
+}

@@ -29,7 +29,7 @@ android {
 
 ext {
     supportLibraryVersion = "24.2.1"
-    moxyVersion = "1.0.0"
+    moxyVersion = "1.0.2"
 }
 
 dependencies {
@@ -43,5 +43,5 @@ dependencies {
     provided "com.arello-mobile:moxy-compiler:$moxyVersion"
 
     //Cicerone
-    compile project(':android')
+    compile project(':library')
 }

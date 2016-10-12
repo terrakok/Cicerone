@@ -13,7 +13,7 @@ import ru.terrakok.cicerone.Router;
 
 public class SampleApplication extends MvpApplication {
     public static SampleApplication INSTANCE;
-    private Cicerone cicerone;
+    private Cicerone<Router> cicerone;
 
     @Override
     public void onCreate() {
@@ -24,14 +24,14 @@ public class SampleApplication extends MvpApplication {
     }
 
     private void initCicerone() {
-        cicerone = new Cicerone();
+        cicerone = Cicerone.create();
     }
 
     public NavigatorHolder getNavigatorHolder() {
-        return cicerone;
+        return cicerone.getNavigatorHolder();
     }
 
     public Router getRouter() {
-        return cicerone;
+        return cicerone.getRouter();
     }
 }
