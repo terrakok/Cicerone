@@ -99,15 +99,15 @@ public class SampleApplication extends MvpApplication {
 
 ## Команды навигатора
 Для большинства задач предоставленных в библиотеке команд должно хватить, но их всегда можно дополнить собственными!
-+ Forward - переход на новый экран
++ Forward - переход на новый экран  
 ![](https://habrastorage.org/files/862/77e/b20/86277eb20b574dae8307ac4f64b0f090.png)
-+ Back - возврат на предыдущий экран
++ Back - возврат на предыдущий экран  
 ![](https://habrastorage.org/files/059/b63/2d3/059b632d3a7c4515a534b9e5e881c8f0.png)
-+ BackTo - возврат к конкретному экрану в цепочке, либо на корневой, если указанный экран не найден
++ BackTo - возврат к конкретному экрану в цепочке, либо на корневой, если указанный экран не найден  
 ![](https://habrastorage.org/files/a45/4f4/c34/a454f4c340764632ad0669014ad5550d.png)
-+ Replace - замена текущего экрана на новый
++ Replace - замена текущего экрана на новый  
 ![](https://habrastorage.org/files/4ae/95c/fee/4ae95cfee4c04f038ad17d358ab08d07.png)
-+ SystemMessage - показ системного сообщения (Alert, Toast, Snack и тд)
++ SystemMessage - показ системного сообщения (Alert, Toast, Snack и тд)  
 ![](https://habrastorage.org/files/6e7/1a6/4ed/6e71a64edec04079bf33faa7ab39606f.png)
 
 ## Готовые навигаторы
