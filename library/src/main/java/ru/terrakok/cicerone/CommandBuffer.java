@@ -14,7 +14,7 @@ import ru.terrakok.cicerone.commands.Command;
  * Passes navigation command to an active {@link Navigator}
  * or stores it in the pending commands queue to pass it later.
  */
-public class CommandBuffer implements NavigatorHolder {
+class CommandBuffer implements NavigatorHolder {
     private Navigator navigator;
     private Queue<Command> pendingCommands = new LinkedList<>();
 
