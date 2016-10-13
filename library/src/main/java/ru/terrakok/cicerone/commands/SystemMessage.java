@@ -5,11 +5,15 @@ package ru.terrakok.cicerone.commands;
  * on 11.10.16
  */
 
+/**
+ * Shows system message.
+ */
 public class SystemMessage implements Command {
     private String message;
 
     /**
-     * Show system message.
+     * Creates a {@link SystemMessage} command.
+     *
      * @param message message text
      */
     public SystemMessage(String message) {

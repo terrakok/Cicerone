@@ -6,7 +6,8 @@ package ru.terrakok.cicerone.commands;
  */
 
 /**
- * Marker interface for all navigation command.
+ * Navigation command describes screens transition.
+ * that can be processed by {@link ru.terrakok.cicerone.Navigator}.
  */
 public interface Command {
 }

@@ -8,13 +8,15 @@ import ru.terrakok.cicerone.commands.Command;
  */
 
 /**
- * The navigation executor interface.
+ * The low-level navigation interface.
+ * Navigator is the one who actually performs any transition.
  */
 public interface Navigator {
 
     /**
-     * Apply navigation command
-     * @param command navigation command
+     * Performs transition described by the navigation command
+     *
+     * @param command the navigation command to apply
      */
     void applyCommand(Command command);
 }
