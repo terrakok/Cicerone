@@ -1,0 +1,24 @@
+apply plugin: 'com.jfrog.bintray'
+
+version = libraryVersion // Library version
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    // User and ApiKey stored in local.properties
+    user = properties.getProperty("bintrayUser")
+    key = properties.getProperty("bintrayApiKey")
+    configurations = ['archives']
+    // Package info for Bintray
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        licenses = allLicenses
+        vcsUrl = gitUrl
+        publish = true
+    }
+}
+
+// Dependency to call only bintrayUpload task
+bintrayUpload.dependsOn install
