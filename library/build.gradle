@@ -27,3 +27,18 @@ ext {
 project.archivesBaseName ='cicerone' // to fix that project name different from artifact name
 apply from: 'androidmaven.gradle'
 apply from: 'bintray.gradle'
+
+// Tasks for sources and javadocs jars
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
