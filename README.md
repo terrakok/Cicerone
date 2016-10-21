@@ -10,6 +10,48 @@ Cicerone (_"чи-че-ро́-не"_ - устар. гид) - легкая биб�
 + простое расширение функционала
 + приспособлена для Unit тестов
 
+## Как подключить?
+Добавьте в build.gradle следующие строки:
+```groovy
+repositories {
+    maven {
+        url 'https://dl.bintray.com/terrakok/terramaven/'
+    }
+}
+
+dependencies {
+    //Cicerone
+    compile 'ru.terrakok.cicerone:cicerone:1.0'
+}
+```
+И инициализируйте библиотеку, например, так:
+```java
+public class SampleApplication extends MvpApplication {
+    public static SampleApplication INSTANCE;
+    private Cicerone<Router> cicerone;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        INSTANCE = this;
+
+        initCicerone();
+    }
+
+    private void initCicerone() {
+        cicerone = Cicerone.create();
+    }
+
+    public NavigatorHolder getNavigatorHolder() {
+        return cicerone.getNavigatorHolder();
+    }
+
+    public Router getRouter() {
+        return cicerone.getRouter();
+    }
+}
+```
+
 ## Как это работает?
 ![](https://habrastorage.org/files/4df/45d/973/4df45d9733fc4ee0a2f0be933de475b1.png)
 
@@ -72,30 +114,7 @@ private Navigator navigator = new Navigator() {
 };
 ```
 
-SampleApplication не содержит никакой магии :-)
-
-```java
-public class SampleApplication extends MvpApplication {
-    public static SampleApplication INSTANCE;
-    private Cicerone<Router> cicerone;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        INSTANCE = this;
-
-        cicerone = Cicerone.create();
-    }
-
-    public NavigatorHolder getNavigatorHolder() {
-        return cicerone.getNavigatorHolder();
-    }
-
-    public Router getRouter() {
-        return cicerone.getRouter();
-    }
-}
-```
+Навигатором не обязана быть Activity. Это может быть и фрагмент, который переключает внутри себя View.
 
 ## Команды навигатора
 Для большинства задач предоставленных в библиотеке команд должно хватить, но их всегда можно дополнить собственными!
@@ -137,8 +156,9 @@ private Navigator navigator = new SupportFragmentNavigator(
 
 ![](https://habrastorage.org/files/16d/2ee/6e3/16d2ee6e33a0428eb4f0dcab8ce6b294.gif)
 
-## Dependencies
-...
+## Участники
++ идея и реализация - Константин Цховребов (@terrakok)
++ архитектурная оптимизация, документация и публикация - Василий Чирвон (@Jeevuz)
 
 ## Лицензия
 
