@@ -1,14 +1,14 @@
 # Cicerone
 
 Cicerone (a guide who gives information to sightseers) is a lightweight library that makes the navigation in an Android app easy.  
-It designed for using with MVP architecture (try [Moxy](https://github.com/Arello-Mobile/Moxy)), but approach for other cases.
+It designed for using with MVP architecture (try [Moxy](https://github.com/Arello-Mobile/Moxy)), but it fits to work in other ways.
 
 ## Main advantages
 + not tied to Fragments
 + not framework
 + short navigation calls (no builders)
 + lifecycle-safely!
-+ simple extension of the functional
++ functional is simple to extent
 + adapted for Unit Testing
 
 ## How to connect?
@@ -91,7 +91,7 @@ protected void executeCommand(Command command) {
 }
 ```
 
-Navigator - (for example) anonymous class inside the Activity, which implements the navigation commands.  
+Navigator - implements the navigation commands, e.g. anonymous class inside the Activity.  
 Activity provides Navigator for CommandBuffer in _onResume_ and remove in _onPause_  
 
 ```java
@@ -116,7 +116,7 @@ private Navigator navigator = new Navigator() {
 ```
 
 ## Navigation commands
-For most applications, these commands should be enough, but you can always supplement your own!
+These command set will fulfill needs of the most application. But if you require more - supply your own!
 + Forward - Opens new screen  
 ![](https://habrastorage.org/files/862/77e/b20/86277eb20b574dae8307ac4f64b0f090.png)
 + Back - Rolls back the last transition from the screens chain  
@@ -130,7 +130,7 @@ For most applications, these commands should be enough, but you can always suppl
 
 ## Ready navigators
 The library provides ready navigators for _Activity_.  
-To use them, simply give the container and pass _FragmentManager_.  
+To use them, just give the container and pass _FragmentManager_.  
 ```java
 private Navigator navigator = new SupportFragmentNavigator(
                               getSupportFragmentManager(), R.id.main_container) {
@@ -151,7 +151,7 @@ private Navigator navigator = new SupportFragmentNavigator(
 };
 ```
 ## Sample
-Library work, ready navigators and more can be found in the sample application.
+Library usage examples, ready navigators and more can be found in the sample application.
 
 ![](https://habrastorage.org/files/16d/2ee/6e3/16d2ee6e33a0428eb4f0dcab8ce6b294.gif)
 
