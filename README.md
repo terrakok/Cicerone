@@ -1,18 +1,18 @@
 # Cicerone
 
-Cicerone (_"чи-че-ро́-не"_ - устар. гид) - легкая библиотека для простой реализации навигации в андроид приложении.  
-Разработана для использования в MVP архитектуре (попробуйте [Moxy](https://github.com/Arello-Mobile/Moxy)), но легко встраивается в любые решения.
+Cicerone (a guide who gives information to sightseers) is a lightweight library that makes the navigation in an Android app easy.  
+It designed for using with MVP architecture (try [Moxy](https://github.com/Arello-Mobile/Moxy)), but it fits to work in other ways.
 
-## Основные преимущества
-+ не завязана на Fragment'ы
-+ не фреймворк
-+ короткие вызовы навигации (никаких билдеров)
-+ lifecycle-безопасна!
-+ простое расширение функционала
-+ приспособлена для Unit тестов
+## Main advantages
++ not tied to Fragments
++ not framework
++ short navigation calls (no builders)
++ lifecycle-safely!
++ functional is simple to extent
++ adapted for Unit Testing
 
-## Как подключить?
-Добавьте в build.gradle следующие строки:
+## How to connect?
+Add the following lines to build.gradle:
 ```groovy
 repositories {
     maven {
@@ -25,7 +25,7 @@ dependencies {
     compile 'ru.terrakok.cicerone:cicerone:1.0'
 }
 ```
-И инициализируйте библиотеку, например, так:
+And initialise library for example with application:
 ```java
 public class SampleApplication extends MvpApplication {
     public static SampleApplication INSTANCE;
@@ -53,10 +53,10 @@ public class SampleApplication extends MvpApplication {
 }
 ```
 
-## Как это работает?
+## How it works?
 ![](https://habrastorage.org/files/4df/45d/973/4df45d9733fc4ee0a2f0be933de475b1.png)
 
-Presenter вызывает у Router метод навигации.
+Presenter calls navigation method of Router.
 
 ```java
 public class SamplePresenter extends Presenter<SampleView> {
@@ -76,10 +76,10 @@ public class SamplePresenter extends Presenter<SampleView> {
 }
 ```
 
-Router - класс, который реализует вызванный метод навигации набором Command и отправляет их в CommandBuffer.
-CommandBuffer проверяет есть ли _"активный"_ Navigator.
-Если да, то на нем вызываются необходимые команды для осуществления запрошенного перехода.
-Если нет, то команды добавляются в очередь, которая будет применена, как только появится _"активный"_ Navigator.
+Router converts the navigation calls to Comand sets and sends them to CommandBuffer.  
+Command Buffer checks whether there _"active"_ Navigator.  
+If yes, it caused the necessary commands for the requested transfer.  
+If not, the command added to the queue, which will be applied as soon as _"active"_ Navigator.  
 
 ```java
 protected void executeCommand(Command command) {
@@ -91,8 +91,8 @@ protected void executeCommand(Command command) {
 }
 ```
 
-Navigator - (например) анонимный класс внутри Activity, который реализует команды навигации.
-Activity предоставляет свой Navigator для CommandBuffer в методе _onResume_ и очищает в _onPause_
+Navigator - implements the navigation commands, e.g. anonymous class inside the Activity.  
+Activity provides Navigator for CommandBuffer in _onResume_ and remove in _onPause_  
 
 ```java
 @Override
@@ -115,24 +115,22 @@ private Navigator navigator = new Navigator() {
 };
 ```
 
-Навигатор не обязана быть в Activity. Он может быть и внутри Fragment'а, который переключает внутри себя View.
-
-## Команды навигатора
-Для большинства задач предоставленных в библиотеке команд должно хватить, но их всегда можно дополнить собственными!
-+ Forward - переход на новый экран  
+## Navigation commands
+These command set will fulfill needs of the most application. But if you require more - supply your own!
++ Forward - Opens new screen  
 ![](https://habrastorage.org/files/862/77e/b20/86277eb20b574dae8307ac4f64b0f090.png)
-+ Back - возврат на предыдущий экран  
++ Back - Rolls back the last transition from the screens chain  
 ![](https://habrastorage.org/files/059/b63/2d3/059b632d3a7c4515a534b9e5e881c8f0.png)
-+ BackTo - возврат к конкретному экрану в цепочке, либо на корневой, если указанный экран не найден  
++ BackTo - Rolls back to the needed screen from the screens chain  
 ![](https://habrastorage.org/files/a45/4f4/c34/a454f4c340764632ad0669014ad5550d.png)
-+ Replace - замена текущего экрана на новый  
++ Replace - Replaces the current screen  
 ![](https://habrastorage.org/files/4ae/95c/fee/4ae95cfee4c04f038ad17d358ab08d07.png)
-+ SystemMessage - показ системного сообщения (Alert, Toast, Snack и тд)  
++ SystemMessage - Shows system message (Alert, Toast, Snack etc)  
 ![](https://habrastorage.org/files/6e7/1a6/4ed/6e71a64edec04079bf33faa7ab39606f.png)
 
-## Готовые навигаторы
-Библиотека предоставляет готовые навигаторы для _Activity_.
-Чтобы их использовать, достаточно указать контейнер и передать _FragmentManager_.
+## Ready navigators
+The library provides ready navigators for _Activity_.  
+To use them, just give the container and pass _FragmentManager_.  
 ```java
 private Navigator navigator = new SupportFragmentNavigator(
                               getSupportFragmentManager(), R.id.main_container) {
@@ -153,15 +151,15 @@ private Navigator navigator = new SupportFragmentNavigator(
 };
 ```
 ## Sample
-Работу библиотеки, готовых навигаторов и другое можно посмотреть в _sample_ приложении.
+Library usage examples, ready navigators and more can be found in the sample application.
 
 ![](https://habrastorage.org/files/16d/2ee/6e3/16d2ee6e33a0428eb4f0dcab8ce6b294.gif)
 
-## Участники
-+ идея и реализация - Константин Цховребов (@terrakok)
-+ архитектурные советы, документация и публикация - Василий Чирвон (@Jeevuz)
+## Participants
++ idea and realization - Konstantin Tckhovrebov (@terrakok)
++ architectural advice, documentation and publication - Vasily Chirvon (@Jeevuz)
 
-## Лицензия
+## License
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
