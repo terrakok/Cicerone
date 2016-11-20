@@ -1,18 +1,18 @@
 # Cicerone
 
-Cicerone (a guide who gives information to sightseers) is a lightweight library that makes the navigation in an Android app easy.  
-It designed for using with MVP architecture (try [Moxy](https://github.com/Arello-Mobile/Moxy)), but it fits to work in other ways.
+Cicerone (a guide, one who conducts sightseers) is a lightweight library that makes the navigation in an Android app easy.  
+It was designed to be used with the MVP pattern (try [Moxy](https://github.com/Arello-Mobile/Moxy)), but will work great with any architecture.
 
 ## Main advantages
-+ not tied to Fragments
-+ not framework
++ is not tied to Fragments
++ not a framework
 + short navigation calls (no builders)
-+ lifecycle-safely!
-+ functional is simple to extent
-+ adapted for Unit Testing
++ lifecycle-safe!
++ functionality is simple to extend
++ suitable for Unit Testing
 
-## How to connect?
-Add the following lines to build.gradle:
+## How to add
+Add the following lines to your build.gradle:
 ```groovy
 repositories {
     maven {
@@ -25,7 +25,7 @@ dependencies {
     compile 'ru.terrakok.cicerone:cicerone:1.0'
 }
 ```
-And initialise library for example with application:
+Initialize the library (usually in your Application class):
 ```java
 public class SampleApplication extends MvpApplication {
     public static SampleApplication INSTANCE;
@@ -76,10 +76,11 @@ public class SamplePresenter extends Presenter<SampleView> {
 }
 ```
 
-Router converts the navigation calls to Comand sets and sends them to CommandBuffer.  
-Command Buffer checks whether there _"active"_ Navigator.  
-If yes, it caused the necessary commands for the requested transfer.  
-If not, the command added to the queue, which will be applied as soon as _"active"_ Navigator.  
+Router converts the navigation call to the set of Commands and sends them to CommandBuffer.  
+
+CommandBuffer checks whether there are _"active"_ Navigator:  
+If yes, it passes the commands to the Navigator. Navigator will process them to achive the desired transition.  
+If no, then CommandBuffer saves the commands in a queue, and will apply them as soon as new _"active"_ Navigator will appear.  
 
 ```java
 protected void executeCommand(Command command) {
@@ -91,8 +92,8 @@ protected void executeCommand(Command command) {
 }
 ```
 
-Navigator - implements the navigation commands, e.g. anonymous class inside the Activity.  
-Activity provides Navigator for CommandBuffer in _onResume_ and remove in _onPause_  
+Navigator processes the navigation commands. Usually it is an anonymous class inside the Activity.  
+Activity provides Navigator to the CommandBuffer in _onResume_ and removes it in _onPause_.  
 
 ```java
 @Override
@@ -110,27 +111,27 @@ protected void onPause() {
 private Navigator navigator = new Navigator() {
     @Override
     public void applyCommand(Command command) {
-        //implements commands logic
+        //implement commands logic
     }
 };
 ```
 
 ## Navigation commands
-These command set will fulfill needs of the most application. But if you require more - supply your own!
+This commands set will fulfill the needs of the most applications. But if you need something special - just add it!
 + Forward - Opens new screen  
 ![](https://habrastorage.org/files/862/77e/b20/86277eb20b574dae8307ac4f64b0f090.png)
-+ Back - Rolls back the last transition from the screens chain  
++ Back - Rolls back the last transition  
 ![](https://habrastorage.org/files/059/b63/2d3/059b632d3a7c4515a534b9e5e881c8f0.png)
-+ BackTo - Rolls back to the needed screen from the screens chain  
++ BackTo - Rolls back to the needed screen in the screens chain  
 ![](https://habrastorage.org/files/a45/4f4/c34/a454f4c340764632ad0669014ad5550d.png)
 + Replace - Replaces the current screen  
 ![](https://habrastorage.org/files/4ae/95c/fee/4ae95cfee4c04f038ad17d358ab08d07.png)
-+ SystemMessage - Shows system message (Alert, Toast, Snack etc)  
++ SystemMessage - Shows system message (Alert, Toast, Snack, etc.)  
 ![](https://habrastorage.org/files/6e7/1a6/4ed/6e71a64edec04079bf33faa7ab39606f.png)
 
-## Ready navigators
-The library provides ready navigators for _Activity_.  
-To use them, just give the container and pass _FragmentManager_.  
+## Predefined navigators
+The library provides predefined navigators for _Fragments_ to use inside _Activity_.    
+To use, just provide it with the container and _FragmentManager_ and override few simple methods.  
 ```java
 private Navigator navigator = new SupportFragmentNavigator(
                               getSupportFragmentManager(), R.id.main_container) {
@@ -151,13 +152,13 @@ private Navigator navigator = new SupportFragmentNavigator(
 };
 ```
 ## Sample
-Library usage examples, ready navigators and more can be found in the sample application.
+To see how to add, initialize and use the library and predefined navigators check out the sample.
 
 ![](https://habrastorage.org/files/16d/2ee/6e3/16d2ee6e33a0428eb4f0dcab8ce6b294.gif)
 
 ## Participants
-+ idea and realization - Konstantin Tckhovrebov (@terrakok)
-+ architectural advice, documentation and publication - Vasily Chirvon (@Jeevuz)
++ idea and code - Konstantin Tskhovrebov (@terrakok)
++ architecture advice, documentation and publication - Vasili Chyrvon (@Jeevuz)
 
 ## License
 
