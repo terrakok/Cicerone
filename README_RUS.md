@@ -16,7 +16,7 @@ Cicerone (_"чи-че-ро́-не"_ - устар. гид) - легкая биб�
 ```groovy
 dependencies {
     //Cicerone
-    compile 'ru.terrakok.cicerone:cicerone:1.0'
+    compile 'ru.terrakok.cicerone:cicerone:1.1'
 }
 ```
 И инициализируйте библиотеку, например, так:
