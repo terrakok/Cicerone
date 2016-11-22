@@ -6,8 +6,7 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-    compileOnly 'com.google.android:android:4.0.1.2'
-    compileOnly project(':stub-appcompat')
+    compileOnly project(':stub-android')
 }
 
 ext {
@@ -16,7 +15,7 @@ ext {
     bintrayName = 'cicerone'
     publishedGroupId = 'ru.terrakok.cicerone'
     artifact = 'cicerone'
-    libraryVersion = '1.0'
+    libraryVersion = '1.1'
     gitUrl = 'https://github.com/terrakok/Cicerone'
     allLicenses = ['Apache-2.0']
 }
