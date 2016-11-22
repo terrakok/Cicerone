@@ -1,5 +1,6 @@
 # Cicerone
-[![Bintray](https://img.shields.io/bintray/v/terrakok/terramaven/cicerone.svg)](https://bintray.com/terrakok/terramaven/cicerone)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Cicerone-green.svg?style=true)](https://android-arsenal.com/details/1/4700)
+[![jCenter](https://api.bintray.com/packages/terrakok/terramaven/cicerone/images/download.svg)](https://bintray.com/terrakok/terramaven/cicerone/_latestVersion)
 [![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](http://choosealicense.com/licenses/apache-2.0/)
 
 Cicerone (a guide, one who conducts sightseers) is a lightweight library that makes the navigation in an Android app easy.  
