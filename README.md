@@ -12,20 +12,15 @@ It was designed to be used with the MVP pattern (try [Moxy](https://github.com/A
 + suitable for Unit Testing
 
 ## How to add
-Add the following lines to your build.gradle:
+Add the dependency in your build.gradle:
 ```groovy
-repositories {
-    maven {
-        url 'https://dl.bintray.com/terrakok/terramaven/'
-    }
-}
-
 dependencies {
     //Cicerone
     compile 'ru.terrakok.cicerone:cicerone:1.0'
 }
 ```
-Initialize the library (usually in your Application class):
+
+Initialize the library (for example in your Application class):
 ```java
 public class SampleApplication extends MvpApplication {
     public static SampleApplication INSTANCE;
