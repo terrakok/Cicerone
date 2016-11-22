@@ -12,14 +12,8 @@ Cicerone (_"чи-че-ро́-не"_ - устар. гид) - легкая биб�
 + приспособлена для Unit тестов
 
 ## Как подключить?
-Добавьте в build.gradle следующие строки:
+Добавьте в build.gradle зависимость:
 ```groovy
-repositories {
-    maven {
-        url 'https://dl.bintray.com/terrakok/terramaven/'
-    }
-}
-
 dependencies {
     //Cicerone
     compile 'ru.terrakok.cicerone:cicerone:1.0'
