@@ -1,4 +1,6 @@
 # Cicerone
+[![Bintray](https://img.shields.io/bintray/v/terrakok/terramaven/cicerone.svg)](https://bintray.com/terrakok/terramaven/cicerone)
+[![License](https://img.shields.io/badge/license-APACHE2-blue.svg)](http://choosealicense.com/licenses/apache-2.0/)
 
 Cicerone (a guide, one who conducts sightseers) is a lightweight library that makes the navigation in an Android app easy.  
 It was designed to be used with the MVP pattern (try [Moxy](https://github.com/Arello-Mobile/Moxy)), but will work great with any architecture.
