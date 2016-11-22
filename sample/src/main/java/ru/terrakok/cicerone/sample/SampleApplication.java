@@ -1,6 +1,6 @@
 package ru.terrakok.cicerone.sample;
 
-import com.arellomobile.mvp.MvpApplication;
+import android.app.Application;
 
 import ru.terrakok.cicerone.Cicerone;
 import ru.terrakok.cicerone.NavigatorHolder;
@@ -11,7 +11,7 @@ import ru.terrakok.cicerone.Router;
  * on 11.10.16
  */
 
-public class SampleApplication extends MvpApplication {
+public class SampleApplication extends Application {
     public static SampleApplication INSTANCE;
     private Cicerone<Router> cicerone;
 
