@@ -30,6 +30,7 @@ android {
 ext {
     supportLibraryVersion = "25.0.1"
     moxyVersion = "1.2.1"
+    daggerVersion = "2.8"
 }
 
 dependencies {
@@ -43,6 +44,10 @@ dependencies {
 
     //Cicerone
     compile project(':library')
+
+    //DI
+    compile "com.google.dagger:dagger:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
     //Bottom Navigation Bar
     compile 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:1.0.9'

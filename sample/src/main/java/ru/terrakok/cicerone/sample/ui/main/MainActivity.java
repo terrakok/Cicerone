@@ -12,7 +12,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.NavigatorHolder;
+import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.android.SupportFragmentNavigator;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
@@ -30,8 +34,15 @@ import ru.terrakok.cicerone.sample.Screens;
 
 public class MainActivity extends MvpAppCompatActivity {
     private static final String STATE_SCREEN_NAMES = "state_screen_names";
+
     private List<String> screenNames = new ArrayList<>();
     private TextView screensSchemeTV;
+
+    @Inject
+    Router router;
+
+    @Inject
+    NavigatorHolder navigatorHolder;
 
     private Navigator navigator = new SupportFragmentNavigator(getSupportFragmentManager(), R.id.main_container) {
         @Override
@@ -58,7 +69,9 @@ public class MainActivity extends MvpAppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        SampleApplication.INSTANCE.getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         screensSchemeTV = (TextView) findViewById(R.id.screens_scheme);
 
@@ -73,13 +86,13 @@ public class MainActivity extends MvpAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SampleApplication.INSTANCE.getNavigatorHolder().setNavigator(navigator);
+        navigatorHolder.setNavigator(navigator);
     }
 
     @Override
     protected void onPause() {
+        navigatorHolder.removeNavigator();
         super.onPause();
-        SampleApplication.INSTANCE.getNavigatorHolder().removeNavigator();
     }
 
     @Override

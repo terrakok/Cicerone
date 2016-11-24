@@ -3,7 +3,6 @@ package ru.terrakok.cicerone.sample.mvp.start;
 import com.arellomobile.mvp.MvpPresenter;
 
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
 
 /**
@@ -12,8 +11,8 @@ import ru.terrakok.cicerone.sample.Screens;
 public class StartActivityPresenter extends MvpPresenter<StartActivityView> {
     private Router router;
 
-    public StartActivityPresenter() {
-        router = SampleApplication.INSTANCE.getRouter();
+    public StartActivityPresenter(Router router) {
+        this.router = router;
     }
 
     public void onNextPressed() {

@@ -9,8 +9,13 @@ import android.view.ViewGroup;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import javax.inject.Inject;
+
+import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.R;
+import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.mvp.main.SamplePresenter;
 import ru.terrakok.cicerone.sample.mvp.main.SampleView;
 
@@ -32,8 +37,16 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView {
     private View forwardWithDelayCommandBt;
     private View backToCommandBt;
 
+    @Inject
+    Router router;
+
     @InjectPresenter
     SamplePresenter presenter;
+
+    @ProvidePresenter
+    public SamplePresenter createSamplePresenter() {
+        return new SamplePresenter(router, getArguments().getInt(EXTRA_NUMBER));
+    }
 
     public static SampleFragment getNewInstance(int number) {
         SampleFragment fragment = new SampleFragment();
@@ -47,8 +60,8 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        SampleApplication.INSTANCE.getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
-        presenter.init(getArguments().getInt(EXTRA_NUMBER));
     }
 
     @Nullable

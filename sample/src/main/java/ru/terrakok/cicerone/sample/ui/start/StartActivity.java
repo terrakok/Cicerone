@@ -8,8 +8,13 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
+
+import javax.inject.Inject;
 
 import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.NavigatorHolder;
+import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Forward;
@@ -26,11 +31,23 @@ import ru.terrakok.cicerone.sample.ui.main.MainActivity;
  * Created by terrakok 21.11.16
  */
 public class StartActivity extends MvpAppCompatActivity implements StartActivityView {
+    @Inject
+    NavigatorHolder navigatorHolder;
+
+    @Inject
+    Router router;
+
     @InjectPresenter
     StartActivityPresenter presenter;
 
+    @ProvidePresenter
+    public StartActivityPresenter createStartActivityPresenter() {
+        return new StartActivityPresenter(router);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SampleApplication.INSTANCE.getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_start);
@@ -49,12 +66,12 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
     @Override
     protected void onResume() {
         super.onResume();
-        SampleApplication.INSTANCE.getNavigatorHolder().setNavigator(navigator);
+        navigatorHolder.setNavigator(navigator);
     }
 
     @Override
     protected void onPause() {
-        SampleApplication.INSTANCE.getNavigatorHolder().removeNavigator();
+        navigatorHolder.removeNavigator();
         super.onPause();
     }
 
