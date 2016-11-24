@@ -2,4 +2,8 @@
     <string name="app_name">Cicerone Sample</string>
     <string name="cicerone_description">Cicerone is a lightweight library that makes the navigation in an Android app easy.</string>
     <string name="lets_go">Lets Go!</string>
+
+    <string name="tab_android">Android</string>
+    <string name="tab_bug">Bug</string>
+    <string name="tab_dog">Dog</string>
 </resources>
