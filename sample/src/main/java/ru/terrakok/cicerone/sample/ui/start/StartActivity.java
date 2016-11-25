@@ -11,9 +11,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import ru.terrakok.cicerone.Cicerone;
 import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.Command;
@@ -25,24 +26,22 @@ import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
 import ru.terrakok.cicerone.sample.mvp.start.StartActivityPresenter;
 import ru.terrakok.cicerone.sample.mvp.start.StartActivityView;
-import ru.terrakok.cicerone.sample.ui.main.MainActivity;
+import ru.terrakok.cicerone.sample.ui.bottom.BottomNavigationActivity;
 
 /**
  * Created by terrakok 21.11.16
  */
 public class StartActivity extends MvpAppCompatActivity implements StartActivityView {
     @Inject
-    NavigatorHolder navigatorHolder;
-
-    @Inject
-    Router router;
+    @Named("GLOBAL")
+    Cicerone<Router> cicerone;
 
     @InjectPresenter
     StartActivityPresenter presenter;
 
     @ProvidePresenter
     public StartActivityPresenter createStartActivityPresenter() {
-        return new StartActivityPresenter(router);
+        return new StartActivityPresenter(cicerone.getRouter());
     }
 
     @Override
@@ -66,12 +65,12 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
     @Override
     protected void onResume() {
         super.onResume();
-        navigatorHolder.setNavigator(navigator);
+        cicerone.getNavigatorHolder().setNavigator(navigator);
     }
 
     @Override
     protected void onPause() {
-        navigatorHolder.removeNavigator();
+        cicerone.getNavigatorHolder().removeNavigator();
         super.onPause();
     }
 
@@ -102,7 +101,7 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
                     startActivity(new Intent(StartActivity.this, StartActivity.class));
                     break;
                 case Screens.MAIN_ACTIVITY_SCREEN:
-                    startActivity(new Intent(StartActivity.this, MainActivity.class));
+                    startActivity(new Intent(StartActivity.this, BottomNavigationActivity.class));
                     break;
                 default:
                     Log.e("Cicerone", "Unknown screen: " + command.getScreenKey());

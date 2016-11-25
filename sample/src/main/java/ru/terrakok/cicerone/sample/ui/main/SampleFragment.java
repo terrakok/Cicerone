@@ -1,7 +1,9 @@
 package ru.terrakok.cicerone.sample.ui.main;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,20 +13,18 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
-import javax.inject.Inject;
-
-import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.R;
-import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.mvp.main.SamplePresenter;
 import ru.terrakok.cicerone.sample.mvp.main.SampleView;
+import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
+import ru.terrakok.cicerone.sample.ui.common.RouterProvider;
 
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
  * on 11.10.16
  */
 
-public class SampleFragment extends MvpAppCompatFragment implements SampleView {
+public class SampleFragment extends MvpAppCompatFragment implements SampleView, BackButtonListener {
     private static final String EXTRA_NUMBER = "extra_number";
 
     private Toolbar toolbar;
@@ -37,15 +37,14 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView {
     private View forwardWithDelayCommandBt;
     private View backToCommandBt;
 
-    @Inject
-    Router router;
+    private RouterProvider routerProvider;
 
     @InjectPresenter
     SamplePresenter presenter;
 
     @ProvidePresenter
-    public SamplePresenter createSamplePresenter() {
-        return new SamplePresenter(router, getArguments().getInt(EXTRA_NUMBER));
+    SamplePresenter createSamplePresenter() {
+        return new SamplePresenter(routerProvider.getRouter(), getArguments().getInt(EXTRA_NUMBER));
     }
 
     public static SampleFragment getNewInstance(int number) {
@@ -59,9 +58,15 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        SampleApplication.INSTANCE.getAppComponent().inject(this);
-        super.onCreate(savedInstanceState);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment != null) {
+            routerProvider = (RouterProvider) parentFragment;
+        } else {
+            routerProvider = (RouterProvider) getActivity();
+        }
     }
 
     @Nullable
@@ -148,7 +153,8 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView {
         toolbar.setTitle(title);
     }
 
-    public void onBackPressed() {
+    public boolean onBackPressed() {
         presenter.onBackCommandClick();
+        return true;
     }
 }

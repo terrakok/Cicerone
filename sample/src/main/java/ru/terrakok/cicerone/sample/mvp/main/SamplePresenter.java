@@ -1,5 +1,7 @@
 package ru.terrakok.cicerone.sample.mvp.main;
 
+import android.util.Log;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
@@ -29,6 +31,7 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
         executorService = Executors.newSingleThreadScheduledExecutor();
 
         getViewState().setTitle("Screen " + screenNumber);
+        Log.i("tttt", "Presenter: " + hashCode() + " Router: " + router.hashCode());
     }
 
     public void onBackCommandClick() {

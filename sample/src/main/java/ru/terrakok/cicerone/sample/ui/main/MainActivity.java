@@ -13,9 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import ru.terrakok.cicerone.Cicerone;
 import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.android.SupportFragmentNavigator;
 import ru.terrakok.cicerone.commands.Back;
@@ -26,6 +27,7 @@ import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
+import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
 
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
@@ -39,10 +41,8 @@ public class MainActivity extends MvpAppCompatActivity {
     private TextView screensSchemeTV;
 
     @Inject
-    Router router;
-
-    @Inject
-    NavigatorHolder navigatorHolder;
+    @Named("GLOBAL")
+    Cicerone<Router> cicerone;
 
     private Navigator navigator = new SupportFragmentNavigator(getSupportFragmentManager(), R.id.main_container) {
         @Override
@@ -86,20 +86,22 @@ public class MainActivity extends MvpAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        navigatorHolder.setNavigator(navigator);
+        cicerone.getNavigatorHolder().setNavigator(navigator);
     }
 
     @Override
     protected void onPause() {
-        navigatorHolder.removeNavigator();
+        cicerone.getNavigatorHolder().removeNavigator();
         super.onPause();
     }
 
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-        if (fragment != null && fragment instanceof SampleFragment) {
-            ((SampleFragment) fragment).onBackPressed();
+        if (fragment != null
+                && fragment instanceof BackButtonListener
+                && ((BackButtonListener) fragment).onBackPressed()) {
+            return;
         } else {
             super.onBackPressed();
         }

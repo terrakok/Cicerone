@@ -2,6 +2,7 @@ package ru.terrakok.cicerone.sample.ui.bottom;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -11,38 +12,42 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import ru.terrakok.cicerone.Cicerone;
 import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.android.SupportFragmentNavigator;
+import ru.terrakok.cicerone.commands.Back;
+import ru.terrakok.cicerone.commands.Command;
+import ru.terrakok.cicerone.commands.Replace;
+import ru.terrakok.cicerone.commands.SystemMessage;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
 import ru.terrakok.cicerone.sample.mvp.bottom.BottomNavigationPresenter;
 import ru.terrakok.cicerone.sample.mvp.bottom.BottomNavigationView;
+import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
+import ru.terrakok.cicerone.sample.ui.common.RouterProvider;
 
 /**
  * Created by terrakok 25.11.16
  */
-public class BottomNavigationActivity extends MvpAppCompatActivity implements BottomNavigationView {
+public class BottomNavigationActivity extends MvpAppCompatActivity implements BottomNavigationView, RouterProvider {
     private BottomNavigationBar bottomNavigationBar;
     private TabContainerFragment androidTabFragment;
     private TabContainerFragment bugTabFragment;
     private TabContainerFragment dogTabFragment;
 
     @Inject
-    NavigatorHolder navigatorHolder;
-
-    @Inject
-    Router router;
+    @Named("GLOBAL")
+    Cicerone<Router> cicerone;
 
     @InjectPresenter
     BottomNavigationPresenter presenter;
 
     @ProvidePresenter
     public BottomNavigationPresenter createBottomNavigationPresenter() {
-        return new BottomNavigationPresenter(router);
+        return new BottomNavigationPresenter(cicerone.getRouter());
     }
 
     @Override
@@ -96,52 +101,86 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
         androidTabFragment = TabContainerFragment.getNewInstance("ANDROID");
         bugTabFragment = TabContainerFragment.getNewInstance("BUG");
         dogTabFragment = TabContainerFragment.getNewInstance("DOG");
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.ab_container, androidTabFragment, "ANDROID")
+                .detach(androidTabFragment).commitNow();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.ab_container, bugTabFragment, "BUG")
+                .detach(bugTabFragment).commitNow();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.ab_container, dogTabFragment, "DOG")
+                .detach(dogTabFragment).commitNow();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        navigatorHolder.setNavigator(navigator);
+        cicerone.getNavigatorHolder().setNavigator(navigator);
     }
 
     @Override
     protected void onPause() {
-        navigatorHolder.removeNavigator();
+        cicerone.getNavigatorHolder().removeNavigator();
         super.onPause();
     }
 
     @Override
     public void onBackPressed() {
-        presenter.onBackPressed();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.ab_container);
+        if (fragment != null
+                && fragment instanceof BackButtonListener
+                && ((BackButtonListener) fragment).onBackPressed()) {
+            return;
+        } else {
+            presenter.onBackPressed();
+        }
     }
 
-    private Navigator navigator = new SupportFragmentNavigator(getSupportFragmentManager(), R.id.ab_container) {
+    private Navigator navigator = new Navigator() {
         @Override
-        protected Fragment createFragment(String screenKey, Object data) {
-            switch (screenKey) {
-                case Screens.ANDROID_SCREEN:
-                    return androidTabFragment;
-                case Screens.BUG_SCREEN:
-                    return bugTabFragment;
-                case Screens.DOG_SCREEN:
-                    return dogTabFragment;
+        public void applyCommand(Command command) {
+            if (command instanceof Back) {
+                finish();
+            } else if (command instanceof SystemMessage) {
+                Toast.makeText(BottomNavigationActivity.this, ((SystemMessage) command).getMessage(), Toast.LENGTH_SHORT).show();
+            } else if (command instanceof Replace) {
+                FragmentManager fm = getSupportFragmentManager();
+
+                switch (((Replace) command).getScreenKey()) {
+                    case Screens.ANDROID_SCREEN:
+                        fm.beginTransaction()
+                                .detach(bugTabFragment)
+                                .detach(dogTabFragment)
+                                .attach(androidTabFragment)
+                                .commitNow();
+                        break;
+                    case Screens.BUG_SCREEN:
+                        fm.beginTransaction()
+                                .detach(androidTabFragment)
+                                .detach(dogTabFragment)
+                                .attach(bugTabFragment)
+                                .commitNow();
+                        break;
+                    case Screens.DOG_SCREEN:
+                        fm.beginTransaction()
+                                .detach(androidTabFragment)
+                                .detach(bugTabFragment)
+                                .attach(dogTabFragment)
+                                .commitNow();
+                        break;
+                }
             }
-            return null;
-        }
-
-        @Override
-        protected void showSystemMessage(String message) {
-            Toast.makeText(BottomNavigationActivity.this, message, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        protected void exit() {
-            finish();
         }
     };
 
     @Override
     public void highlightTab(int position) {
         bottomNavigationBar.selectTab(position, false);
+    }
+
+    @Override
+    public Router getRouter() {
+        return cicerone.getRouter();
     }
 }
