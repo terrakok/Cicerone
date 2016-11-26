@@ -59,6 +59,7 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
         bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.ab_bottom_navigation_bar);
 
         initViews();
+        initContainers();
 
         if (savedInstanceState == null) {
             bottomNavigationBar.selectTab(ANDROID_TAB_POSITION, true);
@@ -98,19 +99,33 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
             }
         });
 
-        androidTabFragment = TabContainerFragment.getNewInstance("ANDROID");
-        bugTabFragment = TabContainerFragment.getNewInstance("BUG");
-        dogTabFragment = TabContainerFragment.getNewInstance("DOG");
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.ab_container, androidTabFragment, "ANDROID")
-                .detach(androidTabFragment).commitNow();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.ab_container, bugTabFragment, "BUG")
-                .detach(bugTabFragment).commitNow();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.ab_container, dogTabFragment, "DOG")
-                .detach(dogTabFragment).commitNow();
+    }
 
+    private void initContainers() {
+        FragmentManager fm = getSupportFragmentManager();
+        androidTabFragment = (TabContainerFragment) fm.findFragmentByTag("ANDROID");
+        if (androidTabFragment == null) {
+            androidTabFragment = TabContainerFragment.getNewInstance("ANDROID");
+            fm.beginTransaction()
+                    .add(R.id.ab_container, androidTabFragment, "ANDROID")
+                    .detach(androidTabFragment).commitNow();
+        }
+
+        bugTabFragment = (TabContainerFragment) fm.findFragmentByTag("BUG");
+        if (bugTabFragment == null) {
+            bugTabFragment = TabContainerFragment.getNewInstance("BUG");
+            fm.beginTransaction()
+                    .add(R.id.ab_container, bugTabFragment, "BUG")
+                    .detach(bugTabFragment).commitNow();
+        }
+
+        dogTabFragment = (TabContainerFragment) fm.findFragmentByTag("DOG");
+        if (dogTabFragment == null) {
+            dogTabFragment = TabContainerFragment.getNewInstance("DOG");
+            fm.beginTransaction()
+                    .add(R.id.ab_container, dogTabFragment, "DOG")
+                    .detach(dogTabFragment).commitNow();
+        }
     }
 
     @Override
