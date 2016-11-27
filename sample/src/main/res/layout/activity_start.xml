@@ -24,9 +24,16 @@
         android:layout_weight="1"/>
 
     <Button
-        android:id="@+id/lets_go_button"
+        android:id="@+id/ordinary_nav_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="@string/lets_go"/>
+        android:text="@string/ordinary_nav"/>
+
+    <Button
+        android:id="@+id/multi_nav_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/multi_nav"/>
 </LinearLayout>

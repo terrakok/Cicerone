@@ -12,10 +12,9 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import ru.terrakok.cicerone.Cicerone;
 import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.Command;
@@ -39,15 +38,17 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
     private TabContainerFragment dogTabFragment;
 
     @Inject
-    @Named("GLOBAL")
-    Cicerone<Router> cicerone;
+    Router router;
+
+    @Inject
+    NavigatorHolder navigatorHolder;
 
     @InjectPresenter
     BottomNavigationPresenter presenter;
 
     @ProvidePresenter
     public BottomNavigationPresenter createBottomNavigationPresenter() {
-        return new BottomNavigationPresenter(cicerone.getRouter());
+        return new BottomNavigationPresenter(router);
     }
 
     @Override
@@ -131,12 +132,12 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
     @Override
     protected void onResume() {
         super.onResume();
-        cicerone.getNavigatorHolder().setNavigator(navigator);
+        navigatorHolder.setNavigator(navigator);
     }
 
     @Override
     protected void onPause() {
-        cicerone.getNavigatorHolder().removeNavigator();
+        navigatorHolder.removeNavigator();
         super.onPause();
     }
 
@@ -196,6 +197,6 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
 
     @Override
     public Router getRouter() {
-        return cicerone.getRouter();
+        return router;
     }
 }

@@ -11,10 +11,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import ru.terrakok.cicerone.Cicerone;
 import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.Command;
@@ -27,21 +26,24 @@ import ru.terrakok.cicerone.sample.Screens;
 import ru.terrakok.cicerone.sample.mvp.start.StartActivityPresenter;
 import ru.terrakok.cicerone.sample.mvp.start.StartActivityView;
 import ru.terrakok.cicerone.sample.ui.bottom.BottomNavigationActivity;
+import ru.terrakok.cicerone.sample.ui.main.MainActivity;
 
 /**
  * Created by terrakok 21.11.16
  */
 public class StartActivity extends MvpAppCompatActivity implements StartActivityView {
     @Inject
-    @Named("GLOBAL")
-    Cicerone<Router> cicerone;
+    Router router;
+
+    @Inject
+    NavigatorHolder navigatorHolder;
 
     @InjectPresenter
     StartActivityPresenter presenter;
 
     @ProvidePresenter
     public StartActivityPresenter createStartActivityPresenter() {
-        return new StartActivityPresenter(cicerone.getRouter());
+        return new StartActivityPresenter(router);
     }
 
     @Override
@@ -54,10 +56,16 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
     }
 
     private void initViews() {
-        findViewById(R.id.lets_go_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ordinary_nav_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.onNextPressed();
+                presenter.onOrdinaryPressed();
+            }
+        });
+        findViewById(R.id.multi_nav_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.onMultiPressed();
             }
         });
     }
@@ -65,12 +73,12 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
     @Override
     protected void onResume() {
         super.onResume();
-        cicerone.getNavigatorHolder().setNavigator(navigator);
+        navigatorHolder.setNavigator(navigator);
     }
 
     @Override
     protected void onPause() {
-        cicerone.getNavigatorHolder().removeNavigator();
+        navigatorHolder.removeNavigator();
         super.onPause();
     }
 
@@ -101,6 +109,9 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
                     startActivity(new Intent(StartActivity.this, StartActivity.class));
                     break;
                 case Screens.MAIN_ACTIVITY_SCREEN:
+                    startActivity(new Intent(StartActivity.this, MainActivity.class));
+                    break;
+                case Screens.BOTTOM_NAVIGATION_ACTIVITY_SCREEN:
                     startActivity(new Intent(StartActivity.this, BottomNavigationActivity.class));
                     break;
                 default:

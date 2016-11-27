@@ -6,11 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import ru.terrakok.cicerone.Cicerone;
 import ru.terrakok.cicerone.Navigator;
@@ -19,9 +17,9 @@ import ru.terrakok.cicerone.android.SupportFragmentNavigator;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
+import ru.terrakok.cicerone.sample.subnavigation.LocalCiceroneHolder;
 import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
 import ru.terrakok.cicerone.sample.ui.common.RouterProvider;
-import ru.terrakok.cicerone.sample.ui.main.SampleFragment;
 
 /**
  * Created by terrakok 25.11.16
@@ -32,8 +30,7 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
     private Navigator navigator;
 
     @Inject
-    @Named("LOCAL")
-    Cicerone<Router> cicerone;
+    LocalCiceroneHolder ciceroneHolder;
 
     public static TabContainerFragment getNewInstance(String name) {
         TabContainerFragment fragment = new TabContainerFragment();
@@ -45,10 +42,18 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
         return fragment;
     }
 
+    private String getContainerName() {
+        return getArguments().getString(EXTRA_NAME);
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         SampleApplication.INSTANCE.getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
+    }
+
+    private Cicerone<Router> getCicerone() {
+        return ciceroneHolder.getCicerone(getContainerName());
     }
 
     @Nullable
@@ -58,30 +63,23 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        ((TextView) view.findViewById(R.id.tab_name)).setText(getArguments().getString(EXTRA_NAME));
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         if (getChildFragmentManager().findFragmentById(R.id.ftc_container) == null) {
-            cicerone.getRouter().replaceScreen(Screens.SAMPLE_SCREEN, 0);
+            getCicerone().getRouter().replaceScreen(Screens.FORWARD_SCREEN, 0);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        cicerone.getNavigatorHolder().setNavigator(getNavigator());
+        getCicerone().getNavigatorHolder().setNavigator(getNavigator());
     }
 
     @Override
     public void onPause() {
-        cicerone.getNavigatorHolder().removeNavigator();
+        getCicerone().getNavigatorHolder().removeNavigator();
         super.onPause();
     }
 
@@ -91,7 +89,7 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
 
                 @Override
                 protected Fragment createFragment(String screenKey, Object data) {
-                    return SampleFragment.getNewInstance((Integer) data);
+                    return ForwardFragment.getNewInstance(getContainerName(), (int) data);
                 }
 
                 @Override
@@ -110,7 +108,7 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
 
     @Override
     public Router getRouter() {
-        return cicerone.getRouter();
+        return getCicerone().getRouter();
     }
 
     @Override
@@ -121,7 +119,8 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
                 && ((BackButtonListener) fragment).onBackPressed()) {
             return true;
         } else {
-            return false;
+            ((RouterProvider) getActivity()).getRouter().exit();
+            return true;
         }
     }
 }

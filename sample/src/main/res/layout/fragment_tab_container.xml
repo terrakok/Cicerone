@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
+    android:id="@+id/ftc_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tab_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary_dark"
-        android:ellipsize="middle"
-        android:lines="1"
-        android:padding="16dp"
-        android:textColor="@android:color/white"
-        android:textSize="13sp"
-        tools:text="1➔2➔3➔4➔2➔3➔4➔2➔3➔4➔2➔3➔4➔2➔3➔4➔2➔3➔4"/>
-
-    <FrameLayout
-        android:id="@+id/ftc_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+    android:layout_height="match_parent"/>

@@ -13,11 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import ru.terrakok.cicerone.Cicerone;
 import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.Router;
+import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.android.SupportFragmentNavigator;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
@@ -41,8 +39,7 @@ public class MainActivity extends MvpAppCompatActivity {
     private TextView screensSchemeTV;
 
     @Inject
-    @Named("GLOBAL")
-    Cicerone<Router> cicerone;
+    NavigatorHolder navigatorHolder;
 
     private Navigator navigator = new SupportFragmentNavigator(getSupportFragmentManager(), R.id.main_container) {
         @Override
@@ -86,12 +83,12 @@ public class MainActivity extends MvpAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cicerone.getNavigatorHolder().setNavigator(navigator);
+        navigatorHolder.setNavigator(navigator);
     }
 
     @Override
     protected void onPause() {
-        cicerone.getNavigatorHolder().removeNavigator();
+        navigatorHolder.removeNavigator();
         super.onPause();
     }
 

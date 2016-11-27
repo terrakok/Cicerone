@@ -15,8 +15,12 @@ public class StartActivityPresenter extends MvpPresenter<StartActivityView> {
         this.router = router;
     }
 
-    public void onNextPressed() {
-        router.replaceScreen(Screens.MAIN_ACTIVITY_SCREEN);
+    public void onOrdinaryPressed() {
+        router.navigateTo(Screens.MAIN_ACTIVITY_SCREEN);
+    }
+
+    public void onMultiPressed() {
+        router.navigateTo(Screens.BOTTOM_NAVIGATION_ACTIVITY_SCREEN);
     }
 
     public void onBackPressed() {
