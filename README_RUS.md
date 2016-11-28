@@ -151,6 +151,8 @@ private Navigator navigator = new SupportFragmentNavigator(
 
 ![](https://habrastorage.org/files/16d/2ee/6e3/16d2ee6e33a0428eb4f0dcab8ce6b294.gif)
 
+![](https://hsto.org/files/867/638/c33/867638c338704489b3107a6d7cb28c2d.gif)
+
 ## Участники
 + идея и реализация - Константин Цховребов (@terrakok)
 + архитектурные советы, документация и публикация - Василий Чирвон (@Jeevuz)
