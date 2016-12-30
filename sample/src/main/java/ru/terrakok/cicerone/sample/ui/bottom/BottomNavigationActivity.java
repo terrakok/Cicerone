@@ -16,9 +16,8 @@ import javax.inject.Inject;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Replace;
+import ru.terrakok.cicerone.commands.CommandType;
 import ru.terrakok.cicerone.commands.SystemMessage;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
@@ -156,36 +155,42 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
     private Navigator navigator = new Navigator() {
         @Override
         public void applyCommand(Command command) {
-            if (command instanceof Back) {
-                finish();
-            } else if (command instanceof SystemMessage) {
-                Toast.makeText(BottomNavigationActivity.this, ((SystemMessage) command).getMessage(), Toast.LENGTH_SHORT).show();
-            } else if (command instanceof Replace) {
-                FragmentManager fm = getSupportFragmentManager();
+            switch (command.getCommandType()){
+                case CommandType.TYPE_BACK:
+                    finish();
+                    break;
+                case CommandType.TYPE_SYSTEM_MESSAGE:
+                    Toast.makeText(BottomNavigationActivity.this, ((SystemMessage) command).getMessage(), Toast.LENGTH_SHORT).show();
+                    break;
+                case CommandType.TYPE_REPLACE:
+                    {
+                        FragmentManager fm = getSupportFragmentManager();
 
-                switch (((Replace) command).getScreenKey()) {
-                    case Screens.ANDROID_SCREEN:
-                        fm.beginTransaction()
-                                .detach(bugTabFragment)
-                                .detach(dogTabFragment)
-                                .attach(androidTabFragment)
-                                .commitNow();
-                        break;
-                    case Screens.BUG_SCREEN:
-                        fm.beginTransaction()
-                                .detach(androidTabFragment)
-                                .detach(dogTabFragment)
-                                .attach(bugTabFragment)
-                                .commitNow();
-                        break;
-                    case Screens.DOG_SCREEN:
-                        fm.beginTransaction()
-                                .detach(androidTabFragment)
-                                .detach(bugTabFragment)
-                                .attach(dogTabFragment)
-                                .commitNow();
-                        break;
-                }
+                        switch (command.getScreenKey()) {
+                            case Screens.ANDROID_SCREEN:
+                                fm.beginTransaction()
+                                        .detach(bugTabFragment)
+                                        .detach(dogTabFragment)
+                                        .attach(androidTabFragment)
+                                        .commitNow();
+                                break;
+                            case Screens.BUG_SCREEN:
+                                fm.beginTransaction()
+                                        .detach(androidTabFragment)
+                                        .detach(dogTabFragment)
+                                        .attach(bugTabFragment)
+                                        .commitNow();
+                                break;
+                            case Screens.DOG_SCREEN:
+                                fm.beginTransaction()
+                                        .detach(androidTabFragment)
+                                        .detach(bugTabFragment)
+                                        .attach(dogTabFragment)
+                                        .commitNow();
+                                break;
+                        }
+                    }
+                    break;
             }
         }
     };

@@ -17,11 +17,8 @@ import javax.inject.Inject;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.android.SupportFragmentNavigator;
-import ru.terrakok.cicerone.commands.Back;
-import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Forward;
-import ru.terrakok.cicerone.commands.Replace;
+import ru.terrakok.cicerone.commands.CommandType;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
@@ -73,7 +70,7 @@ public class MainActivity extends MvpAppCompatActivity {
         screensSchemeTV = (TextView) findViewById(R.id.screens_scheme);
 
         if (savedInstanceState == null) {
-            navigator.applyCommand(new Replace(Screens.SAMPLE_SCREEN, 1));
+            navigator.applyCommand(new Command(Screens.SAMPLE_SCREEN, 1, CommandType.TYPE_REPLACE));
         } else {
             screenNames = (List<String>) savedInstanceState.getSerializable(STATE_SCREEN_NAMES);
             printScreensScheme();
@@ -111,22 +108,28 @@ public class MainActivity extends MvpAppCompatActivity {
     }
 
     private void updateScreenNames(Command command) {
-        if (command instanceof Back) {
-            if (screenNames.size() > 0) {
-                screenNames.remove(screenNames.size() - 1);
-            }
-        } else if (command instanceof Forward) {
-            int i = (int) ((Forward) command).getTransitionData();
-            screenNames.add(i + "");
-        } else if (command instanceof Replace) {
-            int i = (int) ((Replace) command).getTransitionData();
-            if (screenNames.size() > 0) {
-                screenNames.remove(screenNames.size() - 1);
-            }
-            screenNames.add(i + "");
-        } else if (command instanceof BackTo) {
-            screenNames = new ArrayList<>(screenNames.subList(0, getSupportFragmentManager().getBackStackEntryCount() + 1));
+        switch (command.getCommandType()){
+            case CommandType.TYPE_BACK:
+                if (screenNames.size() > 0) {
+                    screenNames.remove(screenNames.size() - 1);
+                }
+                break;
+            case CommandType.TYPE_FORWARD:
+                int forwardData = (int) command.getTransitionData();
+                screenNames.add(forwardData + "");
+                break;
+            case CommandType.TYPE_REPLACE:
+                int replaceData = (int) command.getTransitionData();
+                if (screenNames.size() > 0) {
+                    screenNames.remove(screenNames.size() - 1);
+                }
+                screenNames.add(replaceData + "");
+                break;
+            case CommandType.TYPE_BACK_TO:
+                screenNames = new ArrayList<>(screenNames.subList(0, getSupportFragmentManager().getBackStackEntryCount() + 1));
+                break;
         }
+
         printScreensScheme();
     }
 

@@ -1,9 +1,7 @@
 package ru.terrakok.cicerone;
 
-import ru.terrakok.cicerone.commands.Back;
-import ru.terrakok.cicerone.commands.BackTo;
-import ru.terrakok.cicerone.commands.Forward;
-import ru.terrakok.cicerone.commands.Replace;
+import ru.terrakok.cicerone.commands.Command;
+import ru.terrakok.cicerone.commands.CommandType;
 import ru.terrakok.cicerone.commands.SystemMessage;
 
 /**
@@ -39,7 +37,7 @@ public class Router extends BaseRouter {
      * @param data      initialisation parameters for the new screen
      */
     public void navigateTo(String screenKey, Object data) {
-        executeCommand(new Forward(screenKey, data));
+        executeCommand(new Command(screenKey, data, CommandType.TYPE_FORWARD));
     }
 
     /**
@@ -60,8 +58,8 @@ public class Router extends BaseRouter {
      * @param data      initialisation parameters for the new screen
      */
     public void newScreenChain(String screenKey, Object data) {
-        executeCommand(new BackTo(null));
-        executeCommand(new Forward(screenKey, data));
+        executeCommand(new Command(CommandType.TYPE_BACK_TO));
+        executeCommand(new Command(screenKey, data, CommandType.TYPE_FORWARD));
     }
 
     /**
@@ -80,8 +78,8 @@ public class Router extends BaseRouter {
      * @param data      initialisation parameters for the root
      */
     public void newRootScreen(String screenKey, Object data) {
-        executeCommand(new BackTo(null));
-        executeCommand(new Replace(screenKey, data));
+        executeCommand(new Command(CommandType.TYPE_BACK_TO));
+        executeCommand(new Command(screenKey, data, CommandType.TYPE_REPLACE));
     }
 
     /**
@@ -106,18 +104,18 @@ public class Router extends BaseRouter {
      * @param data      initialisation parameters for the new screen
      */
     public void replaceScreen(String screenKey, Object data) {
-        executeCommand(new Replace(screenKey, data));
+        executeCommand(new Command(screenKey, data, CommandType.TYPE_REPLACE));
     }
 
     /**
      * Return back to the needed screen from the chain.
      * Behavior in the case when no needed screens found depends on
-     * the processing of the {@link BackTo} command in a {@link Navigator} implementation.
+     * the processing of the {@link Command} with type CommandType.TYPE_BACK_TO in a {@link Navigator} implementation.
      *
      * @param screenKey screen key
      */
     public void backTo(String screenKey) {
-        executeCommand(new BackTo(screenKey));
+        executeCommand(new Command(CommandType.TYPE_BACK_TO));
     }
 
     /**
@@ -126,7 +124,7 @@ public class Router extends BaseRouter {
      * the processing of the {@link Back} command in a {@link Navigator} implementation.
      */
     public void exit() {
-        executeCommand(new Back());
+        executeCommand(new Command(CommandType.TYPE_BACK));
     }
 
     /**
@@ -135,7 +133,7 @@ public class Router extends BaseRouter {
      * @param message message to show
      */
     public void exitWithMessage(String message) {
-        executeCommand(new Back());
+        executeCommand(new Command(CommandType.TYPE_BACK));
         executeCommand(new SystemMessage(message));
     }
 
