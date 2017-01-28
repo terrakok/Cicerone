@@ -121,6 +121,15 @@ public class Router extends BaseRouter {
     }
 
     /**
+     * Full completion the chain and exit.
+     * It's usually necessary to complete the application or embedded navigation.
+     */
+    public void finishChain() {
+        executeCommand(new BackTo(null));
+        executeCommand(new Back());
+    }
+
+    /**
      * Return to the previous screen in the chain.
      * Behavior in the case when the current screen is the root depends on
      * the processing of the {@link Back} command in a {@link Navigator} implementation.
