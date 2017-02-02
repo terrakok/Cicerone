@@ -4,11 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.commands.Back;
-import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Forward;
-import ru.terrakok.cicerone.commands.Replace;
+import ru.terrakok.cicerone.commands.CommandType;
 import ru.terrakok.cicerone.commands.SystemMessage;
 
 /**
@@ -19,12 +16,12 @@ import ru.terrakok.cicerone.commands.SystemMessage;
 /**
  * {@link Navigator} implementation based on the support fragments.
  * <p>
- * {@link BackTo} navigation command will return to the root if
+ * {@link Command} with type CommandType.TYPE_BACK_TO  will return to the root if
  * needed screen isn't found in the screens chain.
  * To change this behavior override {@link #backToUnexisting()} method.
  * </p>
  * <p>
- * {@link Back} command will call {@link #exit()} method if current screen is the root.
+ * {@link Command} with type CommandType.TYPE_BACK will call {@link #exit()} method if current screen is the root.
  * </p>
  */
 public abstract class SupportFragmentNavigator implements Navigator {
@@ -33,8 +30,9 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
     /**
      * Creates SupportFragmentNavigator.
+     *
      * @param fragmentManager support fragment manager
-     * @param containerId id of the fragments container layout
+     * @param containerId     id of the fragments container layout
      */
     public SupportFragmentNavigator(FragmentManager fragmentManager, int containerId) {
         this.fragmentManager = fragmentManager;
@@ -43,54 +41,59 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
     @Override
     public void applyCommand(Command command) {
-        if (command instanceof Forward) {
-            Forward forward = (Forward) command;
-            fragmentManager
-                    .beginTransaction()
-                    .replace(containerId, createFragment(forward.getScreenKey(), forward.getTransitionData()))
-                    .addToBackStack(forward.getScreenKey())
-                    .commit();
-        } else if (command instanceof Back) {
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
-            } else {
-                exit();
-            }
-        } else if (command instanceof Replace) {
-            Replace replace = (Replace) command;
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
+        String screenKey = command.getScreenKey();
+        Object transitionData = command.getTransitionData();
+        switch (command.getCommandType()) {
+            case CommandType.TYPE_FORWARD:
                 fragmentManager
                         .beginTransaction()
-                        .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
-                        .addToBackStack(replace.getScreenKey())
+                        .replace(containerId, createFragment(screenKey, transitionData))
+                        .addToBackStack(screenKey)
                         .commit();
-            } else {
-                fragmentManager
-                        .beginTransaction()
-                        .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
-                        .commit();
-            }
-        } else if (command instanceof BackTo) {
-            String key = ((BackTo) command).getScreenKey();
+                break;
+            case CommandType.TYPE_BACK:
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    fragmentManager.popBackStackImmediate();
+                } else {
+                    exit();
+                }
+                break;
+            case CommandType.TYPE_REPLACE:
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    fragmentManager.popBackStackImmediate();
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(containerId, createFragment(screenKey, transitionData))
+                            .addToBackStack(screenKey)
+                            .commit();
+                } else {
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(containerId, createFragment(screenKey, transitionData))
+                            .commit();
+                }
+                break;
+            case CommandType.TYPE_BACK_TO:
 
-            if (key == null) {
-                backToRoot();
-            } else {
-                boolean hasScreen = false;
-                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
-                    if (key.equals(fragmentManager.getBackStackEntryAt(i).getName())) {
-                        fragmentManager.popBackStackImmediate(key, 0);
-                        hasScreen = true;
-                        break;
+                if (screenKey == null) {
+                    backToRoot();
+                } else {
+                    boolean hasScreen = false;
+                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                        if (screenKey.equals(fragmentManager.getBackStackEntryAt(i).getName())) {
+                            fragmentManager.popBackStackImmediate(screenKey, 0);
+                            hasScreen = true;
+                            break;
+                        }
+                    }
+                    if (!hasScreen) {
+                        backToUnexisting();
                     }
                 }
-                if (!hasScreen) {
-                    backToUnexisting();
-                }
-            }
-        } else if (command instanceof SystemMessage) {
-            showSystemMessage(((SystemMessage) command).getMessage());
+                break;
+            case CommandType.TYPE_SYSTEM_MESSAGE:
+                showSystemMessage(((SystemMessage) command).getMessage());
+                break;
         }
     }
 
@@ -103,14 +106,16 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
     /**
      * Creates Fragment matching {@code screenKey}.
+     *
      * @param screenKey screen key
-     * @param data initialization data
+     * @param data      initialization data
      * @return instantiated fragment for the passed screen key
      */
     protected abstract Fragment createFragment(String screenKey, Object data);
 
     /**
      * Shows system message.
+     *
      * @param message message to show
      */
     protected abstract void showSystemMessage(String message);

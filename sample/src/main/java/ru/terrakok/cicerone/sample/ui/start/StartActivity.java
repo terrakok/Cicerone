@@ -15,10 +15,8 @@ import javax.inject.Inject;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Forward;
-import ru.terrakok.cicerone.commands.Replace;
+import ru.terrakok.cicerone.commands.CommandType;
 import ru.terrakok.cicerone.commands.SystemMessage;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
@@ -90,20 +88,26 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
     private Navigator navigator = new Navigator() {
         @Override
         public void applyCommand(Command command) {
-            if (command instanceof Forward) {
-                forward((Forward) command);
-            } else if (command instanceof Replace) {
-                replace((Replace) command);
-            } else if (command instanceof Back) {
-                back();
-            } else if (command instanceof SystemMessage) {
-                Toast.makeText(StartActivity.this, ((SystemMessage) command).getMessage(), Toast.LENGTH_SHORT).show();
-            } else {
-                Log.e("Cicerone", "Illegal command for this screen: " + command.getClass().getSimpleName());
+
+            switch (command.getCommandType()){
+                case CommandType.TYPE_FORWARD:
+                    forward(command);
+                    break;
+                case CommandType.TYPE_REPLACE:
+                    replace(command);
+                    break;
+                case CommandType.TYPE_BACK:
+                    back();
+                    break;
+                case CommandType.TYPE_SYSTEM_MESSAGE:
+                    Toast.makeText(StartActivity.this, ((SystemMessage) command).getMessage(), Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Log.e("Cicerone", "Illegal command for this screen: " + command.getClass().getSimpleName());
             }
         }
 
-        private void forward(Forward command) {
+        private void forward(Command command) {
             switch (command.getScreenKey()) {
                 case Screens.START_ACTIVITY_SCREEN:
                     startActivity(new Intent(StartActivity.this, StartActivity.class));
@@ -120,11 +124,11 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
             }
         }
 
-        private void replace(Replace command) {
+        private void replace(Command command) {
             switch (command.getScreenKey()) {
                 case Screens.START_ACTIVITY_SCREEN:
                 case Screens.MAIN_ACTIVITY_SCREEN:
-                    forward(new Forward(command.getScreenKey(), command.getTransitionData()));
+                    forward(new Command(command.getScreenKey(), command.getTransitionData(), CommandType.TYPE_FORWARD));
                     finish();
                     break;
                 default:
