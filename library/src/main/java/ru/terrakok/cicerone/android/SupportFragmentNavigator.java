@@ -2,6 +2,7 @@ package ru.terrakok.cicerone.android;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
@@ -41,12 +42,15 @@ public abstract class SupportFragmentNavigator implements Navigator {
         this.containerId = containerId;
     }
 
+    protected FragmentTransaction createTransaction() {
+        return fragmentManager.beginTransaction();
+    }
+
     @Override
     public void applyCommand(Command command) {
         if (command instanceof Forward) {
             Forward forward = (Forward) command;
-            fragmentManager
-                    .beginTransaction()
+            createTransaction()
                     .replace(containerId, createFragment(forward.getScreenKey(), forward.getTransitionData()))
                     .addToBackStack(forward.getScreenKey())
                     .commit();
@@ -60,14 +64,12 @@ public abstract class SupportFragmentNavigator implements Navigator {
             Replace replace = (Replace) command;
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
-                fragmentManager
-                        .beginTransaction()
+                createTransaction()
                         .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
                         .addToBackStack(replace.getScreenKey())
                         .commit();
             } else {
-                fragmentManager
-                        .beginTransaction()
+                createTransaction()
                         .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
                         .commit();
             }
