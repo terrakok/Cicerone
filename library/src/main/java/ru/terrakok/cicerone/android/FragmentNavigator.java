@@ -2,6 +2,7 @@ package ru.terrakok.cicerone.android;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
@@ -41,12 +42,20 @@ public abstract class FragmentNavigator implements Navigator {
         this.containerId = containerId;
     }
 
+    /**
+     * Creates transaction. You can override this method to provide custom transaction creation logic.
+     * For example, to add animations to transaction.
+     * @return created transaction
+     */
+    protected FragmentTransaction createTransaction() {
+        return fragmentManager.beginTransaction();
+    }
+
     @Override
     public void applyCommand(Command command) {
         if (command instanceof Forward) {
             Forward forward = (Forward) command;
-            fragmentManager
-                    .beginTransaction()
+            createTransaction()
                     .replace(containerId, createFragment(forward.getScreenKey(), forward.getTransitionData()))
                     .addToBackStack(forward.getScreenKey())
                     .commit();
@@ -60,14 +69,12 @@ public abstract class FragmentNavigator implements Navigator {
             Replace replace = (Replace) command;
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
-                fragmentManager
-                        .beginTransaction()
+                createTransaction()
                         .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
                         .addToBackStack(replace.getScreenKey())
                         .commit();
             } else {
-                fragmentManager
-                        .beginTransaction()
+                createTransaction()
                         .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
                         .commit();
             }

@@ -42,6 +42,11 @@ public abstract class SupportFragmentNavigator implements Navigator {
         this.containerId = containerId;
     }
 
+    /**
+     * Creates transaction. You can override this method to provide custom transaction creation logic.
+     * For example, to add animations to transaction.
+     * @return created transaction
+     */
     protected FragmentTransaction createTransaction() {
         return fragmentManager.beginTransaction();
     }
