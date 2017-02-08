@@ -31,6 +31,9 @@ import ru.terrakok.cicerone.commands.SystemMessage;
 public abstract class SupportFragmentNavigator implements Navigator {
     private FragmentManager fragmentManager;
     private int containerId;
+    private int[] animations = { 0, 0, 0, 0 };
+    private boolean animationExists;
+    private boolean popAnimationExists;
 
     /**
      * Creates SupportFragmentNavigator.
@@ -43,12 +46,35 @@ public abstract class SupportFragmentNavigator implements Navigator {
     }
 
     /**
-     * Creates transaction. You can override this method to provide custom transaction creation logic.
-     * For example, to add animations to transaction.
-     * @return created transaction
+     * Set specific animation resources to run for the fragments that are replacing by this navigator.
+     * These animations will not be played when popping the back stack.
      */
-    protected FragmentTransaction createTransaction() {
-        return fragmentManager.beginTransaction();
+    public void setCustomAnimations(int enter, int exit) {
+        animations[0] = enter;
+        animations[1] = exit;
+        animationExists = true;
+    }
+
+    /**
+     * Set specific animation resources to run for the fragments that are replacing by this navigator.
+     * The <code>popEnter</code> and <code>popExit</code> animations will be played for enter/exit
+     * operations specifically when popping the back stack.
+     */
+    public void setCustomAnimations(int enter, int exit, int popEnter, int popExit) {
+        setCustomAnimations(enter, exit);
+        animations[2] = popEnter;
+        animations[3] = popExit;
+        popAnimationExists = true;
+    }
+
+    private FragmentTransaction createTransaction() {
+        final FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (popAnimationExists) {
+            transaction.setCustomAnimations(animations[0], animations[1], animations[2], animations[3]);
+        } else if (animationExists) {
+            transaction.setCustomAnimations(animations[0], animations[1]);
+        }
+        return transaction;
     }
 
     @Override
