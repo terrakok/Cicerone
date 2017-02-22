@@ -1,6 +1,8 @@
 package ru.terrakok.cicerone.android;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import ru.terrakok.cicerone.Navigator;
@@ -28,16 +30,18 @@ import ru.terrakok.cicerone.commands.SystemMessage;
  * </p>
  */
 public abstract class SupportFragmentNavigator implements Navigator {
+    private FragmentActivity activity;
     private FragmentManager fragmentManager;
     private int containerId;
 
     /**
      * Creates SupportFragmentNavigator.
-     * @param fragmentManager support fragment manager
+     * @param activity {@link FragmentActivity}
      * @param containerId id of the fragments container layout
      */
-    public SupportFragmentNavigator(FragmentManager fragmentManager, int containerId) {
-        this.fragmentManager = fragmentManager;
+    public SupportFragmentNavigator(FragmentActivity activity, int containerId) {
+        this.activity = activity;
+        this.fragmentManager = activity.getSupportFragmentManager();
         this.containerId = containerId;
     }
 
@@ -45,11 +49,17 @@ public abstract class SupportFragmentNavigator implements Navigator {
     public void applyCommand(Command command) {
         if (command instanceof Forward) {
             Forward forward = (Forward) command;
-            fragmentManager
-                    .beginTransaction()
-                    .replace(containerId, createFragment(forward.getScreenKey(), forward.getTransitionData()))
-                    .addToBackStack(forward.getScreenKey())
-                    .commit();
+
+            Intent activityIntent = createActivityIntent(forward.getScreenKey(), forward.getTransitionData());
+            if (activityIntent != null) {
+                activity.startActivity(activityIntent);
+            } else {
+                fragmentManager
+                        .beginTransaction()
+                        .replace(containerId, createFragment(forward.getScreenKey(), forward.getTransitionData()))
+                        .addToBackStack(forward.getScreenKey())
+                        .commit();
+            }
         } else if (command instanceof Back) {
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
@@ -108,6 +118,18 @@ public abstract class SupportFragmentNavigator implements Navigator {
      * @return instantiated fragment for the passed screen key
      */
     protected abstract Fragment createFragment(String screenKey, Object data);
+
+    /**
+     * Creates Activity Intent matching {@code screenKey}.<p/>
+     * <b>Warning:</b> this method will be called only for {@link Forward} command!
+     * It helps you start new Activity but don't create full featured Activity navigation.
+     * @param screenKey screen key
+     * @param data initialization data
+     * @return Activity Intent for the passed screen key
+     */
+    protected Intent createActivityIntent(String screenKey, Object data) {
+        return null;
+    }
 
     /**
      * Shows system message.
