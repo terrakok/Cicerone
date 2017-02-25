@@ -32,8 +32,6 @@ public abstract class SupportFragmentNavigator implements Navigator {
     private FragmentManager fragmentManager;
     private int containerId;
     private int[] animations = { 0, 0, 0, 0 };
-    private boolean animationExists;
-    private boolean popAnimationExists;
 
     /**
      * Creates SupportFragmentNavigator.
@@ -52,7 +50,6 @@ public abstract class SupportFragmentNavigator implements Navigator {
     public void setCustomAnimations(int enter, int exit) {
         animations[0] = enter;
         animations[1] = exit;
-        animationExists = true;
     }
 
     /**
@@ -64,16 +61,11 @@ public abstract class SupportFragmentNavigator implements Navigator {
         setCustomAnimations(enter, exit);
         animations[2] = popEnter;
         animations[3] = popExit;
-        popAnimationExists = true;
     }
 
     private FragmentTransaction createTransaction() {
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
-        if (popAnimationExists) {
-            transaction.setCustomAnimations(animations[0], animations[1], animations[2], animations[3]);
-        } else if (animationExists) {
-            transaction.setCustomAnimations(animations[0], animations[1]);
-        }
+        transaction.setCustomAnimations(animations[0], animations[1], animations[2], animations[3]);
         return transaction;
     }
 
