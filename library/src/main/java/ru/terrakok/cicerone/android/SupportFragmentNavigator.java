@@ -36,7 +36,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
     /**
      * Creates SupportFragmentNavigator.
-     * @param activity {@link FragmentActivity}
+     * @param activity {@link FragmentActivity} that is holding this navigator
      * @param containerId id of the fragments container layout
      */
     public SupportFragmentNavigator(FragmentActivity activity, int containerId) {
@@ -49,8 +49,8 @@ public abstract class SupportFragmentNavigator implements Navigator {
     public void applyCommand(Command command) {
         if (command instanceof Forward) {
             Forward forward = (Forward) command;
-
             Intent activityIntent = createActivityIntent(forward.getScreenKey(), forward.getTransitionData());
+
             if (activityIntent != null) {
                 activity.startActivity(activityIntent);
             } else {
@@ -60,45 +60,62 @@ public abstract class SupportFragmentNavigator implements Navigator {
                         .addToBackStack(forward.getScreenKey())
                         .commit();
             }
+
         } else if (command instanceof Back) {
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
             } else {
                 exit();
             }
+
         } else if (command instanceof Replace) {
             Replace replace = (Replace) command;
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
-                fragmentManager
-                        .beginTransaction()
-                        .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
-                        .addToBackStack(replace.getScreenKey())
-                        .commit();
+            Intent activityIntent = createActivityIntent(replace.getScreenKey(), replace.getTransitionData());
+
+            if (activityIntent != null) {
+                activity.startActivity(activityIntent);
+                activity.finish();
             } else {
-                fragmentManager
-                        .beginTransaction()
-                        .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
-                        .commit();
+                if (fragmentManager.getBackStackEntryCount() > 0) {
+                    fragmentManager.popBackStackImmediate();
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
+                            .addToBackStack(replace.getScreenKey())
+                            .commit();
+                } else {
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
+                            .commit();
+                }
             }
+
         } else if (command instanceof BackTo) {
             String key = ((BackTo) command).getScreenKey();
+            Intent activityIntent = createActivityIntent(key, null);
 
-            if (key == null) {
-                backToRoot();
+            if (activityIntent != null) {
+                throw new IllegalStateException("BackTo command can not be used with screenKey for which " +
+                        "createActivityIntent returns an Intent.");
             } else {
-                boolean hasScreen = false;
-                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
-                    if (key.equals(fragmentManager.getBackStackEntryAt(i).getName())) {
-                        fragmentManager.popBackStackImmediate(key, 0);
-                        hasScreen = true;
-                        break;
+                if (key == null) {
+                    backToRoot();
+                } else {
+                    boolean hasScreen = false;
+                    for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                        if (key.equals(fragmentManager.getBackStackEntryAt(i).getName())) {
+                            fragmentManager.popBackStackImmediate(key, 0);
+                            hasScreen = true;
+                            break;
+                        }
+                    }
+                    if (!hasScreen) {
+                        backToUnexisting();
                     }
                 }
-                if (!hasScreen) {
-                    backToUnexisting();
-                }
             }
+
         } else if (command instanceof SystemMessage) {
             showSystemMessage(((SystemMessage) command).getMessage());
         }
@@ -120,12 +137,17 @@ public abstract class SupportFragmentNavigator implements Navigator {
     protected abstract Fragment createFragment(String screenKey, Object data);
 
     /**
-     * Creates Activity Intent matching {@code screenKey}.<p/>
-     * <b>Warning:</b> this method will be called only for {@link Forward} command!
-     * It helps you start new Activity but don't create full featured Activity navigation.
+     * Creates Intent to start Activity for {@code screenKey}.
+     * This method intended only to ease Activity start from this navigator,
+     * but NOT provides full featured Activity navigation.
+     * <p>
+     * <b>Warning:</b> this method does not work with {@link BackTo} command!
+     * Use of the {@code screenKey} for which this method returns an Intent
+     * with the {@code BackTo} command will throw the exception.
+     * </p>
      * @param screenKey screen key
-     * @param data initialization data
-     * @return Activity Intent for the passed screen key
+     * @param data initialization data, can be null
+     * @return intent to start Activity for the passed screen key
      */
     protected Intent createActivityIntent(String screenKey, Object data) {
         return null;

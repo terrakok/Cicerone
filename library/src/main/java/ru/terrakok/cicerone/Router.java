@@ -121,8 +121,9 @@ public class Router extends BaseRouter {
     }
 
     /**
-     * Full completion the chain and exit.
-     * It's usually necessary to complete the application or embedded navigation.
+     * Remove all screens from the chain and exit.
+     * It's usually necessary to finish the application
+     * or just close a supplementary container's chain.
      */
     public void finishChain() {
         executeCommand(new BackTo(null));

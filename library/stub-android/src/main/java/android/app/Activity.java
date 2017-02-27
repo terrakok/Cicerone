@@ -13,4 +13,8 @@ public class Activity {
     public FragmentManager getFragmentManager() {
         throw new RuntimeException("Stub!");
     }
+
+    public void finish() {
+        throw new RuntimeException("Stub!");
+    }
 }
