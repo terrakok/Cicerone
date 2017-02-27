@@ -12,6 +12,14 @@ public class FragmentTransaction {
 		throw new RuntimeException("Stub!");
 	}
 
+	public FragmentTransaction setCustomAnimations(int enter, int exit) {
+		throw new RuntimeException("Stub!");
+	}
+
+	public FragmentTransaction setCustomAnimations(int enter, int exit, int popEnter, int popExit) {
+		throw new RuntimeException("Stub!");
+	}
+
 	public int commit() {
 		throw new RuntimeException("Stub!");
 	}
