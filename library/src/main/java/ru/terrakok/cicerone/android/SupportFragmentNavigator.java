@@ -41,8 +41,18 @@ public abstract class SupportFragmentNavigator implements Navigator {
      * @param containerId id of the fragments container layout
      */
     public SupportFragmentNavigator(FragmentActivity activity, int containerId) {
+        this(activity, activity.getSupportFragmentManager(), containerId);
+    }
+
+    /**
+     * Creates SupportFragmentNavigator.
+     * @param activity {@link FragmentActivity}
+     * @param fragmentManager support fragment manager
+     * @param containerId id of the fragments container layout
+     */
+    public SupportFragmentNavigator(FragmentActivity activity, FragmentManager fragmentManager, int containerId) {
         this.activity = activity;
-        this.fragmentManager = activity.getSupportFragmentManager();
+        this.fragmentManager = fragmentManager;
         this.containerId = containerId;
     }
 
@@ -52,7 +62,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
             Forward forward = (Forward) command;
 
             Intent activityIntent = createActivityIntent(forward.getScreenKey(), forward.getTransitionData());
-            if (activityIntent != null) {
+            if (activity != null && activityIntent != null) {
                 activity.startActivity(activityIntent);
             } else {
                 fragmentManager

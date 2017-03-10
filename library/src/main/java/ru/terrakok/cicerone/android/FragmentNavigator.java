@@ -41,8 +41,18 @@ public abstract class FragmentNavigator implements Navigator {
      * @param containerId id of the fragments container layout
      */
     public FragmentNavigator(Activity activity, int containerId) {
+        this(activity, activity.getFragmentManager(), containerId);
+    }
+
+    /**
+     * Creates FragmentNavigator.
+     * @param activity {@link Activity}
+     * @param fragmentManager fragment manager
+     * @param containerId id of the fragments container layout
+     */
+    public FragmentNavigator(Activity activity, FragmentManager fragmentManager, int containerId) {
         this.activity = activity;
-        this.fragmentManager = activity.getFragmentManager();
+        this.fragmentManager = fragmentManager;
         this.containerId = containerId;
     }
 
