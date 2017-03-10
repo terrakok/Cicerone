@@ -85,16 +85,11 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
 
     private Navigator getNavigator() {
         if (navigator == null) {
-            navigator = new SupportFragmentNavigator(getChildFragmentManager(), R.id.ftc_container) {
+            navigator = new SupportFragmentNavigator(getActivity(), getChildFragmentManager(), R.id.ftc_container) {
 
                 @Override
                 protected Fragment createFragment(String screenKey, Object data) {
                     return ForwardFragment.getNewInstance(getContainerName(), (int) data);
-                }
-
-                @Override
-                protected void showSystemMessage(String message) {
-                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

@@ -124,6 +124,7 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
             switch (command.getScreenKey()) {
                 case Screens.START_ACTIVITY_SCREEN:
                 case Screens.MAIN_ACTIVITY_SCREEN:
+                case Screens.BOTTOM_NAVIGATION_ACTIVITY_SCREEN:
                     forward(new Forward(command.getScreenKey(), command.getTransitionData()));
                     finish();
                     break;
