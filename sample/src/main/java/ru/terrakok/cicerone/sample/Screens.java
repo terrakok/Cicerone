@@ -17,4 +17,5 @@ public class Screens {
     public static final String DOG_SCREEN = "dog screen";
 
     public static final String FORWARD_SCREEN = "forward screen";
+    public static final String GITHUB_SCREEN = "github screen";
 }

@@ -36,6 +36,10 @@ public class ForwardPresenter extends MvpPresenter<ForwardView> {
         router.navigateTo(Screens.FORWARD_SCREEN, number + 1);
     }
 
+    public void onGithubPressed() {
+        router.navigateTo(Screens.GITHUB_SCREEN);
+    }
+
     public void onBackPressed() {
         router.exit();
     }

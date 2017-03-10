@@ -28,6 +28,7 @@ public class ForwardFragment extends MvpAppCompatFragment implements ForwardView
     private Toolbar toolbar;
     private TextView chainTV;
     private View forwardBt;
+    private View githubBt;
 
     @InjectPresenter
     ForwardPresenter presenter;
@@ -63,6 +64,7 @@ public class ForwardFragment extends MvpAppCompatFragment implements ForwardView
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         chainTV = (TextView) view.findViewById(R.id.chain_text);
         forwardBt = view.findViewById(R.id.forward_button);
+        githubBt = view.findViewById(R.id.github_button);
     }
 
     @Override
@@ -79,6 +81,12 @@ public class ForwardFragment extends MvpAppCompatFragment implements ForwardView
             @Override
             public void onClick(View view) {
                 presenter.onForwardPressed();
+            }
+        });
+        githubBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.onGithubPressed();
             }
         });
     }
