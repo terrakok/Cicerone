@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.widget.Toast;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
@@ -135,12 +136,16 @@ public abstract class SupportFragmentNavigator implements Navigator {
      * Shows system message.
      * @param message message to show
      */
-    protected abstract void showSystemMessage(String message);
+    protected void showSystemMessage(String message) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+    }
 
     /**
      * Called when we try to back from the root.
      */
-    protected abstract void exit();
+    protected void exit() {
+        activity.finish();
+    }
 
     /**
      * Called when we tried to back to some specific screen, but didn't found it.
