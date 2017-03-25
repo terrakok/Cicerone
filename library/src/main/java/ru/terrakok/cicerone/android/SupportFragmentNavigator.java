@@ -141,7 +141,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
     }
 
     /**
-     * Called when we tried to open to some specific screen, but didn't found it.
+     * Called if we can't create a screen.
      */
     protected void unknownScreen(Command command) {
     }
