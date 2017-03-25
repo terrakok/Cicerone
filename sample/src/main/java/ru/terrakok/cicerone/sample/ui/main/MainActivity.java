@@ -41,10 +41,20 @@ public class MainActivity extends MvpAppCompatActivity {
     @Inject
     NavigatorHolder navigatorHolder;
 
-    private Navigator navigator = new SupportFragmentNavigator(this, R.id.main_container) {
+    private Navigator navigator = new SupportFragmentNavigator(getSupportFragmentManager(), R.id.main_container) {
         @Override
         protected Fragment createFragment(String screenKey, Object data) {
             return SampleFragment.getNewInstance((int) data);
+        }
+
+        @Override
+        protected void showSystemMessage(String message) {
+            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected void exit() {
+            finish();
         }
 
         @Override

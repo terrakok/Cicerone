@@ -8,14 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
 import ru.terrakok.cicerone.Cicerone;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.android.SupportFragmentNavigator;
+import ru.terrakok.cicerone.android.SupportAppNavigator;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
@@ -87,19 +86,22 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
 
     private Navigator getNavigator() {
         if (navigator == null) {
-            navigator = new SupportFragmentNavigator(getActivity(), getChildFragmentManager(), R.id.ftc_container) {
+            navigator = new SupportAppNavigator(getActivity(), getChildFragmentManager(), R.id.ftc_container) {
 
                 @Override
                 protected Intent createActivityIntent(String screenKey, Object data) {
                     if (screenKey.equals(Screens.GITHUB_SCREEN)) {
                         return new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/terrakok/Cicerone"));
                     }
-                    return super.createActivityIntent(screenKey, data);
+                    return null;
                 }
 
                 @Override
                 protected Fragment createFragment(String screenKey, Object data) {
-                    return ForwardFragment.getNewInstance(getContainerName(), (int) data);
+                    if (screenKey.equals(Screens.FORWARD_SCREEN)) {
+                        return ForwardFragment.getNewInstance(getContainerName(), (int) data);
+                    }
+                    return null;
                 }
 
                 @Override
