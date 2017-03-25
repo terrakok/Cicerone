@@ -3,6 +3,7 @@ package ru.terrakok.cicerone.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import ru.terrakok.cicerone.commands.BackTo;
@@ -26,6 +27,11 @@ public abstract class SupportAppNavigator extends SupportFragmentNavigator {
 
     public SupportAppNavigator(FragmentActivity activity, int containerId) {
         super(activity.getSupportFragmentManager(), containerId);
+        this.activity = activity;
+    }
+
+    public SupportAppNavigator(FragmentActivity activity, FragmentManager fragmentManager, int containerId) {
+        super(fragmentManager, containerId);
         this.activity = activity;
     }
 

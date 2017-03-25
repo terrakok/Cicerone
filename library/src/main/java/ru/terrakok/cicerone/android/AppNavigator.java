@@ -1,6 +1,7 @@
 package ru.terrakok.cicerone.android;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -25,6 +26,11 @@ public abstract class AppNavigator extends FragmentNavigator {
 
     public AppNavigator(Activity activity, int containerId) {
         super(activity.getFragmentManager(), containerId);
+        this.activity = activity;
+    }
+
+    public AppNavigator(Activity activity, FragmentManager fragmentManager, int containerId) {
+        super(fragmentManager, containerId);
         this.activity = activity;
     }
 
