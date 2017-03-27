@@ -145,5 +145,6 @@ public abstract class FragmentNavigator implements Navigator {
      * Called if we can't create a screen.
      */
     protected void unknownScreen(Command command) {
+        throw new RuntimeException("Can't create a screen for passed screenKey.");
     }
 }
