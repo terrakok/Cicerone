@@ -15,9 +15,9 @@ ext {
     bintrayName = 'cicerone'
     publishedGroupId = 'ru.terrakok.cicerone'
     artifact = 'cicerone'
-    libraryVersion = '1.1'
+    libraryVersion = '1.2'
     gitUrl = 'https://github.com/terrakok/Cicerone'
-    allLicenses = ['Apache-2.0']
+    allLicenses = ['MIT']
 }
 
 // Configuration of the library uploading to the Bintray
