@@ -1,7 +1,8 @@
 # Cicerone
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Cicerone-green.svg?style=true)](https://android-arsenal.com/details/1/4700)
 [![jCenter](https://api.bintray.com/packages/terrakok/terramaven/cicerone/images/download.svg)](https://bintray.com/terrakok/terramaven/cicerone/_latestVersion)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Cicerone-green.svg?style=true)](https://android-arsenal.com/details/1/4700)
+[![Android Weekly](https://img.shields.io/badge/Android%20Weekly-250-lightgrey.svg)](http://androidweekly.net/issues/issue-250)  
 [![Telegram](https://img.shields.io/badge/Telegram-ENG-blue.svg)](https://t.me/Cicerone_ENG)
 [![Telegram](https://img.shields.io/badge/Telegram-RUS-blue.svg)](https://t.me/Cicerone_RUS)  
 
@@ -9,6 +10,8 @@
 
 Cicerone (a guide, one who conducts sightseers) is a lightweight library that makes the navigation in an Android app easy.  
 It was designed to be used with the MVP pattern (try [Moxy](https://github.com/Arello-Mobile/Moxy)), but will work great with any architecture.
+
+[Russian version readme](https://github.com/terrakok/Cicerone/blob/develop/README_RUS.md)
 
 ## Main advantages
 + is not tied to Fragments
@@ -23,7 +26,7 @@ Add the dependency in your build.gradle:
 ```groovy
 dependencies {
     //Cicerone
-    compile 'ru.terrakok.cicerone:cicerone:1.1'
+    compile 'ru.terrakok.cicerone:cicerone:X.X'
 }
 ```
 
