@@ -109,7 +109,33 @@ private Navigator navigator = new Navigator() {
 };
 ```
 
-Навигатор не обязана быть в Activity. Он может быть и внутри Fragment'а, который переключает внутри себя View.
+**Внимание!**
+Если вы используете android.support.v4.app.FragmentActivity, то необходимо устанавливать Navigator в методе _onResumeFragments_, а не _onResume_:
+
+```java
+// For activity extending android.support.v4.app.FragmentActivity
+// more info here: https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()
+@Override
+protected void onResumeFragments() {
+    super.onResumeFragments();
+    SampleApplication.INSTANCE.getNavigatorHolder().setNavigator(navigator);
+}
+
+@Override
+protected void onPause() {
+    super.onPause();
+    SampleApplication.INSTANCE.getNavigatorHolder().removeNavigator();
+}
+
+private Navigator navigator = new Navigator() {
+    @Override
+    public void applyCommand(Command command) {
+        //implements commands logic
+    }
+};
+```
+
+Навигатор не обязан быть в Activity. Он может быть и внутри Fragment'а, который переключает внутри себя View.
 
 ## Команды навигатора
 Для большинства задач предоставленных в библиотеке команд должно хватить, но их всегда можно дополнить собственными!

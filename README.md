@@ -121,6 +121,34 @@ private Navigator navigator = new Navigator() {
 };
 ```
 
+**Attention!**
+You should use _onResumeFragments_ method instead of _onResume_ for providing Navigator if your activity extends android.support.v4.app.FragmentActivity:
+
+```java
+// For activity extending android.support.v4.app.FragmentActivity
+// more info here: https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()
+@Override
+protected void onResumeFragments() {
+    super.onResumeFragments();
+    SampleApplication.INSTANCE.getNavigatorHolder().setNavigator(navigator);
+}
+
+@Override
+protected void onPause() {
+    super.onPause();
+    SampleApplication.INSTANCE.getNavigatorHolder().removeNavigator();
+}
+
+private Navigator navigator = new Navigator() {
+    @Override
+    public void applyCommand(Command command) {
+        //implements commands logic
+    }
+};
+```
+
+Navigator can be also provided by a Fragment to control switching of the Views inside the Fragment.
+
 ## Navigation commands
 This commands set will fulfill the needs of the most applications. But if you need something special - just add it!
 + Forward - Opens new screen  
