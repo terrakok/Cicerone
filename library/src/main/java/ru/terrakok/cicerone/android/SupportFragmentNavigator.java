@@ -33,8 +33,9 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
     /**
      * Creates SupportFragmentNavigator.
+     *
      * @param fragmentManager support fragment manager
-     * @param containerId id of the fragments container layout
+     * @param containerId     id of the fragments container layout
      */
     public SupportFragmentNavigator(FragmentManager fragmentManager, int containerId) {
         this.fragmentManager = fragmentManager;
@@ -45,9 +46,14 @@ public abstract class SupportFragmentNavigator implements Navigator {
     public void applyCommand(Command command) {
         if (command instanceof Forward) {
             Forward forward = (Forward) command;
+            Fragment fragment = createFragment(forward.getScreenKey(), forward.getTransitionData());
+            if (fragment == null) {
+                unknownScreen(command);
+                return;
+            }
             fragmentManager
                     .beginTransaction()
-                    .replace(containerId, createFragment(forward.getScreenKey(), forward.getTransitionData()))
+                    .replace(containerId, fragment)
                     .addToBackStack(forward.getScreenKey())
                     .commit();
         } else if (command instanceof Back) {
@@ -58,17 +64,22 @@ public abstract class SupportFragmentNavigator implements Navigator {
             }
         } else if (command instanceof Replace) {
             Replace replace = (Replace) command;
+            Fragment fragment = createFragment(replace.getScreenKey(), replace.getTransitionData());
+            if (fragment == null) {
+                unknownScreen(command);
+                return;
+            }
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
                 fragmentManager
                         .beginTransaction()
-                        .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
+                        .replace(containerId, fragment)
                         .addToBackStack(replace.getScreenKey())
                         .commit();
             } else {
                 fragmentManager
                         .beginTransaction()
-                        .replace(containerId, createFragment(replace.getScreenKey(), replace.getTransitionData()))
+                        .replace(containerId, fragment)
                         .commit();
             }
         } else if (command instanceof BackTo) {
@@ -103,14 +114,16 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
     /**
      * Creates Fragment matching {@code screenKey}.
+     *
      * @param screenKey screen key
-     * @param data initialization data
+     * @param data      initialization data
      * @return instantiated fragment for the passed screen key
      */
     protected abstract Fragment createFragment(String screenKey, Object data);
 
     /**
      * Shows system message.
+     *
      * @param message message to show
      */
     protected abstract void showSystemMessage(String message);
@@ -125,5 +138,11 @@ public abstract class SupportFragmentNavigator implements Navigator {
      */
     protected void backToUnexisting() {
         backToRoot();
+    }
+
+    /**
+     * Called if we can't create a screen.
+     */
+    protected void unknownScreen(Command command) {
     }
 }

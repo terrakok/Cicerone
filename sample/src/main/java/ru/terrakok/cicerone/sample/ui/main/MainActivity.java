@@ -12,7 +12,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.android.SupportFragmentNavigator;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
@@ -22,6 +25,7 @@ import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
+import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
 
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
@@ -30,8 +34,12 @@ import ru.terrakok.cicerone.sample.Screens;
 
 public class MainActivity extends MvpAppCompatActivity {
     private static final String STATE_SCREEN_NAMES = "state_screen_names";
+
     private List<String> screenNames = new ArrayList<>();
     private TextView screensSchemeTV;
+
+    @Inject
+    NavigatorHolder navigatorHolder;
 
     private Navigator navigator = new SupportFragmentNavigator(getSupportFragmentManager(), R.id.main_container) {
         @Override
@@ -58,7 +66,9 @@ public class MainActivity extends MvpAppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        SampleApplication.INSTANCE.getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         screensSchemeTV = (TextView) findViewById(R.id.screens_scheme);
 
@@ -73,20 +83,22 @@ public class MainActivity extends MvpAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SampleApplication.INSTANCE.getNavigatorHolder().setNavigator(navigator);
+        navigatorHolder.setNavigator(navigator);
     }
 
     @Override
     protected void onPause() {
+        navigatorHolder.removeNavigator();
         super.onPause();
-        SampleApplication.INSTANCE.getNavigatorHolder().removeNavigator();
     }
 
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
-        if (fragment != null && fragment instanceof SampleFragment) {
-            ((SampleFragment) fragment).onBackPressed();
+        if (fragment != null
+                && fragment instanceof BackButtonListener
+                && ((BackButtonListener) fragment).onBackPressed()) {
+            return;
         } else {
             super.onBackPressed();
         }

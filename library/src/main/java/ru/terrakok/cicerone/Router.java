@@ -121,6 +121,15 @@ public class Router extends BaseRouter {
     }
 
     /**
+     * Remove all screens from the chain and exit.
+     * It's mostly used to finish the application or close a supplementary navigation chain.
+     */
+    public void finishChain() {
+        executeCommand(new BackTo(null));
+        executeCommand(new Back());
+    }
+
+    /**
      * Return to the previous screen in the chain.
      * Behavior in the case when the current screen is the root depends on
      * the processing of the {@link Back} command in a {@link Navigator} implementation.

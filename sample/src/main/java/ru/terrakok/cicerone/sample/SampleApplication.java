@@ -1,37 +1,29 @@
 package ru.terrakok.cicerone.sample;
 
-import com.arellomobile.mvp.MvpApplication;
+import android.app.Application;
 
-import ru.terrakok.cicerone.Cicerone;
-import ru.terrakok.cicerone.NavigatorHolder;
-import ru.terrakok.cicerone.Router;
+import ru.terrakok.cicerone.sample.dagger.AppComponent;
+import ru.terrakok.cicerone.sample.dagger.DaggerAppComponent;
 
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
  * on 11.10.16
  */
 
-public class SampleApplication extends MvpApplication {
+public class SampleApplication extends Application {
     public static SampleApplication INSTANCE;
-    private Cicerone<Router> cicerone;
+    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
         INSTANCE = this;
-
-        initCicerone();
     }
 
-    private void initCicerone() {
-        cicerone = Cicerone.create();
-    }
-
-    public NavigatorHolder getNavigatorHolder() {
-        return cicerone.getNavigatorHolder();
-    }
-
-    public Router getRouter() {
-        return cicerone.getRouter();
+    public AppComponent getAppComponent() {
+        if (appComponent == null) {
+            appComponent = DaggerAppComponent.builder().build();
+        }
+        return appComponent;
     }
 }

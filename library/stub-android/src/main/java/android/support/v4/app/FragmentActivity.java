@@ -8,4 +8,7 @@ import android.app.Activity;
  */
 
 public class FragmentActivity extends Activity {
+    public FragmentManager getSupportFragmentManager() {
+        throw new RuntimeException("Stub!");
+    }
 }
