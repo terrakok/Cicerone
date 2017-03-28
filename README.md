@@ -101,10 +101,8 @@ Navigator processes the navigation commands. Usually it is an anonymous class in
 Activity provides Navigator to the CommandBuffer in _onResume_ and removes it in _onPause_.  
 
 ```java
-// Attention: Use onResumeFragments() with FragmentActivity
-// more info here: https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()
 @Override
-protected void onResume() {
+protected void onResume() {	// **Attention**: Use _onResumeFragments()_ with FragmentActivity ([more info](https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()))
     super.onResume();
     SampleApplication.INSTANCE.getNavigatorHolder().setNavigator(navigator);
 }
@@ -122,8 +120,6 @@ private Navigator navigator = new Navigator() {
     }
 };
 ```
-
-Navigator can be also provided by a Fragment to control switching of the Views inside the Fragment.
 
 ## Navigation commands
 This commands set will fulfill the needs of the most applications. But if you need something special - just add it!

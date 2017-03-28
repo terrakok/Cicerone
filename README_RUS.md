@@ -89,10 +89,8 @@ Navigator - (например) анонимный класс внутри Activi
 Activity предоставляет свой Navigator для CommandBuffer в методе _onResume_ и очищает в _onPause_
 
 ```java
-// Attention: Use onResumeFragments() with FragmentActivity
-// more info here: https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()
 @Override
-protected void onResume() {
+protected void onResume() { // **Attention**: Use _onResumeFragments()_ with FragmentActivity ([more info](https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()))
     super.onResume();
     SampleApplication.INSTANCE.getNavigatorHolder().setNavigator(navigator);
 }
