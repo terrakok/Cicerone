@@ -130,8 +130,8 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onResumeFragments() {
+        super.onResumeFragments();
         navigatorHolder.setNavigator(navigator);
     }
 

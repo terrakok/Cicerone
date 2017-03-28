@@ -81,8 +81,8 @@ public class MainActivity extends MvpAppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onResumeFragments() {
+        super.onResumeFragments();
         navigatorHolder.setNavigator(navigator);
     }
 

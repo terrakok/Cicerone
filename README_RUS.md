@@ -88,6 +88,8 @@ protected void executeCommand(Command command) {
 Navigator - (например) анонимный класс внутри Activity, который реализует команды навигации.
 Activity предоставляет свой Navigator для CommandBuffer в методе _onResume_ и очищает в _onPause_
 
+**Внимание**: В FragmentActivity следует использовать _onResumeFragments()_. ([подробнее](https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()))
+
 ```java
 @Override
 protected void onResume() {
@@ -109,7 +111,7 @@ private Navigator navigator = new Navigator() {
 };
 ```
 
-Навигатор не обязана быть в Activity. Он может быть и внутри Fragment'а, который переключает внутри себя View.
+Навигатор не обязан быть в Activity. Он может быть и внутри Fragment'а, который переключает внутри себя View.
 
 ## Команды навигатора
 Для большинства задач предоставленных в библиотеке команд должно хватить, но их всегда можно дополнить собственными!
