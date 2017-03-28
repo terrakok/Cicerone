@@ -13,13 +13,10 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import javax.inject.Inject;
 
+import ru.terrakok.cicerone.DefaultNavigator;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.commands.Back;
-import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Replace;
-import ru.terrakok.cicerone.commands.SystemMessage;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
@@ -153,40 +150,44 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
         }
     }
 
-    private Navigator navigator = new Navigator() {
+    private Navigator navigator = new DefaultNavigator() {
         @Override
-        public void applyCommand(Command command) {
-            if (command instanceof Back) {
-                finish();
-            } else if (command instanceof SystemMessage) {
-                Toast.makeText(BottomNavigationActivity.this, ((SystemMessage) command).getMessage(), Toast.LENGTH_SHORT).show();
-            } else if (command instanceof Replace) {
-                FragmentManager fm = getSupportFragmentManager();
+        public void applyReplace(String screenKey, Object transitionData) {
+            FragmentManager fm = getSupportFragmentManager();
 
-                switch (((Replace) command).getScreenKey()) {
-                    case Screens.ANDROID_SCREEN:
-                        fm.beginTransaction()
-                                .detach(bugTabFragment)
-                                .detach(dogTabFragment)
-                                .attach(androidTabFragment)
-                                .commitNow();
-                        break;
-                    case Screens.BUG_SCREEN:
-                        fm.beginTransaction()
-                                .detach(androidTabFragment)
-                                .detach(dogTabFragment)
-                                .attach(bugTabFragment)
-                                .commitNow();
-                        break;
-                    case Screens.DOG_SCREEN:
-                        fm.beginTransaction()
-                                .detach(androidTabFragment)
-                                .detach(bugTabFragment)
-                                .attach(dogTabFragment)
-                                .commitNow();
-                        break;
-                }
+            switch (screenKey) {
+                case Screens.ANDROID_SCREEN:
+                    fm.beginTransaction()
+                            .detach(bugTabFragment)
+                            .detach(dogTabFragment)
+                            .attach(androidTabFragment)
+                            .commitNow();
+                    break;
+                case Screens.BUG_SCREEN:
+                    fm.beginTransaction()
+                            .detach(androidTabFragment)
+                            .detach(dogTabFragment)
+                            .attach(bugTabFragment)
+                            .commitNow();
+                    break;
+                case Screens.DOG_SCREEN:
+                    fm.beginTransaction()
+                            .detach(androidTabFragment)
+                            .detach(bugTabFragment)
+                            .attach(dogTabFragment)
+                            .commitNow();
+                    break;
             }
+        }
+
+        @Override
+        public void applyBack() {
+            finish();
+        }
+
+        @Override
+        public void applySystemMessage(String message) {
+            Toast.makeText(BottomNavigationActivity.this, message, Toast.LENGTH_SHORT).show();
         }
     };
 

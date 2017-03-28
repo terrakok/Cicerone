@@ -6,10 +6,6 @@ import android.app.FragmentManager;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
-import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Forward;
-import ru.terrakok.cicerone.commands.Replace;
-import ru.terrakok.cicerone.commands.SystemMessage;
 
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
@@ -43,66 +39,72 @@ public abstract class FragmentNavigator implements Navigator {
     }
 
     @Override
-    public void applyCommand(Command command) {
-        if (command instanceof Forward) {
-            Forward forward = (Forward) command;
-            Fragment fragment = createFragment(forward.getScreenKey(), forward.getTransitionData());
-            if (fragment == null) {
-                unknownScreen(command);
-                return;
-            }
+    public void applyReplace(String screenKey, Object transitionData) {
+        Fragment fragment = createFragment(screenKey, transitionData);
+        if (fragment == null) {
+            unknownScreen();
+            return;
+        }
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStackImmediate();
             fragmentManager
                     .beginTransaction()
                     .replace(containerId, fragment)
-                    .addToBackStack(forward.getScreenKey())
+                    .addToBackStack(screenKey)
                     .commit();
-        } else if (command instanceof Back) {
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
-            } else {
-                exit();
-            }
-        } else if (command instanceof Replace) {
-            Replace replace = (Replace) command;
-            Fragment fragment = createFragment(replace.getScreenKey(), replace.getTransitionData());
-            if (fragment == null) {
-                unknownScreen(command);
-                return;
-            }
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
-                fragmentManager
-                        .beginTransaction()
-                        .replace(containerId, fragment)
-                        .addToBackStack(replace.getScreenKey())
-                        .commit();
-            } else {
-                fragmentManager
-                        .beginTransaction()
-                        .replace(containerId, fragment)
-                        .commit();
-            }
-        } else if (command instanceof BackTo) {
-            String key = ((BackTo) command).getScreenKey();
-
-            if (key == null) {
-                backToRoot();
-            } else {
-                boolean hasScreen = false;
-                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
-                    if (key.equals(fragmentManager.getBackStackEntryAt(i).getName())) {
-                        fragmentManager.popBackStackImmediate(key, 0);
-                        hasScreen = true;
-                        break;
-                    }
-                }
-                if (!hasScreen) {
-                    backToUnexisting();
-                }
-            }
-        } else if (command instanceof SystemMessage) {
-            showSystemMessage(((SystemMessage) command).getMessage());
+        } else {
+            fragmentManager
+                    .beginTransaction()
+                    .replace(containerId, fragment)
+                    .commit();
         }
+    }
+
+    @Override
+    public void applyForward(String screenKey, Object transitionData) {
+        Fragment fragment = createFragment(screenKey, transitionData);
+        if (fragment == null) {
+            unknownScreen();
+            return;
+        }
+        fragmentManager
+                .beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(screenKey)
+                .commit();
+    }
+
+    @Override
+    public void applyBack() {
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStackImmediate();
+        } else {
+            exit();
+        }
+    }
+
+    @Override
+    public void applyBackTo(String key) {
+        if (key == null) {
+            backToRoot();
+        } else {
+            boolean hasScreen = false;
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                if (key.equals(fragmentManager.getBackStackEntryAt(i).getName())) {
+                    fragmentManager.popBackStackImmediate(key, 0);
+                    hasScreen = true;
+                    break;
+                }
+            }
+            if (!hasScreen) {
+                backToUnexisting();
+            }
+        }
+    }
+
+    @Override
+    public void applySystemMessage(String message) {
+        showSystemMessage(message);
     }
 
     private void backToRoot() {
@@ -144,7 +146,7 @@ public abstract class FragmentNavigator implements Navigator {
     /**
      * Called if we can't create a screen.
      */
-    protected void unknownScreen(Command command) {
+    protected void unknownScreen() {
         throw new RuntimeException("Can't create a screen for passed screenKey.");
     }
 }

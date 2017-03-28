@@ -8,7 +8,7 @@ package ru.terrakok.cicerone.commands;
 /**
  * Shows system message.
  */
-public class SystemMessage implements Command {
+public class SystemMessage extends Command {
     private String message;
 
     /**
@@ -17,6 +17,7 @@ public class SystemMessage implements Command {
      * @param message message text
      */
     public SystemMessage(String message) {
+        super(CommandType.SYSTEM_MESSAGE);
         this.message = message;
     }
 

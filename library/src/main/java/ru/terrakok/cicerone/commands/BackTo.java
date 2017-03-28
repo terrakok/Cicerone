@@ -12,7 +12,7 @@ import ru.terrakok.cicerone.Navigator;
  * Behavior in the case when no needed screens found depends on an implementation of the {@link Navigator}.
  * But the recommended behavior is to return to the root.
  */
-public class BackTo implements Command {
+public class BackTo extends Command {
     private String screenKey;
 
     /**
@@ -21,6 +21,7 @@ public class BackTo implements Command {
      * @param screenKey screen key
      */
     public BackTo(String screenKey) {
+        super(CommandType.BACK_TO);
         this.screenKey = screenKey;
     }
 
