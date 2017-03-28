@@ -101,6 +101,8 @@ Navigator processes the navigation commands. Usually it is an anonymous class in
 Activity provides Navigator to the CommandBuffer in _onResume_ and removes it in _onPause_.  
 
 ```java
+// Attention: Use onResumeFragments() with FragmentActivity
+// more info here: https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()
 @Override
 protected void onResume() {
     super.onResume();
@@ -117,32 +119,6 @@ private Navigator navigator = new Navigator() {
     @Override
     public void applyCommand(Command command) {
         //implement commands logic
-    }
-};
-```
-
-**Attention!**
-You should use _onResumeFragments_ method instead of _onResume_ for providing Navigator if your activity extends android.support.v4.app.FragmentActivity:
-
-```java
-// For activity extending android.support.v4.app.FragmentActivity
-// more info here: https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()
-@Override
-protected void onResumeFragments() {
-    super.onResumeFragments();
-    SampleApplication.INSTANCE.getNavigatorHolder().setNavigator(navigator);
-}
-
-@Override
-protected void onPause() {
-    super.onPause();
-    SampleApplication.INSTANCE.getNavigatorHolder().removeNavigator();
-}
-
-private Navigator navigator = new Navigator() {
-    @Override
-    public void applyCommand(Command command) {
-        //implements commands logic
     }
 };
 ```
