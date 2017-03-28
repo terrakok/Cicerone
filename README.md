@@ -26,7 +26,7 @@ Add the dependency in your build.gradle:
 ```groovy
 dependencies {
     //Cicerone
-    compile 'ru.terrakok.cicerone:cicerone:X.X'
+    compile 'ru.terrakok.cicerone:cicerone:X.X.X'
 }
 ```
 
@@ -99,6 +99,8 @@ protected void executeCommand(Command command) {
 
 Navigator processes the navigation commands. Usually it is an anonymous class inside the Activity.  
 Activity provides Navigator to the CommandBuffer in _onResume_ and removes it in _onPause_.  
+
+**Attention**: Use _onResumeFragments()_ with FragmentActivity ([more info](https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()))
 
 ```java
 @Override
