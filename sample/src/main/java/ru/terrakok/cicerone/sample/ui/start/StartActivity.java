@@ -15,11 +15,6 @@ import javax.inject.Inject;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.commands.Back;
-import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Forward;
-import ru.terrakok.cicerone.commands.Replace;
-import ru.terrakok.cicerone.commands.SystemMessage;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
@@ -89,22 +84,23 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
 
     private Navigator navigator = new Navigator() {
         @Override
-        public void applyCommand(Command command) {
-            if (command instanceof Forward) {
-                forward((Forward) command);
-            } else if (command instanceof Replace) {
-                replace((Replace) command);
-            } else if (command instanceof Back) {
-                back();
-            } else if (command instanceof SystemMessage) {
-                Toast.makeText(StartActivity.this, ((SystemMessage) command).getMessage(), Toast.LENGTH_SHORT).show();
-            } else {
-                Log.e("Cicerone", "Illegal command for this screen: " + command.getClass().getSimpleName());
+        public void applyReplace(String screenKey, Object transitionData) {
+            switch (screenKey) {
+                case Screens.START_ACTIVITY_SCREEN:
+                case Screens.MAIN_ACTIVITY_SCREEN:
+                case Screens.BOTTOM_NAVIGATION_ACTIVITY_SCREEN:
+                    applyReplace(screenKey, transitionData);
+                    finish();
+                    break;
+                default:
+                    Log.e("Cicerone", "Unknown screen: " + screenKey);
+                    break;
             }
         }
 
-        private void forward(Forward command) {
-            switch (command.getScreenKey()) {
+        @Override
+        public void applyForward(String screenKey, Object transitionData) {
+            switch (screenKey) {
                 case Screens.START_ACTIVITY_SCREEN:
                     startActivity(new Intent(StartActivity.this, StartActivity.class));
                     break;
@@ -115,27 +111,24 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
                     startActivity(new Intent(StartActivity.this, BottomNavigationActivity.class));
                     break;
                 default:
-                    Log.e("Cicerone", "Unknown screen: " + command.getScreenKey());
+                    Log.e("Cicerone", "Unknown screen: " + screenKey);
                     break;
             }
         }
 
-        private void replace(Replace command) {
-            switch (command.getScreenKey()) {
-                case Screens.START_ACTIVITY_SCREEN:
-                case Screens.MAIN_ACTIVITY_SCREEN:
-                case Screens.BOTTOM_NAVIGATION_ACTIVITY_SCREEN:
-                    forward(new Forward(command.getScreenKey(), command.getTransitionData()));
-                    finish();
-                    break;
-                default:
-                    Log.e("Cicerone", "Unknown screen: " + command.getScreenKey());
-                    break;
-            }
-        }
-
-        private void back() {
+        @Override
+        public void applyBack() {
             finish();
+        }
+
+        @Override
+        public void applyBackTo(String screenKey) {
+            //empty
+        }
+
+        @Override
+        public void applySystemMessage(String message) {
+            Toast.makeText(StartActivity.this, message, Toast.LENGTH_SHORT).show();
         }
     };
 }

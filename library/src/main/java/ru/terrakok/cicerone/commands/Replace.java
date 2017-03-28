@@ -8,7 +8,7 @@ package ru.terrakok.cicerone.commands;
 /**
  * Replaces the current screen.
  */
-public class Replace implements Command {
+public class Replace extends Command {
     private String screenKey;
     private Object transitionData;
 
@@ -19,6 +19,7 @@ public class Replace implements Command {
      * @param transitionData initial data
      */
     public Replace(String screenKey, Object transitionData) {
+        super(CommandType.REPLACE);
         this.screenKey = screenKey;
         this.transitionData = transitionData;
     }

@@ -9,5 +9,12 @@ package ru.terrakok.cicerone.commands;
  * Navigation command describes screens transition.
  * that can be processed by {@link ru.terrakok.cicerone.Navigator}.
  */
-public interface Command {
+public abstract class Command {
+
+    public final CommandType type;
+
+    protected Command(CommandType type) {
+        this.type = type;
+    }
+
 }

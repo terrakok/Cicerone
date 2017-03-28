@@ -8,7 +8,7 @@ package ru.terrakok.cicerone.commands;
 /**
  * Opens new screen.
  */
-public class Forward implements Command {
+public class Forward extends Command {
     private String screenKey;
     private Object transitionData;
 
@@ -19,6 +19,7 @@ public class Forward implements Command {
      * @param transitionData initial data
      */
     public Forward(String screenKey, Object transitionData) {
+        super(CommandType.FORWARD);
         this.screenKey = screenKey;
         this.transitionData = transitionData;
     }
