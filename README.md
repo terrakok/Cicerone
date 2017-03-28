@@ -26,7 +26,7 @@ Add the dependency in your build.gradle:
 ```groovy
 dependencies {
     //Cicerone
-    compile 'ru.terrakok.cicerone:cicerone:X.X'
+    compile 'ru.terrakok.cicerone:cicerone:X.X.X'
 }
 ```
 
