@@ -34,32 +34,37 @@ public abstract class AppNavigator extends FragmentNavigator {
         this.activity = activity;
     }
 
+    /**
+     * Opens new screen based on the passed command.
+     *
+     * @param forward forward command to apply
+     */
     @Override
-    public void applyCommand(Command command) {
-        if (command instanceof Forward) {
-            Forward forward = (Forward) command;
-            Intent activityIntent = createActivityIntent(forward.getScreenKey(), forward.getTransitionData());
+    protected void applyForward(Forward forward) {
+        Intent activityIntent = createActivityIntent(forward.getScreenKey(), forward.getTransitionData());
 
-            // Start activity
-            if (activityIntent != null) {
-                activity.startActivity(activityIntent);
-                return;
-            }
-
-        } else if (command instanceof Replace) {
-            Replace replace = (Replace) command;
-            Intent activityIntent = createActivityIntent(replace.getScreenKey(), replace.getTransitionData());
-
-            // Replace activity
-            if (activityIntent != null) {
-                activity.startActivity(activityIntent);
-                activity.finish();
-                return;
-            }
+        // Start activity
+        if (activityIntent != null) {
+            activity.startActivity(activityIntent);
+            return;
         }
+    }
 
-        // Use default fragments navigation
-        super.applyCommand(command);
+    /**
+     * Replaces the current screen based on the passed command.
+     *
+     * @param replace replace command to apply
+     */
+    @Override
+    protected void applyReplace(Replace replace) {
+        Intent activityIntent = createActivityIntent(replace.getScreenKey(), replace.getTransitionData());
+
+        // Replace activity
+        if (activityIntent != null) {
+            activity.startActivity(activityIntent);
+            activity.finish();
+            return;
+        }
     }
 
     /**

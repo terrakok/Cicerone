@@ -6,10 +6,8 @@ import android.app.FragmentManager;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
-import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
-import ru.terrakok.cicerone.commands.SystemMessage;
 
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
@@ -27,7 +25,7 @@ import ru.terrakok.cicerone.commands.SystemMessage;
  * {@link Back} command will call {@link #exit()} method if current screen is the root.
  * </p>
  */
-public abstract class FragmentNavigator implements Navigator {
+public abstract class FragmentNavigator extends NavigatorBase {
     private FragmentManager fragmentManager;
     private int containerId;
 
@@ -42,66 +40,89 @@ public abstract class FragmentNavigator implements Navigator {
         this.containerId = containerId;
     }
 
+    /**
+     * Opens new screen based on the passed command.
+     *
+     * @param forward forward command to apply
+     */
     @Override
-    public void applyCommand(Command command) {
-        if (command instanceof Forward) {
-            Forward forward = (Forward) command;
-            Fragment fragment = createFragment(forward.getScreenKey(), forward.getTransitionData());
-            if (fragment == null) {
-                unknownScreen(command);
-                return;
-            }
+    protected void applyForward(Forward forward) {
+        Fragment fragment = createFragment(forward.getScreenKey(), forward.getTransitionData());
+        if (fragment == null) {
+            unknownScreen(forward);
+            return;
+        }
+        fragmentManager
+                .beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(forward.getScreenKey())
+                .commit();
+    }
+
+    /**
+     * Rolls back the last transition from the screens chain based on the passed command.
+     *
+     * @param back back command to apply
+     */
+    @Override
+    protected void applyBack(Back back) {
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStackImmediate();
+        } else {
+            exit();
+        }
+    }
+
+    /**
+     * Replaces the current screen based on the passed command.
+     *
+     * @param replace replace command to apply
+     */
+    @Override
+    protected void applyReplace(Replace replace) {
+        Fragment fragment = createFragment(replace.getScreenKey(), replace.getTransitionData());
+        if (fragment == null) {
+            unknownScreen(replace);
+            return;
+        }
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStackImmediate();
             fragmentManager
                     .beginTransaction()
                     .replace(containerId, fragment)
-                    .addToBackStack(forward.getScreenKey())
+                    .addToBackStack(replace.getScreenKey())
                     .commit();
-        } else if (command instanceof Back) {
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
-            } else {
-                exit();
-            }
-        } else if (command instanceof Replace) {
-            Replace replace = (Replace) command;
-            Fragment fragment = createFragment(replace.getScreenKey(), replace.getTransitionData());
-            if (fragment == null) {
-                unknownScreen(command);
-                return;
-            }
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
-                fragmentManager
-                        .beginTransaction()
-                        .replace(containerId, fragment)
-                        .addToBackStack(replace.getScreenKey())
-                        .commit();
-            } else {
-                fragmentManager
-                        .beginTransaction()
-                        .replace(containerId, fragment)
-                        .commit();
-            }
-        } else if (command instanceof BackTo) {
-            String key = ((BackTo) command).getScreenKey();
+        } else {
+            fragmentManager
+                    .beginTransaction()
+                    .replace(containerId, fragment)
+                    .commit();
+        }
+    }
 
-            if (key == null) {
-                backToRoot();
-            } else {
-                boolean hasScreen = false;
-                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
-                    if (key.equals(fragmentManager.getBackStackEntryAt(i).getName())) {
-                        fragmentManager.popBackStackImmediate(key, 0);
-                        hasScreen = true;
-                        break;
-                    }
-                }
-                if (!hasScreen) {
-                    backToUnexisting();
+    /**
+     * Rolls back to the needed screen from the screens chain based on the passed command.
+     *
+     * @param backTo backTo command to apply
+     */
+    @Override
+    protected void applyBackTo(BackTo backTo) {
+        String key = backTo.getScreenKey();
+
+        if (key == null) {
+            backToRoot();
+        } else {
+            boolean hasScreen = false;
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                if (key.equals(fragmentManager.getBackStackEntryAt(i).getName())) {
+                    fragmentManager.popBackStackImmediate(key, 0);
+                    hasScreen = true;
+                    break;
                 }
             }
-        } else if (command instanceof SystemMessage) {
-            showSystemMessage(((SystemMessage) command).getMessage());
+            if (!hasScreen) {
+                backToUnexisting();
+            }
         }
     }
 
@@ -122,29 +143,11 @@ public abstract class FragmentNavigator implements Navigator {
     protected abstract Fragment createFragment(String screenKey, Object data);
 
     /**
-     * Shows system message.
-     *
-     * @param message message to show
-     */
-    protected abstract void showSystemMessage(String message);
-
-    /**
-     * Called when we try to back from the root.
-     */
-    protected abstract void exit();
-
-    /**
      * Called when we tried to back to some specific screen, but didn't found it.
      */
+    @Override
     protected void backToUnexisting() {
         backToRoot();
     }
 
-
-    /**
-     * Called if we can't create a screen.
-     */
-    protected void unknownScreen(Command command) {
-        throw new RuntimeException("Can't create a screen for passed screenKey.");
-    }
 }
