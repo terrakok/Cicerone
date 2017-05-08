@@ -1,6 +1,7 @@
 package ru.terrakok.cicerone.android;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +27,16 @@ public abstract class AppNavigator extends AppNavigatorBase {
     public AppNavigator(Activity activity, @Deprecated FragmentManager fragmentManager, @Deprecated int containerId) {
         this(activity, containerId);
     }
+
+    /**
+     * Creates Fragment matching {@code screenKey}.
+     *
+     * @param screenKey screen key
+     * @param data      initialization data
+     * @return instantiated fragment for the passed screen key
+     */
+    @Deprecated
+    protected abstract Fragment createFragment(String screenKey, Object data);
 
     private static class AndroidActivityAdapter implements ActivityAdapter {
         private final Activity activity;

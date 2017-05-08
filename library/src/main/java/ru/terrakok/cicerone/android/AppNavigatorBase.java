@@ -80,6 +80,14 @@ abstract class AppNavigatorBase extends NavigatorBase {
     }
 
     /**
+     * Called when we tried to back to some specific screen, but didn't found it.
+     */
+    @Override
+    protected void backToUnexisting() {
+
+    }
+
+    /**
      * Creates Intent to start Activity for {@code screenKey}.
      * <p>
      * <b>Warning:</b> This method does not work with {@link BackTo} command.
