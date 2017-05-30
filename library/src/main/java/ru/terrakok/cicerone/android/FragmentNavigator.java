@@ -106,10 +106,7 @@ public abstract class FragmentNavigator implements Navigator {
     }
 
     private void backToRoot() {
-        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
-            fragmentManager.popBackStack();
-        }
-        fragmentManager.executePendingTransactions();
+        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     /**
