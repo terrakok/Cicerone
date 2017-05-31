@@ -2,8 +2,10 @@ package ru.terrakok.cicerone.android;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.commands.AnimationCommand;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Command;
@@ -28,14 +30,14 @@ import ru.terrakok.cicerone.commands.SystemMessage;
  * </p>
  */
 public abstract class SupportFragmentNavigator implements Navigator {
-    private FragmentManager fragmentManager;
-    private int containerId;
+    protected FragmentManager fragmentManager;
+    protected int containerId;
 
     /**
      * Creates SupportFragmentNavigator.
      *
      * @param fragmentManager support fragment manager
-     * @param containerId     id of the fragments container layout
+     * @param containerId id of the fragments container layout
      */
     public SupportFragmentNavigator(FragmentManager fragmentManager, int containerId) {
         this.fragmentManager = fragmentManager;
@@ -51,11 +53,11 @@ public abstract class SupportFragmentNavigator implements Navigator {
                 unknownScreen(command);
                 return;
             }
-            fragmentManager
-                    .beginTransaction()
-                    .replace(containerId, fragment)
-                    .addToBackStack(forward.getScreenKey())
-                    .commit();
+
+            final FragmentTransaction ft = fragmentManager.beginTransaction();
+            applyAnimations(ft, (AnimationCommand) command);
+            ft.replace(containerId, fragment).addToBackStack(forward.getScreenKey()).commit();
+
         } else if (command instanceof Back) {
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
@@ -71,17 +73,16 @@ public abstract class SupportFragmentNavigator implements Navigator {
             }
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
-                fragmentManager
-                        .beginTransaction()
-                        .replace(containerId, fragment)
-                        .addToBackStack(replace.getScreenKey())
-                        .commit();
+                final FragmentTransaction ft = fragmentManager.beginTransaction();
+                applyAnimations(ft, (AnimationCommand) command);
+                ft.replace(containerId, fragment).addToBackStack(replace.getScreenKey()).commit();
+
             } else {
-                fragmentManager
-                        .beginTransaction()
-                        .replace(containerId, fragment)
-                        .commit();
+                final FragmentTransaction ft = fragmentManager.beginTransaction();
+                applyAnimations(ft, (AnimationCommand) command);
+                ft.replace(containerId, fragment).commit();
             }
+
         } else if (command instanceof BackTo) {
             String key = ((BackTo) command).getScreenKey();
 
@@ -105,6 +106,15 @@ public abstract class SupportFragmentNavigator implements Navigator {
         }
     }
 
+    private void applyAnimations(FragmentTransaction ft, AnimationCommand command) {
+        if (command.hasAnimations()) {
+            ft.setCustomAnimations(command.getEnterAnim(), command.getExitAnim());
+        } else if (command.hasPopAnimations()) {
+            ft.setCustomAnimations(command.getEnterAnim(), command.getExitAnim(),
+                    command.getPopEnterAnim(), command.getPopExitAnim());
+        }
+    }
+
     private void backToRoot() {
         fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
@@ -113,7 +123,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
      * Creates Fragment matching {@code screenKey}.
      *
      * @param screenKey screen key
-     * @param data      initialization data
+     * @param data initialization data
      * @return instantiated fragment for the passed screen key
      */
     protected abstract Fragment createFragment(String screenKey, Object data);
