@@ -1,10 +1,15 @@
 package ru.terrakok.cicerone;
 
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.commands.SystemMessage;
+import ru.terrakok.cicerone.result.ResultData;
+import ru.terrakok.cicerone.result.ResultListener;
 
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
@@ -19,8 +24,25 @@ import ru.terrakok.cicerone.commands.SystemMessage;
  */
 public class Router extends BaseRouter {
 
+    private HashMap<Integer, WeakReference<ResultListener>> resultListeners = new HashMap<>();
+
     public Router() {
         super();
+    }
+
+    public void listenResult(Integer requestCode, ResultListener listener) {
+        resultListeners.put(requestCode, new WeakReference<>(listener));
+    }
+
+    protected boolean sendResult(Integer requestCode, ResultData result) {
+        if (resultListeners.containsKey(requestCode)) {
+            ResultListener resultListener = resultListeners.get(requestCode).get();
+            if (resultListener != null) {
+                resultListener.onResult(result);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -136,6 +158,11 @@ public class Router extends BaseRouter {
      */
     public void exit() {
         executeCommand(new Back());
+    }
+
+    public void exitWithResult(Integer requestCode, ResultData result) {
+        sendResult(requestCode, result);
+        exit();
     }
 
     /**
