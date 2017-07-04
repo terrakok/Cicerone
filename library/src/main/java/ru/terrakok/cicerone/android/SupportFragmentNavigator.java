@@ -2,6 +2,7 @@ package ru.terrakok.cicerone.android;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
@@ -42,6 +43,9 @@ public abstract class SupportFragmentNavigator implements Navigator {
         this.containerId = containerId;
     }
 
+    protected void applyFragmentAnimations(Command command, FragmentTransaction fragmentTransaction) {
+    }
+
     @Override
     public void applyCommand(Command command) {
         if (command instanceof Forward) {
@@ -51,8 +55,9 @@ public abstract class SupportFragmentNavigator implements Navigator {
                 unknownScreen(command);
                 return;
             }
-            fragmentManager
-                    .beginTransaction()
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            applyFragmentAnimations(command, fragmentTransaction);
+            fragmentTransaction
                     .replace(containerId, fragment)
                     .addToBackStack(forward.getScreenKey())
                     .commit();
@@ -71,14 +76,16 @@ public abstract class SupportFragmentNavigator implements Navigator {
             }
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
-                fragmentManager
-                        .beginTransaction()
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                applyFragmentAnimations(command, fragmentTransaction);
+                fragmentTransaction
                         .replace(containerId, fragment)
                         .addToBackStack(replace.getScreenKey())
                         .commit();
             } else {
-                fragmentManager
-                        .beginTransaction()
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                applyFragmentAnimations(command, fragmentTransaction);
+                fragmentTransaction
                         .replace(containerId, fragment)
                         .commit();
             }
