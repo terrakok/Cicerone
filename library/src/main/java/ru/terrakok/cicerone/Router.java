@@ -30,13 +30,13 @@ public class Router extends BaseRouter {
         super();
     }
 
-    public void listenResult(Integer requestCode, ResultListener listener) {
-        resultListeners.put(requestCode, new WeakReference<>(listener));
+    public void listenResult(Integer resultCode, ResultListener listener) {
+        resultListeners.put(resultCode, new WeakReference<>(listener));
     }
 
-    protected boolean sendResult(Integer requestCode, ResultData result) {
-        if (resultListeners.containsKey(requestCode)) {
-            ResultListener resultListener = resultListeners.get(requestCode).get();
+    protected boolean sendResult(Integer resultCode, ResultData result) {
+        if (resultListeners.containsKey(resultCode)) {
+            ResultListener resultListener = resultListeners.get(resultCode).get();
             if (resultListener != null) {
                 resultListener.onResult(result);
                 return true;
@@ -160,8 +160,8 @@ public class Router extends BaseRouter {
         executeCommand(new Back());
     }
 
-    public void exitWithResult(Integer requestCode, ResultData result) {
-        sendResult(requestCode, result);
+    public void exitWithResult(Integer resultCode, ResultData result) {
+        sendResult(resultCode, result);
         exit();
     }
 
