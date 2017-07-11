@@ -161,8 +161,8 @@ public class Router extends BaseRouter {
     }
 
     public void exitWithResult(Integer resultCode, ResultData result) {
-        sendResult(resultCode, result);
         exit();
+        sendResult(resultCode, result);
     }
 
     /**
