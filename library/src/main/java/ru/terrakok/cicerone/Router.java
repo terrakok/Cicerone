@@ -29,10 +29,24 @@ public class Router extends BaseRouter {
         super();
     }
 
+    /**
+     * Subscribe to the screen result.
+     * Note: only one listener can subscribe to a unique resultCode!
+     *
+     * @param resultCode key for filter results
+     * @param listener result listener
+     */
     public void listenResult(Integer resultCode, ResultListener listener) {
         resultListeners.put(resultCode, new WeakReference<>(listener));
     }
 
+    /**
+     * Send result data to subscriber.
+     *
+     * @param resultCode result data key
+     * @param result result data
+     * @return TRUE if listener was notified and FALSE otherwise
+     */
     protected boolean sendResult(Integer resultCode, Object result) {
         if (resultListeners.containsKey(resultCode)) {
             ResultListener resultListener = resultListeners.get(resultCode).get();
@@ -159,6 +173,12 @@ public class Router extends BaseRouter {
         executeCommand(new Back());
     }
 
+    /**
+     * Return to the previous screen in the chain and send result data.
+     *
+     * @param resultCode result data key
+     * @param result result data
+     */
     public void exitWithResult(Integer resultCode, Object result) {
         exit();
         sendResult(resultCode, result);
