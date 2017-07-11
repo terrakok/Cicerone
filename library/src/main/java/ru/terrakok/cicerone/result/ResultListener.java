@@ -5,5 +5,5 @@ package ru.terrakok.cicerone.result;
  */
 
 public interface ResultListener {
-    void onResult(ResultData resultData);
+    void onResult(Object resultData);
 }

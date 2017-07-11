@@ -8,7 +8,6 @@ import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.commands.SystemMessage;
-import ru.terrakok.cicerone.result.ResultData;
 import ru.terrakok.cicerone.result.ResultListener;
 
 /**
@@ -34,7 +33,7 @@ public class Router extends BaseRouter {
         resultListeners.put(resultCode, new WeakReference<>(listener));
     }
 
-    protected boolean sendResult(Integer resultCode, ResultData result) {
+    protected boolean sendResult(Integer resultCode, Object result) {
         if (resultListeners.containsKey(resultCode)) {
             ResultListener resultListener = resultListeners.get(resultCode).get();
             if (resultListener != null) {
@@ -160,7 +159,7 @@ public class Router extends BaseRouter {
         executeCommand(new Back());
     }
 
-    public void exitWithResult(Integer resultCode, ResultData result) {
+    public void exitWithResult(Integer resultCode, Object result) {
         exit();
         sendResult(resultCode, result);
     }
