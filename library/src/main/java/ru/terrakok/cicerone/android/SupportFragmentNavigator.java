@@ -43,7 +43,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
         this.containerId = containerId;
     }
 
-    protected void applyFragmentAnimations(Command command, FragmentTransaction fragmentTransaction) {
+    protected void applyFragmentAnimations(Command command, Fragment newFragment, FragmentTransaction fragmentTransaction) {
     }
 
     @Override
@@ -56,7 +56,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
                 return;
             }
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            applyFragmentAnimations(command, fragmentTransaction);
+            applyFragmentAnimations(command, fragment, fragmentTransaction);
             fragmentTransaction
                     .replace(containerId, fragment)
                     .addToBackStack(forward.getScreenKey())
@@ -77,14 +77,14 @@ public abstract class SupportFragmentNavigator implements Navigator {
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                applyFragmentAnimations(command, fragmentTransaction);
+                applyFragmentAnimations(command, fragment, fragmentTransaction);
                 fragmentTransaction
                         .replace(containerId, fragment)
                         .addToBackStack(replace.getScreenKey())
                         .commit();
             } else {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                applyFragmentAnimations(command, fragmentTransaction);
+                applyFragmentAnimations(command, fragment, fragmentTransaction);
                 fragmentTransaction
                         .replace(containerId, fragment)
                         .commit();
