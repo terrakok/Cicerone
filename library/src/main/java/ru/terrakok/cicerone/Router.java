@@ -1,10 +1,14 @@
 package ru.terrakok.cicerone;
 
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.commands.SystemMessage;
+import ru.terrakok.cicerone.result.ResultListener;
 
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
@@ -19,8 +23,39 @@ import ru.terrakok.cicerone.commands.SystemMessage;
  */
 public class Router extends BaseRouter {
 
+    private HashMap<Integer, WeakReference<ResultListener>> resultListeners = new HashMap<>();
+
     public Router() {
         super();
+    }
+
+    /**
+     * Subscribe to the screen result.
+     * Note: only one listener can subscribe to a unique resultCode!
+     *
+     * @param resultCode key for filter results
+     * @param listener result listener
+     */
+    public void listenResult(Integer resultCode, ResultListener listener) {
+        resultListeners.put(resultCode, new WeakReference<>(listener));
+    }
+
+    /**
+     * Send result data to subscriber.
+     *
+     * @param resultCode result data key
+     * @param result result data
+     * @return TRUE if listener was notified and FALSE otherwise
+     */
+    protected boolean sendResult(Integer resultCode, Object result) {
+        if (resultListeners.containsKey(resultCode)) {
+            ResultListener resultListener = resultListeners.get(resultCode).get();
+            if (resultListener != null) {
+                resultListener.onResult(result);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -136,6 +171,17 @@ public class Router extends BaseRouter {
      */
     public void exit() {
         executeCommand(new Back());
+    }
+
+    /**
+     * Return to the previous screen in the chain and send result data.
+     *
+     * @param resultCode result data key
+     * @param result result data
+     */
+    public void exitWithResult(Integer resultCode, Object result) {
+        exit();
+        sendResult(resultCode, result);
     }
 
     /**
