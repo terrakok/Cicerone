@@ -20,5 +20,6 @@
 
         <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.bottom.BottomNavigationActivity"/>
+        <activity android:name=".ui.animations.ProfileActivity"/>
     </application>
 </manifest>
