@@ -22,7 +22,7 @@ public class ProfilePresenter extends MvpPresenter<ProfileView> {
         currentPhoto = defaultPhoto;
         this.router = router;
 
-        this.router.listenResult(PHOTO_RESULT_CODE, new ResultListener() {
+        router.setResultListener(PHOTO_RESULT_CODE, new ResultListener() {
             @Override
             public void onResult(Object resultData) {
                 currentPhoto = (int) resultData;
@@ -35,6 +35,12 @@ public class ProfilePresenter extends MvpPresenter<ProfileView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
         updatePhoto();
+    }
+
+    @Override
+    public void onDestroy() {
+        router.removeResultListener(PHOTO_RESULT_CODE);
+        super.onDestroy();
     }
 
     private void updatePhoto() {
