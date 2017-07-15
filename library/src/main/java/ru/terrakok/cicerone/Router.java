@@ -1,6 +1,5 @@
 package ru.terrakok.cicerone;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import ru.terrakok.cicerone.commands.Back;
@@ -23,37 +22,45 @@ import ru.terrakok.cicerone.result.ResultListener;
  */
 public class Router extends BaseRouter {
 
-    private HashMap<Integer, WeakReference<ResultListener>> resultListeners = new HashMap<>();
+    private HashMap<Integer, ResultListener> resultListeners = new HashMap<>();
 
     public Router() {
         super();
     }
 
     /**
-     * Subscribe to the screen result.
-     * Note: only one listener can subscribe to a unique resultCode!
+     * Subscribe to the screen result.<br/>
+     * <b>Note:</b> only one listener can subscribe to a unique resultCode!<br/>
+     * You must call a <b>removeResultListener()</b> to avoid a memory leak.
      *
      * @param resultCode key for filter results
-     * @param listener result listener
+     * @param listener   result listener
      */
-    public void listenResult(Integer resultCode, ResultListener listener) {
-        resultListeners.put(resultCode, new WeakReference<>(listener));
+    public void setResultListener(Integer resultCode, ResultListener listener) {
+        resultListeners.put(resultCode, listener);
+    }
+
+    /**
+     * Unsubscribe from the screen result.
+     *
+     * @param resultCode key for filter results
+     */
+    public void removeResultListener(Integer resultCode) {
+        resultListeners.remove(resultCode);
     }
 
     /**
      * Send result data to subscriber.
      *
      * @param resultCode result data key
-     * @param result result data
+     * @param result     result data
      * @return TRUE if listener was notified and FALSE otherwise
      */
     protected boolean sendResult(Integer resultCode, Object result) {
-        if (resultListeners.containsKey(resultCode)) {
-            ResultListener resultListener = resultListeners.get(resultCode).get();
-            if (resultListener != null) {
-                resultListener.onResult(result);
-                return true;
-            }
+        ResultListener resultListener = resultListeners.get(resultCode);
+        if (resultListener != null) {
+            resultListener.onResult(result);
+            return true;
         }
         return false;
     }
@@ -177,7 +184,7 @@ public class Router extends BaseRouter {
      * Return to the previous screen in the chain and send result data.
      *
      * @param resultCode result data key
-     * @param result result data
+     * @param result     result data
      */
     public void exitWithResult(Integer resultCode, Object result) {
         exit();
