@@ -76,12 +76,15 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void applyFragmentAnimations(Command command, Fragment newFragment, FragmentTransaction fragmentTransaction) {
-            if (command instanceof Forward && newFragment instanceof SelectPhotoFragment) {
-                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container);
-                if (currentFragment != null && currentFragment instanceof ProfileFragment) {
-                    setupSharedElementForProfileToSelectPhoto((ProfileFragment) currentFragment, (SelectPhotoFragment) newFragment, fragmentTransaction);
-                }
+        protected void setupFragmentTransactionAnimation(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
+            if (command instanceof Forward
+                    && currentFragment instanceof ProfileFragment
+                    && nextFragment instanceof SelectPhotoFragment) {
+                setupSharedElementForProfileToSelectPhoto(
+                        (ProfileFragment) currentFragment,
+                        (SelectPhotoFragment) nextFragment,
+                        fragmentTransaction
+                );
             }
         }
     };

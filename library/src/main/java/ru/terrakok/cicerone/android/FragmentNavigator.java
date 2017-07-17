@@ -43,7 +43,19 @@ public abstract class FragmentNavigator implements Navigator {
         this.containerId = containerId;
     }
 
-    protected void applyFragmentAnimations(Command command, Fragment newFragment, FragmentTransaction fragmentTransaction) {
+    /**
+     * Override this method for setup custom fragment transaction animation.<p/>
+     *
+     * @param command             current navigation command. Maybe only {@link Forward} and {@link Replace}
+     * @param currentFragment     current fragment in container
+     *                            (for {@link Replace} command it will be previous screen, NOT replaced screen)
+     * @param nextFragment        next screen fragment
+     * @param fragmentTransaction fragment transaction
+     */
+    protected void setupFragmentTransactionAnimation(Command command,
+                                                     Fragment currentFragment,
+                                                     Fragment nextFragment,
+                                                     FragmentTransaction fragmentTransaction) {
     }
 
     @Override
@@ -55,8 +67,15 @@ public abstract class FragmentNavigator implements Navigator {
                 unknownScreen(command);
                 return;
             }
+
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            applyFragmentAnimations(command, fragment, fragmentTransaction);
+            setupFragmentTransactionAnimation(
+                    command,
+                    fragmentManager.findFragmentById(containerId),
+                    fragment,
+                    fragmentTransaction
+            );
+
             fragmentTransaction
                     .replace(containerId, fragment)
                     .addToBackStack(forward.getScreenKey())
@@ -76,15 +95,28 @@ public abstract class FragmentNavigator implements Navigator {
             }
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
+
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                applyFragmentAnimations(command, fragment, fragmentTransaction);
+                setupFragmentTransactionAnimation(
+                        command,
+                        fragmentManager.findFragmentById(containerId),
+                        fragment,
+                        fragmentTransaction
+                );
+
                 fragmentTransaction
                         .replace(containerId, fragment)
                         .addToBackStack(replace.getScreenKey())
                         .commit();
             } else {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                applyFragmentAnimations(command, fragment, fragmentTransaction);
+                setupFragmentTransactionAnimation(
+                        command,
+                        fragmentManager.findFragmentById(containerId),
+                        fragment,
+                        fragmentTransaction
+                );
+
                 fragmentTransaction
                         .replace(containerId, fragment)
                         .commit();
