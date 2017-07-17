@@ -18,4 +18,7 @@ public class Screens {
 
     public static final String FORWARD_SCREEN = "forward screen";
     public static final String GITHUB_SCREEN = "github screen";
+
+    public static final String PROFILE_SCREEN = "profile screen";
+    public static final String SELECT_PHOTO_SCREEN = "select photo screen";
 }

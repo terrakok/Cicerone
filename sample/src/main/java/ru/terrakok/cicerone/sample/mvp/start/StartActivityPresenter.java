@@ -23,6 +23,10 @@ public class StartActivityPresenter extends MvpPresenter<StartActivityView> {
         router.navigateTo(Screens.BOTTOM_NAVIGATION_ACTIVITY_SCREEN);
     }
 
+    public void onResultWithAnimationPressed() {
+        router.navigateTo(Screens.PROFILE_SCREEN);
+    }
+
     public void onBackPressed() {
         router.exit();
     }
