@@ -21,6 +21,11 @@ It was designed to be used with the MVP pattern (try [Moxy](https://github.com/A
 + functionality is simple to extend
 + suitable for Unit Testing
 
+## Version 2.+
++ easy screen result subscription
++ predefined navigator ready for setup transition animation
+**See the sample application**
+
 ## How to add
 Add the dependency in your build.gradle:
 ```groovy
@@ -140,30 +145,39 @@ This commands set will fulfill the needs of the most applications. But if you ne
 The library provides predefined navigators for _Fragments_ to use inside _Activity_.    
 To use, just provide it with the container and _FragmentManager_ and override few simple methods.  
 ```java
-private Navigator navigator = new SupportFragmentNavigator(
-                              getSupportFragmentManager(), R.id.main_container) {
+private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
+    @Override
+    protected Intent createActivityIntent(String screenKey, Object data) {
+        return null;
+    }
+
     @Override
     protected Fragment createFragment(String screenKey, Object data) {
-        return SampleFragment.getNewInstance((int) data);
+        switch (screenKey) {
+            case Screens.PROFILE_SCREEN:
+                return new ProfileFragment();
+            case Screens.SELECT_PHOTO_SCREEN:
+                return SelectPhotoFragment.getNewInstance((int) data);
+        }
+        return null;
     }
 
     @Override
-    protected void showSystemMessage(String message) {
-        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void exit() {
-        finish();
+    protected void setupFragmentTransactionAnimation(
+                Command command,
+                Fragment currentFragment,
+                Fragment nextFragment,
+                FragmentTransaction fragmentTransaction) {
+        //setup animation
     }
 };
 ```
 ## Sample
 To see how to add, initialize and use the library and predefined navigators check out the sample.
 
-![](https://habrastorage.org/files/16d/2ee/6e3/16d2ee6e33a0428eb4f0dcab8ce6b294.gif)
-
-![](https://hsto.org/files/867/638/c33/867638c338704489b3107a6d7cb28c2d.gif)
+![](https://habrastorage.org/web/a94/d73/653/a94d736534694d9daa994e0c260fca28.gif)
+![](https://habrastorage.org/web/6dd/a19/15c/6dda1915cdcf4f14bed16fcffb3fd938.gif)
+![](https://habrastorage.org/web/a63/881/7f8/a638817f8bba49daacc4fa427987fabb.gif)
 
 ## Participants
 + idea and code - Konstantin Tskhovrebov (@terrakok)
