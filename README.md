@@ -23,7 +23,7 @@ It was designed to be used with the MVP pattern (try [Moxy](https://github.com/A
 
 ## Version 2.+
 + easy screen result subscription
-+ predefined navigator ready for setup transition animation
++ predefined navigator ready for setup transition animation  
 **See the sample application**
 
 ## How to add
