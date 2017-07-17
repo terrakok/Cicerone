@@ -5,6 +5,9 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ru.terrakok.cicerone.sample.dagger.module.LocalNavigationModule;
 import ru.terrakok.cicerone.sample.dagger.module.NavigationModule;
+import ru.terrakok.cicerone.sample.ui.animations.ProfileActivity;
+import ru.terrakok.cicerone.sample.ui.animations.photos.SelectPhotoFragment;
+import ru.terrakok.cicerone.sample.ui.animations.profile.ProfileFragment;
 import ru.terrakok.cicerone.sample.ui.bottom.BottomNavigationActivity;
 import ru.terrakok.cicerone.sample.ui.bottom.TabContainerFragment;
 import ru.terrakok.cicerone.sample.ui.main.MainActivity;
@@ -31,4 +34,10 @@ public interface AppComponent {
     void inject(BottomNavigationActivity activity);
 
     void inject(TabContainerFragment fragment);
+
+    void inject(ProfileFragment fragment);
+
+    void inject(SelectPhotoFragment fragment);
+
+    void inject(ProfileActivity activity);
 }

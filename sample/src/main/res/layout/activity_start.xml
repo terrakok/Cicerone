@@ -36,4 +36,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/multi_nav"/>
+
+    <Button
+        android:id="@+id/result_and_anim_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/result_and_anim_nav"/>
 </LinearLayout>

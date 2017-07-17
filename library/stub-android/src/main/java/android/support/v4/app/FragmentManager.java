@@ -6,6 +6,7 @@ package android.support.v4.app;
  */
 
 public class FragmentManager {
+    public static final int POP_BACK_STACK_INCLUSIVE = 1<<0;
 
     public FragmentTransaction beginTransaction() {
         throw new RuntimeException("Stub!");
@@ -35,6 +36,9 @@ public class FragmentManager {
         throw new RuntimeException("Stub!");
     }
 
+    public Fragment findFragmentById(int id) {
+        throw new RuntimeException("Stub!");
+    }
 
     public interface BackStackEntry {
         int getId();

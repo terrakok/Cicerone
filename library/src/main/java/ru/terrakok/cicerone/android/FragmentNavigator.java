@@ -2,6 +2,7 @@ package ru.terrakok.cicerone.android;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
@@ -42,6 +43,21 @@ public abstract class FragmentNavigator implements Navigator {
         this.containerId = containerId;
     }
 
+    /**
+     * Override this method for setup custom fragment transaction animation.
+     *
+     * @param command             current navigation command. Maybe only {@link Forward} and {@link Replace}
+     * @param currentFragment     current fragment in container
+     *                            (for {@link Replace} command it will be previous screen, NOT replaced screen)
+     * @param nextFragment        next screen fragment
+     * @param fragmentTransaction fragment transaction
+     */
+    protected void setupFragmentTransactionAnimation(Command command,
+                                                     Fragment currentFragment,
+                                                     Fragment nextFragment,
+                                                     FragmentTransaction fragmentTransaction) {
+    }
+
     @Override
     public void applyCommand(Command command) {
         if (command instanceof Forward) {
@@ -51,8 +67,16 @@ public abstract class FragmentNavigator implements Navigator {
                 unknownScreen(command);
                 return;
             }
-            fragmentManager
-                    .beginTransaction()
+
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            setupFragmentTransactionAnimation(
+                    command,
+                    fragmentManager.findFragmentById(containerId),
+                    fragment,
+                    fragmentTransaction
+            );
+
+            fragmentTransaction
                     .replace(containerId, fragment)
                     .addToBackStack(forward.getScreenKey())
                     .commit();
@@ -71,14 +95,29 @@ public abstract class FragmentNavigator implements Navigator {
             }
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStackImmediate();
-                fragmentManager
-                        .beginTransaction()
+
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                setupFragmentTransactionAnimation(
+                        command,
+                        fragmentManager.findFragmentById(containerId),
+                        fragment,
+                        fragmentTransaction
+                );
+
+                fragmentTransaction
                         .replace(containerId, fragment)
                         .addToBackStack(replace.getScreenKey())
                         .commit();
             } else {
-                fragmentManager
-                        .beginTransaction()
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                setupFragmentTransactionAnimation(
+                        command,
+                        fragmentManager.findFragmentById(containerId),
+                        fragment,
+                        fragmentTransaction
+                );
+
+                fragmentTransaction
                         .replace(containerId, fragment)
                         .commit();
             }
@@ -106,10 +145,7 @@ public abstract class FragmentNavigator implements Navigator {
     }
 
     private void backToRoot() {
-        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
-            fragmentManager.popBackStack();
-        }
-        fragmentManager.executePendingTransactions();
+        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     /**

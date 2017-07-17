@@ -60,6 +60,7 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
         future = executorService.schedule(new Runnable() {
             @Override
             public void run() {
+                //WARNING! Navigation must be only in UI thread. this method works only for sample :)
                 router.navigateTo(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
             }
         }, 5, TimeUnit.SECONDS);

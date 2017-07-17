@@ -1,10 +1,13 @@
 package ru.terrakok.cicerone;
 
+import java.util.HashMap;
+
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.commands.SystemMessage;
+import ru.terrakok.cicerone.result.ResultListener;
 
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
@@ -19,8 +22,47 @@ import ru.terrakok.cicerone.commands.SystemMessage;
  */
 public class Router extends BaseRouter {
 
+    private HashMap<Integer, ResultListener> resultListeners = new HashMap<>();
+
     public Router() {
         super();
+    }
+
+    /**
+     * Subscribe to the screen result.<br>
+     * <b>Note:</b> only one listener can subscribe to a unique resultCode!<br>
+     * You must call a <b>removeResultListener()</b> to avoid a memory leak.
+     *
+     * @param resultCode key for filter results
+     * @param listener   result listener
+     */
+    public void setResultListener(Integer resultCode, ResultListener listener) {
+        resultListeners.put(resultCode, listener);
+    }
+
+    /**
+     * Unsubscribe from the screen result.
+     *
+     * @param resultCode key for filter results
+     */
+    public void removeResultListener(Integer resultCode) {
+        resultListeners.remove(resultCode);
+    }
+
+    /**
+     * Send result data to subscriber.
+     *
+     * @param resultCode result data key
+     * @param result     result data
+     * @return TRUE if listener was notified and FALSE otherwise
+     */
+    protected boolean sendResult(Integer resultCode, Object result) {
+        ResultListener resultListener = resultListeners.get(resultCode);
+        if (resultListener != null) {
+            resultListener.onResult(result);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -136,6 +178,17 @@ public class Router extends BaseRouter {
      */
     public void exit() {
         executeCommand(new Back());
+    }
+
+    /**
+     * Return to the previous screen in the chain and send result data.
+     *
+     * @param resultCode result data key
+     * @param result     result data
+     */
+    public void exitWithResult(Integer resultCode, Object result) {
+        exit();
+        sendResult(resultCode, result);
     }
 
     /**
