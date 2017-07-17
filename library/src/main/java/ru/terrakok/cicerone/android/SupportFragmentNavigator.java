@@ -44,7 +44,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
     }
 
     /**
-     * Override this method for setup custom fragment transaction animation.<p/>
+     * Override this method for setup custom fragment transaction animation.
      *
      * @param command             current navigation command. Maybe only {@link Forward} and {@link Replace}
      * @param currentFragment     current fragment in container

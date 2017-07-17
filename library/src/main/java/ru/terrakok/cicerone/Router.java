@@ -29,8 +29,8 @@ public class Router extends BaseRouter {
     }
 
     /**
-     * Subscribe to the screen result.<br/>
-     * <b>Note:</b> only one listener can subscribe to a unique resultCode!<br/>
+     * Subscribe to the screen result.<br>
+     * <b>Note:</b> only one listener can subscribe to a unique resultCode!<br>
      * You must call a <b>removeResultListener()</b> to avoid a memory leak.
      *
      * @param resultCode key for filter results
