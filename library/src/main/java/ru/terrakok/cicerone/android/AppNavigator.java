@@ -3,6 +3,7 @@ package ru.terrakok.cicerone.android;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import ru.terrakok.cicerone.commands.BackTo;
@@ -34,15 +35,28 @@ public abstract class AppNavigator extends FragmentNavigator {
         this.activity = activity;
     }
 
+    /**
+     * Override this method for setup custom activity transaction animation.
+     *
+     * @param command        current navigation command. Maybe only {@link Forward} and {@link Replace}
+     * @param activityIntent activity intent
+     * @return transition options
+     */
+    protected Bundle setupActivityTransactionAnimation(Command command, Intent activityIntent) {
+        return null;
+    }
+
     @Override
     public void applyCommand(Command command) {
         if (command instanceof Forward) {
             Forward forward = (Forward) command;
             Intent activityIntent = createActivityIntent(forward.getScreenKey(), forward.getTransitionData());
 
+            Bundle options = setupActivityTransactionAnimation(command, activityIntent);
+
             // Start activity
             if (activityIntent != null) {
-                activity.startActivity(activityIntent);
+                activity.startActivity(activityIntent, options);
                 return;
             }
 
@@ -50,9 +64,11 @@ public abstract class AppNavigator extends FragmentNavigator {
             Replace replace = (Replace) command;
             Intent activityIntent = createActivityIntent(replace.getScreenKey(), replace.getTransitionData());
 
+            Bundle options = setupActivityTransactionAnimation(command, activityIntent);
+
             // Replace activity
             if (activityIntent != null) {
-                activity.startActivity(activityIntent);
+                activity.startActivity(activityIntent, options);
                 activity.finish();
                 return;
             }
