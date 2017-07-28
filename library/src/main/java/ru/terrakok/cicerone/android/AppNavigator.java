@@ -52,10 +52,9 @@ public abstract class AppNavigator extends FragmentNavigator {
             Forward forward = (Forward) command;
             Intent activityIntent = createActivityIntent(forward.getScreenKey(), forward.getTransitionData());
 
-            Bundle options = setupActivityTransactionAnimation(command, activityIntent);
-
             // Start activity
             if (activityIntent != null) {
+                Bundle options = setupActivityTransactionAnimation(command, activityIntent);
                 activity.startActivity(activityIntent, options);
                 return;
             }
@@ -64,10 +63,9 @@ public abstract class AppNavigator extends FragmentNavigator {
             Replace replace = (Replace) command;
             Intent activityIntent = createActivityIntent(replace.getScreenKey(), replace.getTransitionData());
 
-            Bundle options = setupActivityTransactionAnimation(command, activityIntent);
-
             // Replace activity
             if (activityIntent != null) {
+                Bundle options = setupActivityTransactionAnimation(command, activityIntent);
                 activity.startActivity(activityIntent, options);
                 activity.finish();
                 return;
