@@ -36,7 +36,7 @@ public abstract class AppNavigator extends FragmentNavigator {
     }
 
     /**
-     * Override this method for setup custom activity transaction animation.
+     * Override this method to create option for start activity
      *
      * @param command        current navigation command. Maybe only {@link Forward} and {@link Replace}
      * @param activityIntent activity intent
