@@ -43,7 +43,7 @@ public abstract class SupportAppNavigator extends SupportFragmentNavigator {
      * @param activityIntent activity intent
      * @return transition options
      */
-    protected Bundle setupActivityTransactionAnimation(Command command, Intent activityIntent) {
+    protected Bundle createStartActivityOptions(Command command, Intent activityIntent) {
         return null;
     }
 
@@ -55,7 +55,7 @@ public abstract class SupportAppNavigator extends SupportFragmentNavigator {
 
             // Start activity
             if (activityIntent != null) {
-                Bundle options = setupActivityTransactionAnimation(command, activityIntent);
+                Bundle options = createStartActivityOptions(command, activityIntent);
                 activity.startActivity(activityIntent, options);
                 return;
             }
@@ -66,7 +66,7 @@ public abstract class SupportAppNavigator extends SupportFragmentNavigator {
 
             // Replace activity
             if (activityIntent != null) {
-                Bundle options = setupActivityTransactionAnimation(command, activityIntent);
+                Bundle options = createStartActivityOptions(command, activityIntent);
                 activity.startActivity(activityIntent, options);
                 activity.finish();
                 return;
