@@ -38,7 +38,7 @@ public abstract class AppNavigator extends FragmentNavigator {
     /**
      * Override this method to create option for start activity
      *
-     * @param command        current navigation command. Maybe only {@link Forward} and {@link Replace}
+     * @param command        current navigation command. Will be only {@link Forward} or {@link Replace}
      * @param activityIntent activity intent
      * @return transition options
      */
