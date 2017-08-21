@@ -2,6 +2,7 @@ package ru.terrakok.cicerone.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
@@ -35,6 +36,17 @@ public abstract class SupportAppNavigator extends SupportFragmentNavigator {
         this.activity = activity;
     }
 
+    /**
+     * Override this method to create option for start activity
+     *
+     * @param command        current navigation command. Will be only {@link Forward} or {@link Replace}
+     * @param activityIntent activity intent
+     * @return transition options
+     */
+    protected Bundle createStartActivityOptions(Command command, Intent activityIntent) {
+        return null;
+    }
+
     @Override
     public void applyCommand(Command command) {
         if (command instanceof Forward) {
@@ -43,7 +55,8 @@ public abstract class SupportAppNavigator extends SupportFragmentNavigator {
 
             // Start activity
             if (activityIntent != null) {
-                activity.startActivity(activityIntent);
+                Bundle options = createStartActivityOptions(command, activityIntent);
+                activity.startActivity(activityIntent, options);
                 return;
             }
 
@@ -53,7 +66,8 @@ public abstract class SupportAppNavigator extends SupportFragmentNavigator {
 
             // Replace activity
             if (activityIntent != null) {
-                activity.startActivity(activityIntent);
+                Bundle options = createStartActivityOptions(command, activityIntent);
+                activity.startActivity(activityIntent, options);
                 activity.finish();
                 return;
             }

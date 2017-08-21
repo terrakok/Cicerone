@@ -44,11 +44,11 @@ public abstract class FragmentNavigator implements Navigator {
     }
 
     /**
-     * Override this method for setup custom fragment transaction animation.
+     * Override this method to setup custom fragment transaction animation.
      *
-     * @param command             current navigation command. Maybe only {@link Forward} and {@link Replace}
+     * @param command             current navigation command. Will be only {@link Forward} or {@link Replace}
      * @param currentFragment     current fragment in container
-     *                            (for {@link Replace} command it will be previous screen, NOT replaced screen)
+     *                            (for {@link Replace} command it will be screen previous in new chain, NOT replaced screen)
      * @param nextFragment        next screen fragment
      * @param fragmentTransaction fragment transaction
      */

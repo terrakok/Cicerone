@@ -1,5 +1,9 @@
 # Cicerone
 
+[![Telegram](https://img.shields.io/badge/Telegram-RUS-blue.svg)](https://t.me/Cicerone_RUS)  
+
+![](https://habrastorage.org/files/644/32e/9eb/64432e9eb3664723b3ee438449dab3b0.png)
+
 Cicerone (_"чи-че-ро́-не"_ - устар. гид) - легкая библиотека для простой реализации навигации в андроид приложении.  
 Разработана для использования в MVP архитектуре (попробуйте [Moxy](https://github.com/Arello-Mobile/Moxy)), но легко встраивается в любые решения.
 
