@@ -6,6 +6,7 @@ import android.os.Bundle;
  * Created by laomo on 2016-11-21.
  */
 public class Fragment {
+
 	public void onCreate(Bundle savedInstanceState) {
 		throw new RuntimeException("Stub!");
 	}
@@ -31,6 +32,10 @@ public class Fragment {
 	}
 
 	public final Activity getActivity() {
+		throw new RuntimeException("Stub!");
+	}
+
+	public void setArguments(Bundle args) {
 		throw new RuntimeException("Stub!");
 	}
 }

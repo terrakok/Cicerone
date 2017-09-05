@@ -35,4 +35,9 @@ public class Fragment {
 	public final FragmentActivity getActivity() {
 		throw new RuntimeException("Stub!");
 	}
+
+	public void setArguments(Bundle args) {
+		throw new RuntimeException("Stub!");
+	}
 }
+
