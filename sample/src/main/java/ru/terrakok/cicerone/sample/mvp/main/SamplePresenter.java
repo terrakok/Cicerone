@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.Screens;
 
+import static ru.terrakok.cicerone.sample.ui.main.MainActivity.BACK_TO_RESULT_CODE;
+
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
  * on 11.10.16
@@ -69,4 +71,9 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
     public void onBackToCommandClick() {
         router.backTo(Screens.SAMPLE_SCREEN + 3);
     }
+
+    public void onBackToCommandClick(final String textFromNextScreens) {
+        router.backToWithResult(Screens.SAMPLE_SCREEN + 3, BACK_TO_RESULT_CODE, textFromNextScreens);
+    }
+
 }

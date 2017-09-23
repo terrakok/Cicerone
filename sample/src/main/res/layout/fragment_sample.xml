@@ -98,5 +98,15 @@
             android:text="Back to '3'"
             android:textSize="28sp"/>
 
+        <TextView
+            android:id="@+id/back_to_with_result_command"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/greensea"
+            android:gravity="center"
+            android:text="Back to '3' with result"
+            android:textSize="28sp"/>
+
     </LinearLayout>
 </LinearLayout>

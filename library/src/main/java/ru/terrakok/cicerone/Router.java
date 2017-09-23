@@ -159,7 +159,22 @@ public class Router extends BaseRouter {
      * @param screenKey screen key
      */
     public void backTo(String screenKey) {
+        backToWithResult(screenKey, -1, null);
+    }
+
+    /**
+     * Return back to the needed screen from the chain.
+     * Behavior in the case when no needed screens found depends on
+     * the processing of the {@link BackTo} command in a {@link Navigator} implementation.
+     *
+     * @param screenKey  screen key
+     * @param resultCode result data key
+     * @param data       result parameters for the old screen
+     * @return true if result was send with success
+     */
+    public boolean backToWithResult(String screenKey, int resultCode, Object data) {
         executeCommand(new BackTo(screenKey));
+        return sendResult(resultCode, data);
     }
 
     /**
@@ -185,10 +200,11 @@ public class Router extends BaseRouter {
      *
      * @param resultCode result data key
      * @param result     result data
+     * @return true if result was send with success
      */
-    public void exitWithResult(Integer resultCode, Object result) {
+    public boolean exitWithResult(Integer resultCode, Object result) {
         exit();
-        sendResult(resultCode, result);
+        return sendResult(resultCode, result);
     }
 
     /**
