@@ -16,12 +16,14 @@ import javax.inject.Inject;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
+import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.android.SupportFragmentNavigator;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
+import ru.terrakok.cicerone.result.ResultListener;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
@@ -35,11 +37,15 @@ import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
 public class MainActivity extends MvpAppCompatActivity {
     private static final String STATE_SCREEN_NAMES = "state_screen_names";
 
+    public static final int BACK_TO_RESULT_CODE = 1987;
+
     private List<String> screenNames = new ArrayList<>();
     private TextView screensSchemeTV;
 
     @Inject
     NavigatorHolder navigatorHolder;
+    @Inject
+    Router router;
 
     private Navigator navigator = new SupportFragmentNavigator(getSupportFragmentManager(), R.id.main_container) {
         @Override
@@ -78,6 +84,13 @@ public class MainActivity extends MvpAppCompatActivity {
             screenNames = (List<String>) savedInstanceState.getSerializable(STATE_SCREEN_NAMES);
             printScreensScheme();
         }
+
+        router.setResultListener(BACK_TO_RESULT_CODE, new ResultListener() {
+            @Override
+            public void onResult(Object resultData) {
+                MainActivity.this.router.showSystemMessage((String) resultData);
+            }
+        });
     }
 
     @Override
@@ -140,5 +153,11 @@ public class MainActivity extends MvpAppCompatActivity {
             }
         }
         screensSchemeTV.setText("Chain: " + str + "");
+    }
+
+    @Override
+    protected void onDestroy() {
+        router.removeResultListener(BACK_TO_RESULT_CODE);
+        super.onDestroy();
     }
 }

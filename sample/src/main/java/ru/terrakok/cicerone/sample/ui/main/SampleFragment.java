@@ -37,6 +37,7 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
     private View backWithMessageCommandBt;
     private View forwardWithDelayCommandBt;
     private View backToCommandBt;
+    private View backToWithResultCommandBt;
 
     @Inject
     Router router;
@@ -83,6 +84,7 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
         backWithMessageCommandBt = view.findViewById(R.id.back_with_message_command);
         forwardWithDelayCommandBt = view.findViewById(R.id.forward_delay_command);
         backToCommandBt = view.findViewById(R.id.back_to_command);
+        backToWithResultCommandBt = view.findViewById(R.id.back_to_with_result_command);
     }
 
     @Override
@@ -140,6 +142,12 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
             @Override
             public void onClick(View view) {
                 presenter.onBackToCommandClick();
+            }
+        });
+        backToWithResultCommandBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.onBackToCommandClick(toolbar.getTitle().toString());
             }
         });
     }
