@@ -55,7 +55,7 @@ public abstract class AppNavigator extends FragmentNavigator {
             // Start activity
             if (activityIntent != null) {
                 Bundle options = createStartActivityOptions(command, activityIntent);
-                activity.startActivity(activityIntent, options);
+                checkAndStartActivity(forward.getScreenKey(), activityIntent, options);
                 return;
             }
 
@@ -66,7 +66,7 @@ public abstract class AppNavigator extends FragmentNavigator {
             // Replace activity
             if (activityIntent != null) {
                 Bundle options = createStartActivityOptions(command, activityIntent);
-                activity.startActivity(activityIntent, options);
+                checkAndStartActivity(replace.getScreenKey(), activityIntent, options);
                 activity.finish();
                 return;
             }
@@ -74,6 +74,25 @@ public abstract class AppNavigator extends FragmentNavigator {
 
         // Use default fragments navigation
         super.applyCommand(command);
+    }
+
+    private void checkAndStartActivity(String screenKey, Intent activityIntent, Bundle options) {
+        // Check if we can start activity
+        if (activityIntent.resolveActivity(activity.getPackageManager()) != null) {
+            activity.startActivity(activityIntent, options);
+        } else {
+            unexistingActivity(screenKey, activityIntent);
+        }
+    }
+
+    /**
+     * Called when there is no activity to open {@code screenKey}.
+     *
+     * @param screenKey screen key
+     * @param activityIntent intent passed to start Activity for the {@code screenKey}
+     */
+    protected void unexistingActivity(String screenKey, Intent activityIntent) {
+        // Do nothing by default
     }
 
     /**
