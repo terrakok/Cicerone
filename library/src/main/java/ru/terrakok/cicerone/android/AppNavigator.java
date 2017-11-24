@@ -2,6 +2,7 @@ package ru.terrakok.cicerone.android;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -50,7 +51,7 @@ public abstract class AppNavigator extends FragmentNavigator {
     public void applyCommand(Command command) {
         if (command instanceof Forward) {
             Forward forward = (Forward) command;
-            Intent activityIntent = createActivityIntent(forward.getScreenKey(), forward.getTransitionData());
+            Intent activityIntent = createActivityIntent(activity, forward.getScreenKey(), forward.getTransitionData());
 
             // Start activity
             if (activityIntent != null) {
@@ -61,7 +62,7 @@ public abstract class AppNavigator extends FragmentNavigator {
 
         } else if (command instanceof Replace) {
             Replace replace = (Replace) command;
-            Intent activityIntent = createActivityIntent(replace.getScreenKey(), replace.getTransitionData());
+            Intent activityIntent = createActivityIntent(activity, replace.getScreenKey(), replace.getTransitionData());
 
             // Replace activity
             if (activityIntent != null) {
@@ -101,11 +102,13 @@ public abstract class AppNavigator extends FragmentNavigator {
      * <b>Warning:</b> This method does not work with {@link BackTo} command.
      * </p>
      *
+     *
+     * @param context
      * @param screenKey screen key
      * @param data      initialization data, can be null
      * @return intent to start Activity for the passed screen key
      */
-    protected abstract Intent createActivityIntent(String screenKey, Object data);
+    protected abstract Intent createActivityIntent(Context context, String screenKey, Object data);
 
     @Override
     protected void showSystemMessage(String message) {
