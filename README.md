@@ -147,7 +147,7 @@ To use, just provide it with the container and _FragmentManager_ and override fe
 ```java
 private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
     @Override
-    protected Intent createActivityIntent(String screenKey, Object data) {
+    protected Intent createActivityIntent(Context context, String screenKey, Object data) {
         return null;
     }
 
