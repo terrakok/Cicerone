@@ -1,3 +1,7 @@
+/*
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
+ */
+
 package ru.terrakok.cicerone;
 
 import java.util.HashMap;
@@ -8,11 +12,6 @@ import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.commands.SystemMessage;
 import ru.terrakok.cicerone.result.ResultListener;
-
-/**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
- * on 12.10.16
- */
 
 /**
  * Router is the class for high-level navigation.

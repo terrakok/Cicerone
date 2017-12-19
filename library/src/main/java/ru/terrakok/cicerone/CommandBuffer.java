@@ -1,14 +1,13 @@
+/*
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
+ */
+
 package ru.terrakok.cicerone;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 import ru.terrakok.cicerone.commands.Command;
-
-/**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
- * on 12.10.16
- */
 
 /**
  * Passes navigation command to an active {@link Navigator}

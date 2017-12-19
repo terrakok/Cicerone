@@ -1,11 +1,10 @@
+/*
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
+ */
+
 package ru.terrakok.cicerone;
 
 import ru.terrakok.cicerone.commands.Command;
-
-/**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
- * on 11.10.16
- */
 
 /**
  * The low-level navigation interface.

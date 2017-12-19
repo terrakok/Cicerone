@@ -1,3 +1,7 @@
+/*
+ * Created by Vasili Chyrvon (vasili.chyrvon@gmail.com)
+ */
+
 package ru.terrakok.cicerone.android;
 
 import android.app.Activity;
@@ -19,8 +23,6 @@ import ru.terrakok.cicerone.commands.Replace;
  * This navigator DOESN'T provide full featured Activity navigation,
  * but can ease Activity start or replace from current navigator.
  * </p>
- *
- * @author Vasili Chyrvon (vasili.chyrvon@gmail.com)
  */
 public abstract class AppNavigator extends FragmentNavigator {
 
@@ -89,7 +91,7 @@ public abstract class AppNavigator extends FragmentNavigator {
     /**
      * Called when there is no activity to open {@code screenKey}.
      *
-     * @param screenKey screen key
+     * @param screenKey      screen key
      * @param activityIntent intent passed to start Activity for the {@code screenKey}
      */
     protected void unexistingActivity(String screenKey, Intent activityIntent) {
@@ -101,7 +103,6 @@ public abstract class AppNavigator extends FragmentNavigator {
      * <p>
      * <b>Warning:</b> This method does not work with {@link BackTo} command.
      * </p>
-     *
      *
      * @param context
      * @param screenKey screen key

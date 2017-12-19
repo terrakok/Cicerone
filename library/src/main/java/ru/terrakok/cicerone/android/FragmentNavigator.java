@@ -1,3 +1,7 @@
+/*
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
+ */
+
 package ru.terrakok.cicerone.android;
 
 import android.app.Fragment;
@@ -11,11 +15,6 @@ import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.commands.SystemMessage;
-
-/**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
- * on 11.10.16
- */
 
 /**
  * {@link Navigator} implementation based on the fragments.

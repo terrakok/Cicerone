@@ -1,11 +1,10 @@
+/*
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
+ */
+
 package ru.terrakok.cicerone.commands;
 
 import ru.terrakok.cicerone.Navigator;
-
-/**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
- * on 11.10.16
- */
 
 /**
  * Rolls back to the needed screen from the screens chain.

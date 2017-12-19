@@ -1,11 +1,10 @@
+/*
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
+ */
+
 package ru.terrakok.cicerone;
 
 import ru.terrakok.cicerone.commands.Command;
-
-/**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
- * on 12.10.16
- */
 
 /**
  * BaseRouter is an abstract class to implement high-level navigation.

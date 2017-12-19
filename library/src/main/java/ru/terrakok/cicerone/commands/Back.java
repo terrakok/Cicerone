@@ -1,9 +1,8 @@
-package ru.terrakok.cicerone.commands;
-
-/**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
- * on 11.10.16
+/*
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
  */
+
+package ru.terrakok.cicerone.commands;
 
 /**
  * Rolls back the last transition from the screens chain.

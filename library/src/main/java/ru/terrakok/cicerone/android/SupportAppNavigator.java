@@ -1,3 +1,7 @@
+/*
+ * Created by Vasili Chyrvon (vasili.chyrvon@gmail.com)
+ */
+
 package ru.terrakok.cicerone.android;
 
 import android.app.Activity;
@@ -20,8 +24,6 @@ import ru.terrakok.cicerone.commands.Replace;
  * This navigator DOESN'T provide full featured Activity navigation,
  * but can ease Activity start or replace from current navigator.
  * </p>
- *
- * @author Vasili Chyrvon (vasili.chyrvon@gmail.com)
  */
 public abstract class SupportAppNavigator extends SupportFragmentNavigator {
 
