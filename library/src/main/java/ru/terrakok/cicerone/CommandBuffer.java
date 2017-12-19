@@ -1,6 +1,7 @@
 package ru.terrakok.cicerone;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import ru.terrakok.cicerone.commands.Command;
@@ -16,14 +17,14 @@ import ru.terrakok.cicerone.commands.Command;
  */
 class CommandBuffer implements NavigatorHolder {
     private Navigator navigator;
-    private Queue<Command> pendingCommands = new LinkedList<>();
+    private Queue<Command[]> pendingCommands = new LinkedList<>();
 
     @Override
     public void setNavigator(Navigator navigator) {
         this.navigator = navigator;
         while (!pendingCommands.isEmpty()) {
             if (navigator != null) {
-                executeCommand(pendingCommands.poll());
+                executeCommands(pendingCommands.poll());
             } else break;
         }
     }
@@ -34,15 +35,15 @@ class CommandBuffer implements NavigatorHolder {
     }
 
     /**
-     * Passes {@code command} to the {@link Navigator} if it available.
+     * Passes {@code commands} to the {@link Navigator} if it available.
      * Else puts it to the pending commands queue to pass it later.
-     * @param command navigation command
+     * @param commands navigation command array
      */
-    public void executeCommand(Command command) {
+    public void executeCommands(Command[] commands) {
         if (navigator != null) {
-            navigator.applyCommand(command);
+            navigator.applyCommands(commands);
         } else {
-            pendingCommands.add(command);
+            pendingCommands.add(commands);
         }
     }
 }

@@ -96,8 +96,13 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
 
     //Sample fully custom navigator:
     private Navigator navigator = new Navigator() {
+
         @Override
-        public void applyCommand(Command command) {
+        public void applyCommands(Command[] commands) {
+            for (Command command : commands) applyCommand(command);
+        }
+
+        private void applyCommand(Command command) {
             if (command instanceof Forward) {
                 forward((Forward) command);
             } else if (command instanceof Replace) {

@@ -10,6 +10,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -73,7 +74,7 @@ public class MainActivity extends MvpAppCompatActivity {
         screensSchemeTV = (TextView) findViewById(R.id.screens_scheme);
 
         if (savedInstanceState == null) {
-            navigator.applyCommand(new Replace(Screens.SAMPLE_SCREEN, 1));
+            navigator.applyCommands(new Command[]{new Replace(Screens.SAMPLE_SCREEN, 1)});
         } else {
             screenNames = (List<String>) savedInstanceState.getSerializable(STATE_SCREEN_NAMES);
             printScreensScheme();

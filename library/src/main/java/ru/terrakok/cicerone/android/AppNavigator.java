@@ -48,33 +48,30 @@ public abstract class AppNavigator extends FragmentNavigator {
     }
 
     @Override
-    public void applyCommand(Command command) {
-        if (command instanceof Forward) {
-            Forward forward = (Forward) command;
-            Intent activityIntent = createActivityIntent(activity, forward.getScreenKey(), forward.getTransitionData());
+    protected void forward(Forward command) {
+        Intent activityIntent = createActivityIntent(activity, command.getScreenKey(), command.getTransitionData());
 
-            // Start activity
-            if (activityIntent != null) {
-                Bundle options = createStartActivityOptions(command, activityIntent);
-                checkAndStartActivity(forward.getScreenKey(), activityIntent, options);
-                return;
-            }
-
-        } else if (command instanceof Replace) {
-            Replace replace = (Replace) command;
-            Intent activityIntent = createActivityIntent(activity, replace.getScreenKey(), replace.getTransitionData());
-
-            // Replace activity
-            if (activityIntent != null) {
-                Bundle options = createStartActivityOptions(command, activityIntent);
-                checkAndStartActivity(replace.getScreenKey(), activityIntent, options);
-                activity.finish();
-                return;
-            }
+        // Start activity
+        if (activityIntent != null) {
+            Bundle options = createStartActivityOptions(command, activityIntent);
+            checkAndStartActivity(command.getScreenKey(), activityIntent, options);
+        } else {
+            super.forward(command);
         }
+    }
 
-        // Use default fragments navigation
-        super.applyCommand(command);
+    @Override
+    protected void replace(Replace command) {
+        Intent activityIntent = createActivityIntent(activity, command.getScreenKey(), command.getTransitionData());
+
+        // Replace activity
+        if (activityIntent != null) {
+            Bundle options = createStartActivityOptions(command, activityIntent);
+            checkAndStartActivity(command.getScreenKey(), activityIntent, options);
+            activity.finish();
+        } else {
+            super.replace(command);
+        }
     }
 
     private void checkAndStartActivity(String screenKey, Intent activityIntent, Bundle options) {
