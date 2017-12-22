@@ -8,6 +8,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 
+import java.util.LinkedList;
+
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
@@ -30,6 +32,7 @@ import ru.terrakok.cicerone.commands.SystemMessage;
 public abstract class FragmentNavigator implements Navigator {
     private FragmentManager fragmentManager;
     private int containerId;
+    private LinkedList<String> localStackCopy;
 
     /**
      * Creates FragmentNavigator.
@@ -58,14 +61,74 @@ public abstract class FragmentNavigator implements Navigator {
     }
 
     @Override
-    public void applyCommand(Command command) {
+    public void applyCommands(Command[] commands) {
+        fragmentManager.executePendingTransactions();
+
+        //copy stack structure before apply commands
+        final int stackSize = fragmentManager.getBackStackEntryCount();
+        localStackCopy = new LinkedList<>();
+        for (int i = 0; i < stackSize; i++) {
+            localStackCopy.add(fragmentManager.getBackStackEntryAt(i).getName());
+        }
+
+        for (Command command : commands) applyCommand(command);
+    }
+
+    protected void applyCommand(Command command) {
         if (command instanceof Forward) {
-            Forward forward = (Forward) command;
-            Fragment fragment = createFragment(forward.getScreenKey(), forward.getTransitionData());
-            if (fragment == null) {
-                unknownScreen(command);
-                return;
-            }
+            forward((Forward) command);
+        } else if (command instanceof Back) {
+            back();
+        } else if (command instanceof Replace) {
+            replace((Replace) command);
+        } else if (command instanceof BackTo) {
+            backTo((BackTo) command);
+        } else if (command instanceof SystemMessage) {
+            showSystemMessage(((SystemMessage) command).getMessage());
+        }
+    }
+
+    protected void forward(Forward command) {
+        Fragment fragment = createFragment(command.getScreenKey(), command.getTransitionData());
+        if (fragment == null) {
+            unknownScreen(command);
+            return;
+        }
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        setupFragmentTransactionAnimation(
+                command,
+                fragmentManager.findFragmentById(containerId),
+                fragment,
+                fragmentTransaction
+        );
+
+        fragmentTransaction
+                .replace(containerId, fragment)
+                .addToBackStack(command.getScreenKey())
+                .commit();
+        localStackCopy.add(command.getScreenKey());
+    }
+
+    protected void back() {
+        if (localStackCopy.size() > 0) {
+            fragmentManager.popBackStack();
+            localStackCopy.pop();
+        } else {
+            exit();
+        }
+    }
+
+    protected void replace(Replace command) {
+        Fragment fragment = createFragment(command.getScreenKey(), command.getTransitionData());
+        if (fragment == null) {
+            unknownScreen(command);
+            return;
+        }
+        if (localStackCopy.size() > 0) {
+            fragmentManager.popBackStack();
+            localStackCopy.pop();
+
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             setupFragmentTransactionAnimation(
@@ -77,74 +140,46 @@ public abstract class FragmentNavigator implements Navigator {
 
             fragmentTransaction
                     .replace(containerId, fragment)
-                    .addToBackStack(forward.getScreenKey())
+                    .addToBackStack(command.getScreenKey())
                     .commit();
-        } else if (command instanceof Back) {
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
-            } else {
-                exit();
-            }
-        } else if (command instanceof Replace) {
-            Replace replace = (Replace) command;
-            Fragment fragment = createFragment(replace.getScreenKey(), replace.getTransitionData());
-            if (fragment == null) {
-                unknownScreen(command);
-                return;
-            }
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
+            localStackCopy.add(command.getScreenKey());
+        } else {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            setupFragmentTransactionAnimation(
+                    command,
+                    fragmentManager.findFragmentById(containerId),
+                    fragment,
+                    fragmentTransaction
+            );
 
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                setupFragmentTransactionAnimation(
-                        command,
-                        fragmentManager.findFragmentById(containerId),
-                        fragment,
-                        fragmentTransaction
-                );
+            fragmentTransaction
+                    .replace(containerId, fragment)
+                    .commit();
+        }
+    }
 
-                fragmentTransaction
-                        .replace(containerId, fragment)
-                        .addToBackStack(replace.getScreenKey())
-                        .commit();
-            } else {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                setupFragmentTransactionAnimation(
-                        command,
-                        fragmentManager.findFragmentById(containerId),
-                        fragment,
-                        fragmentTransaction
-                );
+    protected void backTo(BackTo command) {
+        String key = command.getScreenKey();
 
-                fragmentTransaction
-                        .replace(containerId, fragment)
-                        .commit();
-            }
-        } else if (command instanceof BackTo) {
-            String key = ((BackTo) command).getScreenKey();
-
-            if (key == null) {
-                backToRoot();
-            } else {
-                boolean hasScreen = false;
-                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
-                    if (key.equals(fragmentManager.getBackStackEntryAt(i).getName())) {
-                        fragmentManager.popBackStackImmediate(key, 0);
-                        hasScreen = true;
-                        break;
-                    }
+        if (key == null) {
+            backToRoot();
+        } else {
+            int i = localStackCopy.indexOf(key);
+            int s = localStackCopy.size();
+            if (i != -1) {
+                for (int j = 1; j < s - i; j++) {
+                    localStackCopy.pop();
                 }
-                if (!hasScreen) {
-                    backToUnexisting();
-                }
+                fragmentManager.popBackStack(key, 0);
+            } else {
+                backToUnexisting();
             }
-        } else if (command instanceof SystemMessage) {
-            showSystemMessage(((SystemMessage) command).getMessage());
         }
     }
 
     private void backToRoot() {
-        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        localStackCopy.clear();
     }
 
     /**

@@ -15,7 +15,7 @@ public interface Navigator {
     /**
      * Performs transition described by the navigation command
      *
-     * @param command the navigation command to apply
+     * @param commands the navigation command array to apply per single transaction
      */
-    void applyCommand(Command command);
+    void applyCommands(Command[] commands);
 }

@@ -80,7 +80,7 @@ public class Router extends BaseRouter {
      * @param data      initialisation parameters for the new screen
      */
     public void navigateTo(String screenKey, Object data) {
-        executeCommand(new Forward(screenKey, data));
+        executeCommands(new Forward(screenKey, data));
     }
 
     /**
@@ -101,8 +101,10 @@ public class Router extends BaseRouter {
      * @param data      initialisation parameters for the new screen
      */
     public void newScreenChain(String screenKey, Object data) {
-        executeCommand(new BackTo(null));
-        executeCommand(new Forward(screenKey, data));
+        executeCommands(
+                new BackTo(null),
+                new Forward(screenKey, data)
+        );
     }
 
     /**
@@ -121,8 +123,10 @@ public class Router extends BaseRouter {
      * @param data      initialisation parameters for the root
      */
     public void newRootScreen(String screenKey, Object data) {
-        executeCommand(new BackTo(null));
-        executeCommand(new Replace(screenKey, data));
+        executeCommands(
+                new BackTo(null),
+                new Replace(screenKey, data)
+        );
     }
 
     /**
@@ -147,7 +151,7 @@ public class Router extends BaseRouter {
      * @param data      initialisation parameters for the new screen
      */
     public void replaceScreen(String screenKey, Object data) {
-        executeCommand(new Replace(screenKey, data));
+        executeCommands(new Replace(screenKey, data));
     }
 
     /**
@@ -158,7 +162,7 @@ public class Router extends BaseRouter {
      * @param screenKey screen key
      */
     public void backTo(String screenKey) {
-        executeCommand(new BackTo(screenKey));
+        executeCommands(new BackTo(screenKey));
     }
 
     /**
@@ -166,8 +170,10 @@ public class Router extends BaseRouter {
      * It's mostly used to finish the application or close a supplementary navigation chain.
      */
     public void finishChain() {
-        executeCommand(new BackTo(null));
-        executeCommand(new Back());
+        executeCommands(
+                new BackTo(null),
+                new Back()
+        );
     }
 
     /**
@@ -176,7 +182,7 @@ public class Router extends BaseRouter {
      * the processing of the {@link Back} command in a {@link Navigator} implementation.
      */
     public void exit() {
-        executeCommand(new Back());
+        executeCommands(new Back());
     }
 
     /**
@@ -196,8 +202,10 @@ public class Router extends BaseRouter {
      * @param message message to show
      */
     public void exitWithMessage(String message) {
-        executeCommand(new Back());
-        executeCommand(new SystemMessage(message));
+        executeCommands(
+                new Back(),
+                new SystemMessage(message)
+        );
     }
 
     /**
@@ -206,6 +214,6 @@ public class Router extends BaseRouter {
      * @param message message to show
      */
     public void showSystemMessage(String message) {
-        executeCommand(new SystemMessage(message));
+        executeCommands(new SystemMessage(message));
     }
 }

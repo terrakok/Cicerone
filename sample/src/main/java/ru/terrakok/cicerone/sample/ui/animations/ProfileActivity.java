@@ -43,7 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_container);
 
         if (savedInstanceState == null) {
-            navigator.applyCommand(new Replace(Screens.PROFILE_SCREEN, null));
+            navigator.applyCommands(new Command[]{new Replace(Screens.PROFILE_SCREEN, null)});
         }
     }
 

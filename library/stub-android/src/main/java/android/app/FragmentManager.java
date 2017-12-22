@@ -18,11 +18,7 @@ public class FragmentManager {
 		throw new RuntimeException("Stub!");
 	}
 
-	public boolean popBackStackImmediate() {
-		throw new RuntimeException("Stub!");
-	}
-
-	public boolean popBackStackImmediate(String name, int flags) {
+	public void popBackStack(String name, int flags) {
 		throw new RuntimeException("Stub!");
 	}
 

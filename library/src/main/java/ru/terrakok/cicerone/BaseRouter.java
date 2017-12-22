@@ -22,11 +22,11 @@ public abstract class BaseRouter {
     }
 
     /**
-     * Sends navigation command to {@link CommandBuffer}.
+     * Sends navigation command array to {@link CommandBuffer}.
      *
-     * @param command navigation command to execute
+     * @param commands navigation command array to execute
      */
-    protected void executeCommand(Command command) {
-        commandBuffer.executeCommand(command);
+    protected void executeCommands(Command... commands) {
+        commandBuffer.executeCommands(commands);
     }
 }
