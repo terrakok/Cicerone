@@ -30,8 +30,8 @@ android {
 
 ext {
     supportLibraryVersion = "26.1.0"
-    moxyVersion = "1.4.6"
-    daggerVersion = "2.10"
+    moxyVersion = "1.5.3"
+    daggerVersion = "2.14"
 }
 
 dependencies {
