@@ -3,6 +3,7 @@ package ru.terrakok.cicerone.android;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.support.annotation.Nullable;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
@@ -150,12 +151,16 @@ public abstract class FragmentNavigator implements Navigator {
 
     /**
      * Creates Fragment matching {@code screenKey}.
+     * <p>
+     * If it returns null, will be called {@link #unknownScreen(Command)}.
+     * </p>
      *
      * @param screenKey screen key
      * @param data      initialization data
-     * @return instantiated fragment for the passed screen key
+     * @return instantiated fragment for the passed screen key, or null if there no fragment that
+     *         accords to passed screenKey
      */
-    protected abstract Fragment createFragment(String screenKey, Object data);
+    protected abstract Fragment createFragment(String screenKey, @Nullable Object data);
 
     /**
      * Shows system message.

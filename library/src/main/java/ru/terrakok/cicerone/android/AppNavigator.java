@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import ru.terrakok.cicerone.commands.BackTo;
@@ -99,6 +100,7 @@ public abstract class AppNavigator extends FragmentNavigator {
     /**
      * Creates Intent to start Activity for {@code screenKey}.
      * <p>
+     * If it returns null, screenKey will be passed to {@link #createFragment(String, Object)}.
      * <b>Warning:</b> This method does not work with {@link BackTo} command.
      * </p>
      *
@@ -106,9 +108,12 @@ public abstract class AppNavigator extends FragmentNavigator {
      * @param context
      * @param screenKey screen key
      * @param data      initialization data, can be null
-     * @return intent to start Activity for the passed screen key
+     * @return intent to start Activity for the passed screen key, or null if there no activity
+     *         that accords to passed screenKey
      */
-    protected abstract Intent createActivityIntent(Context context, String screenKey, Object data);
+    protected abstract Intent createActivityIntent(Context context,
+                                                   String screenKey,
+                                                   @Nullable Object data);
 
     @Override
     protected void showSystemMessage(String message) {
