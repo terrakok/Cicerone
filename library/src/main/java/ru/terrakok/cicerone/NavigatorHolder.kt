@@ -9,14 +9,14 @@ package ru.terrakok.cicerone
 interface NavigatorHolder {
 
     /**
-     * Set an active Navigator for the Cicerone and start receive commands.
+     * Set an active [Navigator] for the [Cicerone] and start receive commands.
      *
      * @param navigator new active Navigator, can be null
      */
-    fun setNavigator(navigator: Navigator)
+    fun setNavigator(navigator: Navigator?)
 
     /**
-     * Remove the current Navigator and stop receive commands.
+     * Remove the current [Navigator] and stop receive commands.
      */
     fun removeNavigator()
 }
