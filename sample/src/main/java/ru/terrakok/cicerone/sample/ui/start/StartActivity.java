@@ -2,6 +2,7 @@ package ru.terrakok.cicerone.sample.ui.start;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -97,7 +98,7 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
     //Sample fully custom navigator:
     private Navigator navigator = new Navigator() {
         @Override
-        public void applyCommand(Command command) {
+        public void applyCommand(@NonNull Command command) {
             if (command instanceof Forward) {
                 forward((Forward) command);
             } else if (command instanceof Replace) {
