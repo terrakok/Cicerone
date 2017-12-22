@@ -28,7 +28,7 @@ class BackTo(val screenKey: String?) : Command
  * @param transitionData initial data, can be null
  * @author Konstantin Tskhovrebov (aka terrakok) on 11.10.16.
  */
-class Forward(val screenKey: String, val transitionData: Any?) : Command
+class Forward(override val screenKey: String, override val transitionData: Any?) : CreationalCommand
 
 
 /**
@@ -38,7 +38,7 @@ class Forward(val screenKey: String, val transitionData: Any?) : Command
  * @param transitionData initial data, can be null
  * @author Konstantin Tskhovrebov (aka terrakok) on 11.10.16.
  */
-class Replace(val screenKey: String, val transitionData: Any?) : Command
+class Replace(override val screenKey: String, override val transitionData: Any?) : CreationalCommand
 
 
 /**
