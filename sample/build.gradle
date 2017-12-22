@@ -28,7 +28,7 @@ android {
 ext {
     supportLibraryVersion = "26.1.0"
     moxyVersion = "1.5.3"
-    daggerVersion = "2.14"
+    daggerVersion = "2.14.1"
 }
 
 dependencies {
