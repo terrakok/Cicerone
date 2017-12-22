@@ -9,6 +9,7 @@ import android.widget.Toast
 
 import ru.terrakok.cicerone.commands.BackTo
 import ru.terrakok.cicerone.commands.Command
+import ru.terrakok.cicerone.commands.CreationalCommand
 import ru.terrakok.cicerone.commands.Forward
 import ru.terrakok.cicerone.commands.Replace
 
@@ -21,11 +22,57 @@ import ru.terrakok.cicerone.commands.Replace
  * @author Vasili Chyrvon (vasili.chyrvon@gmail.com)
  * @see SupportAppNavigator
  */
-abstract class AppNavigator(
+abstract class AppNavigator @JvmOverloads constructor(
         private var activity: Activity,
         fragmentManager: FragmentManager = activity.fragmentManager,
         containerId: Int
 ) : FragmentNavigator(fragmentManager, containerId) {
+
+    override fun applyCommand(command: Command) {
+        when (command) {
+            is Forward -> applyForward(command)
+            is Replace -> applyReplace(command)
+            else -> super.applyCommand(command)
+        }
+    }
+
+    private fun applyForward(forward: Forward) {
+        createActivityIntent(activity, forward.screenKey, forward.transitionData)?.let {
+            checkAndStartActivity(forward, it)
+        }
+    }
+
+    private fun applyReplace(replace: Replace) {
+        createActivityIntent(activity, replace.screenKey, replace.transitionData)?.let {
+            checkAndStartActivity(replace, it)
+            activity.finish()
+        }
+    }
+
+    /**
+     * Creates [Intent] to start Activity for [screenKey].
+     *
+     * If it returns null, [screenKey] will be passed to [createFragment].
+     * **Warning:** This method does not work with [BackTo] command.
+     *
+     * @param screenKey screen key
+     * @param data      initialization data, can be null
+     * @return intent to start Activity for the passed screen key, or null if there no activity
+     * that accords to passed screen key
+     */
+    protected abstract fun createActivityIntent(
+            context: Context,
+            screenKey: String,
+            data: Any?
+    ): Intent?
+
+    private fun checkAndStartActivity(command: CreationalCommand, activityIntent: Intent) {
+        // Check if we can start activity
+        activityIntent.resolveActivity(activity.packageManager)?.run {
+            val options = createStartActivityOptions(command, activityIntent)
+            activity.startActivity(activityIntent, options)
+        } ?: unexistingActivity(command.screenKey, activityIntent)
+    }
 
     /**
      * Override this method to create option for start activity
@@ -35,46 +82,20 @@ abstract class AppNavigator(
      * @return transition options
      */
     protected open fun createStartActivityOptions(
+            command: CreationalCommand,
+            activityIntent: Intent
+    ): Bundle? {
+        @Suppress("DEPRECATION")
+        return createStartActivityOptions(command as Command, activityIntent)
+    }
+
+    // For backward compatibility
+    @Deprecated("use variant of this function with CreationalCommand instead")
+    protected open fun createStartActivityOptions(
             command: Command,
             activityIntent: Intent
     ): Bundle? {
         return null
-    }
-
-    override fun applyCommand(command: Command) {
-        if (command is Forward) {
-            val activityIntent = createActivityIntent(activity, command.screenKey, command.transitionData)
-
-            // Start activity
-            if (activityIntent != null) {
-                val options = createStartActivityOptions(command, activityIntent)
-                checkAndStartActivity(command.screenKey, activityIntent, options)
-                return
-            }
-
-        } else if (command is Replace) {
-            val activityIntent = createActivityIntent(activity, command.screenKey, command.transitionData)
-
-            // Replace activity
-            if (activityIntent != null) {
-                val options = createStartActivityOptions(command, activityIntent)
-                checkAndStartActivity(command.screenKey, activityIntent, options)
-                activity.finish()
-                return
-            }
-        }
-
-        // Use default fragments navigation
-        super.applyCommand(command)
-    }
-
-    private fun checkAndStartActivity(screenKey: String, activityIntent: Intent, options: Bundle?) {
-        // Check if we can start activity
-        if (activityIntent.resolveActivity(activity.packageManager) != null) {
-            activity.startActivity(activityIntent, options)
-        } else {
-            unexistingActivity(screenKey, activityIntent)
-        }
     }
 
     /**
@@ -86,24 +107,6 @@ abstract class AppNavigator(
     protected open fun unexistingActivity(screenKey: String, activityIntent: Intent) {
         // Do nothing by default
     }
-
-    /**
-     * Creates [Intent] to start Activity for [screenKey].
-     *
-     * If it returns null, [screenKey] will be passed to [createFragment].
-     * **Warning:** This method does not work with [BackTo] command.
-     *
-     * @param context
-     * @param screenKey screen key
-     * @param data      initialization data, can be null
-     * @return intent to start Activity for the passed screen key, or null if there no activity
-     * that accords to passed screen key
-     */
-    protected abstract fun createActivityIntent(
-            context: Context,
-            screenKey: String,
-            data: Any?
-    ): Intent?
 
     override fun showSystemMessage(message: String) {
         // Toast by default

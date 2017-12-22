@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager
 import android.widget.Toast
 import ru.terrakok.cicerone.commands.BackTo
 import ru.terrakok.cicerone.commands.Command
+import ru.terrakok.cicerone.commands.CreationalCommand
 import ru.terrakok.cicerone.commands.Forward
 import ru.terrakok.cicerone.commands.Replace
 
@@ -20,74 +21,31 @@ import ru.terrakok.cicerone.commands.Replace
  * @author Vasili Chyrvon (vasili.chyrvon@gmail.com)
  * @see AppNavigator
  */
-abstract class SupportAppNavigator(
+abstract class SupportAppNavigator @JvmOverloads constructor(
         private val activity: FragmentActivity,
         fragmentManager: FragmentManager = activity.supportFragmentManager,
         containerId: Int
 ) : SupportFragmentNavigator(fragmentManager, containerId) {
 
-    /**
-     * Override this method to create option for start activity
-     *
-     * @param command        current navigation command. Will be only [Forward] or [Replace]
-     * @param activityIntent activity intent
-     * @return transition options
-     */
-    protected open fun createStartActivityOptions(
-            command: Command,
-            activityIntent: Intent
-    ): Bundle? {
-        return null
-    }
-
     override fun applyCommand(command: Command) {
-        if (command is Forward) {
-            val activityIntent = createActivityIntent(activity, command.screenKey, command.transitionData)
-
-            // Start activity
-            if (activityIntent != null) {
-                val options = createStartActivityOptions(command, activityIntent)
-                checkAndStartActivity(command.screenKey, activityIntent, options)
-                return
-            }
-
-        } else if (command is Replace) {
-            val activityIntent = createActivityIntent(activity, command.screenKey, command.transitionData)
-
-            // Replace activity
-            if (activityIntent != null) {
-                val options = createStartActivityOptions(command, activityIntent)
-                checkAndStartActivity(command.screenKey, activityIntent, options)
-                activity.finish()
-                return
-            }
-        }
-
-        // Use default fragments navigation
-        super.applyCommand(command)
-    }
-
-    private fun checkAndStartActivity(
-            screenKey: String,
-            activityIntent: Intent,
-            options: Bundle?
-    ) {
-        // Check if we can start activity
-        if (activityIntent.resolveActivity(activity.packageManager) != null) {
-            activity.startActivity(activityIntent, options)
-        } else {
-            unexistingActivity(screenKey, activityIntent)
+        when (command) {
+            is Forward -> applyForward(command)
+            is Replace -> applyReplace(command)
+            else -> super.applyCommand(command)
         }
     }
 
-    /**
-     * Called when there is no activity to open [screenKey].
-     *
-     * @param screenKey screen key
-     * @param activityIntent intent passed to start Activity for the [screenKey]
-     */
-    protected open fun unexistingActivity(screenKey: String, activityIntent: Intent) {
-        // Do nothing by default
+    private fun applyForward(forward: Forward) {
+        createActivityIntent(activity, forward.screenKey, forward.transitionData)?.let {
+            checkAndStartActivity(forward, it)
+        }
+    }
+
+    private fun applyReplace(replace: Replace) {
+        createActivityIntent(activity, replace.screenKey, replace.transitionData)?.let {
+            checkAndStartActivity(replace, it)
+            activity.finish()
+        }
     }
 
     /**
@@ -106,6 +64,48 @@ abstract class SupportAppNavigator(
             screenKey: String,
             data: Any?
     ): Intent?
+
+    private fun checkAndStartActivity(command: CreationalCommand, activityIntent: Intent) {
+        // Check if we can start activity
+        activityIntent.resolveActivity(activity.packageManager)?.run {
+            val options = createStartActivityOptions(command, activityIntent)
+            activity.startActivity(activityIntent, options)
+        } ?: unexistingActivity(command.screenKey, activityIntent)
+    }
+
+    /**
+     * Override this method to create option for start activity
+     *
+     * @param command        current navigation command. Will be only [Forward] or [Replace]
+     * @param activityIntent activity intent
+     * @return transition options
+     */
+    protected open fun createStartActivityOptions(
+            command: CreationalCommand,
+            activityIntent: Intent
+    ): Bundle? {
+        @Suppress("DEPRECATION")
+        return createStartActivityOptions(command as Command, activityIntent)
+    }
+
+    // For backward compatibility
+    @Deprecated("use variant of this function with CreationalCommand instead")
+    protected open fun createStartActivityOptions(
+            command: Command,
+            activityIntent: Intent
+    ): Bundle? {
+        return null
+    }
+
+    /**
+     * Called when there is no activity to open [screenKey].
+     *
+     * @param screenKey screen key
+     * @param activityIntent intent passed to start Activity for the [screenKey]
+     */
+    protected open fun unexistingActivity(screenKey: String, activityIntent: Intent) {
+        // Do nothing by default
+    }
 
     override fun showSystemMessage(message: String) {
         // Toast by default
