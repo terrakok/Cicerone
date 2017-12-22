@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.android.SupportAppNavigator;
-import ru.terrakok.cicerone.commands.Command;
+import ru.terrakok.cicerone.commands.CreationalCommand;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.sample.R;
@@ -80,7 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void setupFragmentTransactionAnimation(@NonNull Command command,
+        protected void setupFragmentTransactionAnimation(@NonNull CreationalCommand command,
                                                          @NonNull Fragment currentFragment,
                                                          @NonNull Fragment nextFragment,
                                                          @NonNull FragmentTransaction fragmentTransaction) {
@@ -117,8 +117,8 @@ public class ProfileActivity extends AppCompatActivity {
                 && fragment instanceof BackButtonListener
                 && ((BackButtonListener) fragment).onBackPressed()) {
             return;
-        } else {
-            super.onBackPressed();
         }
+
+        super.onBackPressed();
     }
 }
