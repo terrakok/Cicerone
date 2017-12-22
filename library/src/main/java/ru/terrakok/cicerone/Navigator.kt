@@ -1,22 +1,19 @@
-package ru.terrakok.cicerone;
+package ru.terrakok.cicerone
 
-import ru.terrakok.cicerone.commands.Command;
-
-/**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
- * on 11.10.16
- */
+import ru.terrakok.cicerone.commands.Command
 
 /**
  * The low-level navigation interface.
  * Navigator is the one who actually performs any transition.
+ *
+ * @author Konstantin Tskhovrebov (aka terrakok) on 11.10.16
  */
-public interface Navigator {
+interface Navigator {
 
     /**
      * Performs transition described by the navigation command
      *
      * @param command the navigation command to apply
      */
-    void applyCommand(Command command);
+    fun applyCommand(command: Command)
 }

@@ -1,15 +1,14 @@
-package ru.terrakok.cicerone.result;
+package ru.terrakok.cicerone.result
 
 /**
  * @author Konstantin Tskhovrebov (aka terrakok) on 04.07.17.
  */
-
-public interface ResultListener {
+interface ResultListener {
 
     /**
      * Received result from screen.
      *
      * @param resultData
      */
-    void onResult(Object resultData);
+    fun onResult(resultData: Any)
 }

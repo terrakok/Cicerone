@@ -1,5 +1,7 @@
 package ru.terrakok.cicerone.sample.mvp.animation.profile;
 
+import android.support.annotation.NonNull;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
@@ -24,7 +26,7 @@ public class ProfilePresenter extends MvpPresenter<ProfileView> {
 
         router.setResultListener(PHOTO_RESULT_CODE, new ResultListener() {
             @Override
-            public void onResult(Object resultData) {
+            public void onResult(@NonNull Object resultData) {
                 currentPhoto = (int) resultData;
                 updatePhoto();
             }
