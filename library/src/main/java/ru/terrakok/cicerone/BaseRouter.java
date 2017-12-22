@@ -1,5 +1,7 @@
 package ru.terrakok.cicerone;
 
+import android.support.annotation.NonNull;
+
 import ru.terrakok.cicerone.commands.Command;
 
 /**
@@ -12,12 +14,15 @@ import ru.terrakok.cicerone.commands.Command;
  * Extend it to add needed transition methods.
  */
 public abstract class BaseRouter {
+
+    @NonNull
     private CommandBuffer commandBuffer;
 
     public BaseRouter() {
         this.commandBuffer = new CommandBuffer();
     }
 
+    @NonNull
     CommandBuffer getCommandBuffer() {
         return commandBuffer;
     }
@@ -27,7 +32,7 @@ public abstract class BaseRouter {
      *
      * @param command navigation command to execute
      */
-    protected void executeCommand(Command command) {
+    protected void executeCommand(@NonNull Command command) {
         commandBuffer.executeCommand(command);
     }
 }

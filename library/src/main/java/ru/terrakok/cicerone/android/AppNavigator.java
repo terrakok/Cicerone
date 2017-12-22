@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
@@ -25,14 +26,17 @@ import ru.terrakok.cicerone.commands.Replace;
  */
 public abstract class AppNavigator extends FragmentNavigator {
 
+    @NonNull
     private Activity activity;
 
-    public AppNavigator(Activity activity, int containerId) {
+    public AppNavigator(@NonNull Activity activity, int containerId) {
         super(activity.getFragmentManager(), containerId);
         this.activity = activity;
     }
 
-    public AppNavigator(Activity activity, FragmentManager fragmentManager, int containerId) {
+    public AppNavigator(@NonNull Activity activity,
+                        @NonNull FragmentManager fragmentManager,
+                        int containerId) {
         super(fragmentManager, containerId);
         this.activity = activity;
     }
@@ -44,12 +48,14 @@ public abstract class AppNavigator extends FragmentNavigator {
      * @param activityIntent activity intent
      * @return transition options
      */
-    protected Bundle createStartActivityOptions(Command command, Intent activityIntent) {
+    @Nullable
+    protected Bundle createStartActivityOptions(@NonNull Command command,
+                                                @NonNull Intent activityIntent) {
         return null;
     }
 
     @Override
-    public void applyCommand(Command command) {
+    public void applyCommand(@NonNull Command command) {
         if (command instanceof Forward) {
             Forward forward = (Forward) command;
             Intent activityIntent = createActivityIntent(activity, forward.getScreenKey(), forward.getTransitionData());
@@ -78,7 +84,9 @@ public abstract class AppNavigator extends FragmentNavigator {
         super.applyCommand(command);
     }
 
-    private void checkAndStartActivity(String screenKey, Intent activityIntent, Bundle options) {
+    private void checkAndStartActivity(@NonNull String screenKey,
+                                       @NonNull Intent activityIntent,
+                                       @Nullable Bundle options) {
         // Check if we can start activity
         if (activityIntent.resolveActivity(activity.getPackageManager()) != null) {
             activity.startActivity(activityIntent, options);
@@ -93,7 +101,7 @@ public abstract class AppNavigator extends FragmentNavigator {
      * @param screenKey screen key
      * @param activityIntent intent passed to start Activity for the {@code screenKey}
      */
-    protected void unexistingActivity(String screenKey, Intent activityIntent) {
+    protected void unexistingActivity(@NonNull String screenKey, @NonNull Intent activityIntent) {
         // Do nothing by default
     }
 
@@ -111,12 +119,13 @@ public abstract class AppNavigator extends FragmentNavigator {
      * @return intent to start Activity for the passed screen key, or null if there no activity
      *         that accords to passed screenKey
      */
-    protected abstract Intent createActivityIntent(Context context,
-                                                   String screenKey,
+    @Nullable
+    protected abstract Intent createActivityIntent(@NonNull Context context,
+                                                   @NonNull String screenKey,
                                                    @Nullable Object data);
 
     @Override
-    protected void showSystemMessage(String message) {
+    protected void showSystemMessage(@NonNull String message) {
         // Toast by default
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
     }

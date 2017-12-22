@@ -1,6 +1,7 @@
 package ru.terrakok.cicerone.sample.ui.main;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.widget.TextView;
@@ -43,12 +44,12 @@ public class MainActivity extends MvpAppCompatActivity {
 
     private Navigator navigator = new SupportFragmentNavigator(getSupportFragmentManager(), R.id.main_container) {
         @Override
-        protected Fragment createFragment(String screenKey, Object data) {
+        protected Fragment createFragment(@NonNull String screenKey, Object data) {
             return SampleFragment.getNewInstance((int) data);
         }
 
         @Override
-        protected void showSystemMessage(String message) {
+        protected void showSystemMessage(@NonNull String message) {
             Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
         }
 
@@ -58,7 +59,7 @@ public class MainActivity extends MvpAppCompatActivity {
         }
 
         @Override
-        public void applyCommand(Command command) {
+        public void applyCommand(@NonNull Command command) {
             super.applyCommand(command);
             updateScreenNames(command);
         }

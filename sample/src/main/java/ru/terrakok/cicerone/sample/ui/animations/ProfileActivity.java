@@ -3,6 +3,7 @@ package ru.terrakok.cicerone.sample.ui.animations;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -61,12 +62,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
         @Override
-        protected Intent createActivityIntent(Context context, String screenKey, Object data) {
+        protected Intent createActivityIntent(@NonNull Context context,
+                                              @NonNull String screenKey,
+                                              Object data) {
             return null;
         }
 
         @Override
-        protected Fragment createFragment(String screenKey, Object data) {
+        protected Fragment createFragment(@NonNull String screenKey, Object data) {
             switch (screenKey) {
                 case Screens.PROFILE_SCREEN:
                     return new ProfileFragment();
@@ -77,7 +80,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void setupFragmentTransactionAnimation(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
+        protected void setupFragmentTransactionAnimation(@NonNull Command command,
+                                                         @NonNull Fragment currentFragment,
+                                                         @NonNull Fragment nextFragment,
+                                                         @NonNull FragmentTransaction fragmentTransaction) {
             if (command instanceof Forward
                     && currentFragment instanceof ProfileFragment
                     && nextFragment instanceof SelectPhotoFragment) {

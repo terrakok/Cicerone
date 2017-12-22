@@ -1,5 +1,7 @@
 package ru.terrakok.cicerone.android;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,6 +31,7 @@ import ru.terrakok.cicerone.commands.SystemMessage;
  * </p>
  */
 public abstract class SupportFragmentNavigator implements Navigator {
+    @NonNull
     private FragmentManager fragmentManager;
     private int containerId;
 
@@ -38,7 +41,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
      * @param fragmentManager support fragment manager
      * @param containerId     id of the fragments container layout
      */
-    public SupportFragmentNavigator(FragmentManager fragmentManager, int containerId) {
+    public SupportFragmentNavigator(@NonNull FragmentManager fragmentManager, int containerId) {
         this.fragmentManager = fragmentManager;
         this.containerId = containerId;
     }
@@ -52,14 +55,14 @@ public abstract class SupportFragmentNavigator implements Navigator {
      * @param nextFragment        next screen fragment
      * @param fragmentTransaction fragment transaction
      */
-    protected void setupFragmentTransactionAnimation(Command command,
-                                                     Fragment currentFragment,
-                                                     Fragment nextFragment,
-                                                     FragmentTransaction fragmentTransaction) {
+    protected void setupFragmentTransactionAnimation(@NonNull Command command,
+                                                     @NonNull Fragment currentFragment,
+                                                     @NonNull Fragment nextFragment,
+                                                     @NonNull FragmentTransaction fragmentTransaction) {
     }
 
     @Override
-    public void applyCommand(Command command) {
+    public void applyCommand(@NonNull Command command) {
         if (command instanceof Forward) {
             Forward forward = (Forward) command;
             Fragment fragment = createFragment(forward.getScreenKey(), forward.getTransitionData());
@@ -150,19 +153,24 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
     /**
      * Creates Fragment matching {@code screenKey}.
+     * <p>
+     * If it returns null, will be called {@link #unknownScreen(Command)}.
+     * </p>
      *
      * @param screenKey screen key
      * @param data      initialization data
-     * @return instantiated fragment for the passed screen key
+     * @return instantiated fragment for the passed screen key, or null if there no fragment that
+     *         accords to passed screenKey
      */
-    protected abstract Fragment createFragment(String screenKey, Object data);
+    @Nullable
+    protected abstract Fragment createFragment(@NonNull String screenKey, @Nullable Object data);
 
     /**
      * Shows system message.
      *
      * @param message message to show
      */
-    protected abstract void showSystemMessage(String message);
+    protected abstract void showSystemMessage(@NonNull String message);
 
     /**
      * Called when we try to back from the root.
@@ -179,7 +187,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
     /**
      * Called if we can't create a screen.
      */
-    protected void unknownScreen(Command command) {
+    protected void unknownScreen(@NonNull Command command) {
         throw new RuntimeException("Can't create a screen for passed screenKey.");
     }
 }

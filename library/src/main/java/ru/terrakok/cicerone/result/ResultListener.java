@@ -1,5 +1,7 @@
 package ru.terrakok.cicerone.result;
 
+import android.support.annotation.NonNull;
+
 /**
  * @author Konstantin Tskhovrebov (aka terrakok) on 04.07.17.
  */
@@ -11,5 +13,5 @@ public interface ResultListener {
      *
      * @param resultData
      */
-    void onResult(Object resultData);
+    void onResult(@NonNull Object resultData);
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -90,7 +91,7 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
             navigator = new SupportAppNavigator(getActivity(), getChildFragmentManager(), R.id.ftc_container) {
 
                 @Override
-                protected Intent createActivityIntent(Context context, String screenKey, Object data) {
+                protected Intent createActivityIntent(@NonNull Context context, @NonNull String screenKey, Object data) {
                     if (screenKey.equals(Screens.GITHUB_SCREEN)) {
                         return new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/terrakok/Cicerone"));
                     }
@@ -98,7 +99,7 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
                 }
 
                 @Override
-                protected Fragment createFragment(String screenKey, Object data) {
+                protected Fragment createFragment(@NonNull String screenKey, Object data) {
                     if (screenKey.equals(Screens.FORWARD_SCREEN)) {
                         return ForwardFragment.getNewInstance(getContainerName(), (int) data);
                     }

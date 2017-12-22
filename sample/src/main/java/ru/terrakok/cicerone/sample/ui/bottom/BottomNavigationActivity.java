@@ -1,6 +1,7 @@
 package ru.terrakok.cicerone.sample.ui.bottom;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
@@ -155,7 +156,7 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
 
     private Navigator navigator = new Navigator() {
         @Override
-        public void applyCommand(Command command) {
+        public void applyCommand(@NonNull Command command) {
             if (command instanceof Back) {
                 finish();
             } else if (command instanceof SystemMessage) {

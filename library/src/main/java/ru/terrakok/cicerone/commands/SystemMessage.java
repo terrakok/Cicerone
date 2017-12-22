@@ -5,10 +5,13 @@ package ru.terrakok.cicerone.commands;
  * on 11.10.16
  */
 
+import android.support.annotation.NonNull;
+
 /**
  * Shows system message.
  */
 public class SystemMessage implements Command {
+    @NonNull
     private String message;
 
     /**
@@ -16,10 +19,11 @@ public class SystemMessage implements Command {
      *
      * @param message message text
      */
-    public SystemMessage(String message) {
+    public SystemMessage(@NonNull String message) {
         this.message = message;
     }
 
+    @NonNull
     public String getMessage() {
         return message;
     }

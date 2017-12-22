@@ -1,5 +1,8 @@
 package ru.terrakok.cicerone;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.util.HashMap;
 
 import ru.terrakok.cicerone.commands.Back;
@@ -22,6 +25,7 @@ import ru.terrakok.cicerone.result.ResultListener;
  */
 public class Router extends BaseRouter {
 
+    @NonNull
     private HashMap<Integer, ResultListener> resultListeners = new HashMap<>();
 
     public Router() {
@@ -36,7 +40,7 @@ public class Router extends BaseRouter {
      * @param resultCode key for filter results
      * @param listener   result listener
      */
-    public void setResultListener(Integer resultCode, ResultListener listener) {
+    public void setResultListener(int resultCode, @NonNull ResultListener listener) {
         resultListeners.put(resultCode, listener);
     }
 
@@ -45,7 +49,7 @@ public class Router extends BaseRouter {
      *
      * @param resultCode key for filter results
      */
-    public void removeResultListener(Integer resultCode) {
+    public void removeResultListener(int resultCode) {
         resultListeners.remove(resultCode);
     }
 
@@ -56,7 +60,7 @@ public class Router extends BaseRouter {
      * @param result     result data
      * @return TRUE if listener was notified and FALSE otherwise
      */
-    protected boolean sendResult(Integer resultCode, Object result) {
+    protected boolean sendResult(int resultCode, @NonNull Object result) {
         ResultListener resultListener = resultListeners.get(resultCode);
         if (resultListener != null) {
             resultListener.onResult(result);
@@ -70,7 +74,7 @@ public class Router extends BaseRouter {
      *
      * @param screenKey screen key
      */
-    public void navigateTo(String screenKey) {
+    public void navigateTo(@NonNull String screenKey) {
         navigateTo(screenKey, null);
     }
 
@@ -78,9 +82,9 @@ public class Router extends BaseRouter {
      * Open new screen and add it to screens chain.
      *
      * @param screenKey screen key
-     * @param data      initialisation parameters for the new screen
+     * @param data      initialisation parameters for the new screen, can be null
      */
-    public void navigateTo(String screenKey, Object data) {
+    public void navigateTo(@NonNull String screenKey, @Nullable Object data) {
         executeCommand(new Forward(screenKey, data));
     }
 
@@ -90,7 +94,7 @@ public class Router extends BaseRouter {
      *
      * @param screenKey screen key
      */
-    public void newScreenChain(String screenKey) {
+    public void newScreenChain(@NonNull String screenKey) {
         newScreenChain(screenKey, null);
     }
 
@@ -99,9 +103,9 @@ public class Router extends BaseRouter {
      * by opening a new screen right after the root.
      *
      * @param screenKey screen key
-     * @param data      initialisation parameters for the new screen
+     * @param data      initialisation parameters for the new screen, can be null
      */
-    public void newScreenChain(String screenKey, Object data) {
+    public void newScreenChain(@NonNull String screenKey, @Nullable Object data) {
         executeCommand(new BackTo(null));
         executeCommand(new Forward(screenKey, data));
     }
@@ -111,7 +115,7 @@ public class Router extends BaseRouter {
      *
      * @param screenKey screen key
      */
-    public void newRootScreen(String screenKey) {
+    public void newRootScreen(@NonNull String screenKey) {
         newRootScreen(screenKey, null);
     }
 
@@ -119,9 +123,9 @@ public class Router extends BaseRouter {
      * Clear all screens and open new one as root.
      *
      * @param screenKey screen key
-     * @param data      initialisation parameters for the root
+     * @param data      initialisation parameters for the root, can be null
      */
-    public void newRootScreen(String screenKey, Object data) {
+    public void newRootScreen(@NonNull String screenKey, @Nullable Object data) {
         executeCommand(new BackTo(null));
         executeCommand(new Replace(screenKey, data));
     }
@@ -134,7 +138,7 @@ public class Router extends BaseRouter {
      *
      * @param screenKey screen key
      */
-    public void replaceScreen(String screenKey) {
+    public void replaceScreen(@NonNull String screenKey) {
         replaceScreen(screenKey, null);
     }
 
@@ -145,9 +149,9 @@ public class Router extends BaseRouter {
      * and not to the replaced one.
      *
      * @param screenKey screen key
-     * @param data      initialisation parameters for the new screen
+     * @param data      initialisation parameters for the new screen, can be null
      */
-    public void replaceScreen(String screenKey, Object data) {
+    public void replaceScreen(@NonNull String screenKey, @Nullable Object data) {
         executeCommand(new Replace(screenKey, data));
     }
 
@@ -158,7 +162,7 @@ public class Router extends BaseRouter {
      *
      * @param screenKey screen key
      */
-    public void backTo(String screenKey) {
+    public void backTo(@NonNull String screenKey) {
         executeCommand(new BackTo(screenKey));
     }
 
@@ -186,7 +190,7 @@ public class Router extends BaseRouter {
      * @param resultCode result data key
      * @param result     result data
      */
-    public void exitWithResult(Integer resultCode, Object result) {
+    public void exitWithResult(int resultCode, @NonNull Object result) {
         exit();
         sendResult(resultCode, result);
     }
@@ -196,7 +200,7 @@ public class Router extends BaseRouter {
      *
      * @param message message to show
      */
-    public void exitWithMessage(String message) {
+    public void exitWithMessage(@NonNull String message) {
         executeCommand(new Back());
         executeCommand(new SystemMessage(message));
     }
@@ -206,7 +210,7 @@ public class Router extends BaseRouter {
      *
      * @param message message to show
      */
-    public void showSystemMessage(String message) {
+    public void showSystemMessage(@NonNull String message) {
         executeCommand(new SystemMessage(message));
     }
 }

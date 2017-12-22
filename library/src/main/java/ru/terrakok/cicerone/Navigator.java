@@ -1,5 +1,7 @@
 package ru.terrakok.cicerone;
 
+import android.support.annotation.NonNull;
+
 import ru.terrakok.cicerone.commands.Command;
 
 /**
@@ -18,5 +20,5 @@ public interface Navigator {
      *
      * @param command the navigation command to apply
      */
-    void applyCommand(Command command);
+    void applyCommand(@NonNull Command command);
 }
