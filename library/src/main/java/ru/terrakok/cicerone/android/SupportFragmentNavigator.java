@@ -32,7 +32,7 @@ import ru.terrakok.cicerone.commands.SystemMessage;
 public abstract class SupportFragmentNavigator implements Navigator {
     private FragmentManager fragmentManager;
     private int containerId;
-    private LinkedList<String> localStackCopy;
+    protected LinkedList<String> localStackCopy;
 
     /**
      * Creates SupportFragmentNavigator.
@@ -64,16 +64,28 @@ public abstract class SupportFragmentNavigator implements Navigator {
     public void applyCommands(Command[] commands) {
         fragmentManager.executePendingTransactions();
 
-        //copy stack structure before apply commands
-        final int stackSize = fragmentManager.getBackStackEntryCount();
+        //copy stack before apply commands
+        copyStackToLocal();
+
+        for (Command command : commands) {
+            applyCommand(command);
+        }
+    }
+
+    private void copyStackToLocal() {
         localStackCopy = new LinkedList<>();
+
+        final int stackSize = fragmentManager.getBackStackEntryCount();
         for (int i = 0; i < stackSize; i++) {
             localStackCopy.add(fragmentManager.getBackStackEntryAt(i).getName());
         }
-
-        for (Command command : commands) applyCommand(command);
     }
 
+    /**
+     * Perform transition described by the navigation command
+     *
+     * @param command the navigation command to apply
+     */
     protected void applyCommand(Command command) {
         if (command instanceof Forward) {
             forward((Forward) command);
@@ -88,14 +100,19 @@ public abstract class SupportFragmentNavigator implements Navigator {
         }
     }
 
+    /**
+     * Performs {@link Forward} command transition
+     */
     protected void forward(Forward command) {
         Fragment fragment = createFragment(command.getScreenKey(), command.getTransitionData());
+
         if (fragment == null) {
             unknownScreen(command);
             return;
         }
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
         setupFragmentTransactionAnimation(
                 command,
                 fragmentManager.findFragmentById(containerId),
@@ -110,6 +127,9 @@ public abstract class SupportFragmentNavigator implements Navigator {
         localStackCopy.add(command.getScreenKey());
     }
 
+    /**
+     * Performs {@link Back} command transition
+     */
     protected void back() {
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
@@ -119,17 +139,23 @@ public abstract class SupportFragmentNavigator implements Navigator {
         }
     }
 
+    /**
+     * Performs {@link Replace} command transition
+     */
     protected void replace(Replace command) {
         Fragment fragment = createFragment(command.getScreenKey(), command.getTransitionData());
+
         if (fragment == null) {
             unknownScreen(command);
             return;
         }
+
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
             localStackCopy.pop();
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
             setupFragmentTransactionAnimation(
                     command,
                     fragmentManager.findFragmentById(containerId),
@@ -142,8 +168,10 @@ public abstract class SupportFragmentNavigator implements Navigator {
                     .addToBackStack(command.getScreenKey())
                     .commit();
             localStackCopy.add(command.getScreenKey());
+
         } else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
             setupFragmentTransactionAnimation(
                     command,
                     fragmentManager.findFragmentById(containerId),
@@ -157,16 +185,21 @@ public abstract class SupportFragmentNavigator implements Navigator {
         }
     }
 
+    /**
+     * Performs {@link BackTo} command transition
+     */
     protected void backTo(BackTo command) {
         String key = command.getScreenKey();
 
         if (key == null) {
             backToRoot();
+
         } else {
-            int i = localStackCopy.indexOf(key);
-            int s = localStackCopy.size();
-            if (i != -1) {
-                for (int j = 1; j < s - i; j++) {
+            int index = localStackCopy.indexOf(key);
+            int size = localStackCopy.size();
+
+            if (index != -1) {
+                for (int i = 1; i < size - index; i++) {
                     localStackCopy.pop();
                 }
                 fragmentManager.popBackStack(key, 0);
