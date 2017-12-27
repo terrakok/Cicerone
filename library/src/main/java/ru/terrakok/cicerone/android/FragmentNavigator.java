@@ -23,7 +23,7 @@ import ru.terrakok.cicerone.commands.SystemMessage;
  * <p>
  * {@link BackTo} navigation command will return to the root if
  * needed screen isn't found in the screens chain.
- * To change this behavior override {@link #backToUnexisting()} method.
+ * To change this behavior override {@link #backToUnexisting(String)} method.
  * </p>
  * <p>
  * {@link Back} command will call {@link #exit()} method if current screen is the root.
@@ -172,7 +172,7 @@ public abstract class FragmentNavigator implements Navigator {
                 }
                 fragmentManager.popBackStack(key, 0);
             } else {
-                backToUnexisting();
+                backToUnexisting(command.getScreenKey());
             }
         }
     }
@@ -204,9 +204,11 @@ public abstract class FragmentNavigator implements Navigator {
     protected abstract void exit();
 
     /**
-     * Called when we tried to back to some specific screen, but didn't found it.
+     * Called when we tried to back to some specific screen (via {@link BackTo} command),
+     * but didn't found it.
+     * @param screenKey screen key
      */
-    protected void backToUnexisting() {
+    protected void backToUnexisting(String screenKey) {
         backToRoot();
     }
 
