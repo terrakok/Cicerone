@@ -21,9 +21,9 @@ It was designed to be used with the MVP pattern (try [Moxy](https://github.com/A
 + functionality is simple to extend
 + suitable for Unit Testing
 
-## Version 2.+
+## Additional features
 + easy screen result subscription
-+ predefined navigator ready for setup transition animation  
++ predefined navigator ready for setup transition animation
 **See the sample application**
 
 ## How to add
@@ -89,21 +89,21 @@ public class SamplePresenter extends Presenter<SampleView> {
 Router converts the navigation call to the set of Commands and sends them to CommandBuffer.  
 
 CommandBuffer checks whether there are _"active"_ Navigator:  
-If yes, it passes the commands to the Navigator. Navigator will process them to achive the desired transition.  
-If no, then CommandBuffer saves the commands in a queue, and will apply them as soon as new _"active"_ Navigator will appear.  
+- If yes, it passes the commands to the Navigator. Navigator will process them to achive the desired transition.
+- If no, then CommandBuffer saves the commands in a queue, and will apply them as soon as new _"active"_ Navigator will appear.
 
 ```java
-protected void executeCommand(Command command) {
-    if (navigator != null) {
-        navigator.applyCommand(command);
-    } else {
-        pendingCommands.add(command);
+    void executeCommands(Command[] commands) {
+        if (navigator != null) {
+            navigator.applyCommands(commands);
+        } else {
+            pendingCommands.add(commands);
+        }
     }
-}
 ```
 
-Navigator processes the navigation commands. Usually it is an anonymous class inside the Activity.  
-Activity provides Navigator to the CommandBuffer in _onResume_ and removes it in _onPause_.  
+Navigator processes the navigation commands. Usually it is an anonymous class inside the Activity.
+Activity provides Navigator to the CommandBuffer in _onResume_ and removes it in _onPause_.
 
 **Attention**: Use _onResumeFragments()_ with FragmentActivity ([more info](https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()))
 
@@ -130,20 +130,20 @@ private Navigator navigator = new Navigator() {
 
 ## Navigation commands
 This commands set will fulfill the needs of the most applications. But if you need something special - just add it!
-+ Forward - Opens new screen  
++ Forward - Opens new screen
 ![](https://habrastorage.org/files/862/77e/b20/86277eb20b574dae8307ac4f64b0f090.png)
-+ Back - Rolls back the last transition  
++ Back - Rolls back the last transition
 ![](https://habrastorage.org/files/059/b63/2d3/059b632d3a7c4515a534b9e5e881c8f0.png)
-+ BackTo - Rolls back to the needed screen in the screens chain  
++ BackTo - Rolls back to the needed screen in the screens chain
 ![](https://habrastorage.org/files/a45/4f4/c34/a454f4c340764632ad0669014ad5550d.png)
-+ Replace - Replaces the current screen  
++ Replace - Replaces the current screen
 ![](https://habrastorage.org/files/4ae/95c/fee/4ae95cfee4c04f038ad17d358ab08d07.png)
-+ SystemMessage - Shows system message (Alert, Toast, Snack, etc.)  
++ SystemMessage - Shows system message (Alert, Toast, Snack, etc.)
 ![](https://habrastorage.org/files/6e7/1a6/4ed/6e71a64edec04079bf33faa7ab39606f.png)
 
 ## Predefined navigators
-The library provides predefined navigators for _Fragments_ to use inside _Activity_.    
-To use, just provide it with the container and _FragmentManager_ and override few simple methods.  
+The library provides predefined navigators for _Fragments_ to use inside _Activity_.
+To use, just provide it with the container and _FragmentManager_ and override few simple methods.
 ```java
 private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
     @Override
@@ -185,7 +185,10 @@ To see how to add, initialize and use the library and predefined navigators chec
 
 ## License
 ```
-The MIT License (MIT)
+MIT License
+
+Copyright (c) 2017 Konstantin Tskhovrebov (@terrakok)
+                   and Vasili Chyrvon (@Jeevuz)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

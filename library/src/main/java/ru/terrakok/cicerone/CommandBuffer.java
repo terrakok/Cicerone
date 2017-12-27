@@ -5,7 +5,6 @@
 package ru.terrakok.cicerone;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import ru.terrakok.cicerone.commands.Command;
@@ -38,7 +37,7 @@ class CommandBuffer implements NavigatorHolder {
      * Else puts it to the pending commands queue to pass it later.
      * @param commands navigation command array
      */
-    public void executeCommands(Command[] commands) {
+    void executeCommands(Command[] commands) {
         if (navigator != null) {
             navigator.applyCommands(commands);
         } else {
