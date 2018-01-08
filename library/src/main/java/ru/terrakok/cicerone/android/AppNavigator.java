@@ -1,7 +1,12 @@
+/*
+ * Created by Vasili Chyrvon (vasili.chyrvon@gmail.com)
+ */
+
 package ru.terrakok.cicerone.android;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -18,8 +23,6 @@ import ru.terrakok.cicerone.commands.Replace;
  * This navigator DOESN'T provide full featured Activity navigation,
  * but can ease Activity start or replace from current navigator.
  * </p>
- *
- * @author Vasili Chyrvon (vasili.chyrvon@gmail.com)
  */
 public abstract class AppNavigator extends FragmentNavigator {
 
@@ -47,33 +50,49 @@ public abstract class AppNavigator extends FragmentNavigator {
     }
 
     @Override
-    public void applyCommand(Command command) {
-        if (command instanceof Forward) {
-            Forward forward = (Forward) command;
-            Intent activityIntent = createActivityIntent(forward.getScreenKey(), forward.getTransitionData());
+    protected void forward(Forward command) {
+        Intent activityIntent = createActivityIntent(activity, command.getScreenKey(), command.getTransitionData());
 
-            // Start activity
-            if (activityIntent != null) {
-                Bundle options = createStartActivityOptions(command, activityIntent);
-                activity.startActivity(activityIntent, options);
-                return;
-            }
-
-        } else if (command instanceof Replace) {
-            Replace replace = (Replace) command;
-            Intent activityIntent = createActivityIntent(replace.getScreenKey(), replace.getTransitionData());
-
-            // Replace activity
-            if (activityIntent != null) {
-                Bundle options = createStartActivityOptions(command, activityIntent);
-                activity.startActivity(activityIntent, options);
-                activity.finish();
-                return;
-            }
+        // Start activity
+        if (activityIntent != null) {
+            Bundle options = createStartActivityOptions(command, activityIntent);
+            checkAndStartActivity(command.getScreenKey(), activityIntent, options);
+        } else {
+            super.forward(command);
         }
+    }
 
-        // Use default fragments navigation
-        super.applyCommand(command);
+    @Override
+    protected void replace(Replace command) {
+        Intent activityIntent = createActivityIntent(activity, command.getScreenKey(), command.getTransitionData());
+
+        // Replace activity
+        if (activityIntent != null) {
+            Bundle options = createStartActivityOptions(command, activityIntent);
+            checkAndStartActivity(command.getScreenKey(), activityIntent, options);
+            activity.finish();
+        } else {
+            super.replace(command);
+        }
+    }
+
+    private void checkAndStartActivity(String screenKey, Intent activityIntent, Bundle options) {
+        // Check if we can start activity
+        if (activityIntent.resolveActivity(activity.getPackageManager()) != null) {
+            activity.startActivity(activityIntent, options);
+        } else {
+            unexistingActivity(screenKey, activityIntent);
+        }
+    }
+
+    /**
+     * Called when there is no activity to open {@code screenKey}.
+     *
+     * @param screenKey      screen key
+     * @param activityIntent intent passed to start Activity for the {@code screenKey}
+     */
+    protected void unexistingActivity(String screenKey, Intent activityIntent) {
+        // Do nothing by default
     }
 
     /**
@@ -82,11 +101,12 @@ public abstract class AppNavigator extends FragmentNavigator {
      * <b>Warning:</b> This method does not work with {@link BackTo} command.
      * </p>
      *
+     * @param context
      * @param screenKey screen key
      * @param data      initialization data, can be null
      * @return intent to start Activity for the passed screen key
      */
-    protected abstract Intent createActivityIntent(String screenKey, Object data);
+    protected abstract Intent createActivityIntent(Context context, String screenKey, Object data);
 
     @Override
     protected void showSystemMessage(String message) {

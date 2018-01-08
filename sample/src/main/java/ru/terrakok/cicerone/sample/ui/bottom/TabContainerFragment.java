@@ -1,5 +1,6 @@
 package ru.terrakok.cicerone.sample.ui.bottom;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -89,7 +90,7 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
             navigator = new SupportAppNavigator(getActivity(), getChildFragmentManager(), R.id.ftc_container) {
 
                 @Override
-                protected Intent createActivityIntent(String screenKey, Object data) {
+                protected Intent createActivityIntent(Context context, String screenKey, Object data) {
                     if (screenKey.equals(Screens.GITHUB_SCREEN)) {
                         return new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/terrakok/Cicerone"));
                     }

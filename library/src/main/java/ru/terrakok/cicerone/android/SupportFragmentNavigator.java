@@ -1,8 +1,14 @@
+/*
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
+ */
+
 package ru.terrakok.cicerone.android;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+
+import java.util.LinkedList;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
@@ -13,16 +19,11 @@ import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.commands.SystemMessage;
 
 /**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
- * on 11.10.16
- */
-
-/**
  * {@link Navigator} implementation based on the support fragments.
  * <p>
  * {@link BackTo} navigation command will return to the root if
  * needed screen isn't found in the screens chain.
- * To change this behavior override {@link #backToUnexisting()} method.
+ * To change this behavior override {@link #backToUnexisting(String)} method.
  * </p>
  * <p>
  * {@link Back} command will call {@link #exit()} method if current screen is the root.
@@ -31,6 +32,7 @@ import ru.terrakok.cicerone.commands.SystemMessage;
 public abstract class SupportFragmentNavigator implements Navigator {
     private FragmentManager fragmentManager;
     private int containerId;
+    protected LinkedList<String> localStackCopy;
 
     /**
      * Creates SupportFragmentNavigator.
@@ -59,16 +61,101 @@ public abstract class SupportFragmentNavigator implements Navigator {
     }
 
     @Override
-    public void applyCommand(Command command) {
+    public void applyCommands(Command[] commands) {
+        fragmentManager.executePendingTransactions();
+
+        //copy stack before apply commands
+        copyStackToLocal();
+
+        for (Command command : commands) {
+            applyCommand(command);
+        }
+    }
+
+    private void copyStackToLocal() {
+        localStackCopy = new LinkedList<>();
+
+        final int stackSize = fragmentManager.getBackStackEntryCount();
+        for (int i = 0; i < stackSize; i++) {
+            localStackCopy.add(fragmentManager.getBackStackEntryAt(i).getName());
+        }
+    }
+
+    /**
+     * Perform transition described by the navigation command
+     *
+     * @param command the navigation command to apply
+     */
+    protected void applyCommand(Command command) {
         if (command instanceof Forward) {
-            Forward forward = (Forward) command;
-            Fragment fragment = createFragment(forward.getScreenKey(), forward.getTransitionData());
-            if (fragment == null) {
-                unknownScreen(command);
-                return;
-            }
+            forward((Forward) command);
+        } else if (command instanceof Back) {
+            back();
+        } else if (command instanceof Replace) {
+            replace((Replace) command);
+        } else if (command instanceof BackTo) {
+            backTo((BackTo) command);
+        } else if (command instanceof SystemMessage) {
+            showSystemMessage(((SystemMessage) command).getMessage());
+        }
+    }
+
+    /**
+     * Performs {@link Forward} command transition
+     */
+    protected void forward(Forward command) {
+        Fragment fragment = createFragment(command.getScreenKey(), command.getTransitionData());
+
+        if (fragment == null) {
+            unknownScreen(command);
+            return;
+        }
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        setupFragmentTransactionAnimation(
+                command,
+                fragmentManager.findFragmentById(containerId),
+                fragment,
+                fragmentTransaction
+        );
+
+        fragmentTransaction
+                .replace(containerId, fragment)
+                .addToBackStack(command.getScreenKey())
+                .commit();
+        localStackCopy.add(command.getScreenKey());
+    }
+
+    /**
+     * Performs {@link Back} command transition
+     */
+    protected void back() {
+        if (localStackCopy.size() > 0) {
+            fragmentManager.popBackStack();
+            localStackCopy.pop();
+        } else {
+            exit();
+        }
+    }
+
+    /**
+     * Performs {@link Replace} command transition
+     */
+    protected void replace(Replace command) {
+        Fragment fragment = createFragment(command.getScreenKey(), command.getTransitionData());
+
+        if (fragment == null) {
+            unknownScreen(command);
+            return;
+        }
+
+        if (localStackCopy.size() > 0) {
+            fragmentManager.popBackStack();
+            localStackCopy.pop();
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
             setupFragmentTransactionAnimation(
                     command,
                     fragmentManager.findFragmentById(containerId),
@@ -78,74 +165,53 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
             fragmentTransaction
                     .replace(containerId, fragment)
-                    .addToBackStack(forward.getScreenKey())
+                    .addToBackStack(command.getScreenKey())
                     .commit();
-        } else if (command instanceof Back) {
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
-            } else {
-                exit();
-            }
-        } else if (command instanceof Replace) {
-            Replace replace = (Replace) command;
-            Fragment fragment = createFragment(replace.getScreenKey(), replace.getTransitionData());
-            if (fragment == null) {
-                unknownScreen(command);
-                return;
-            }
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStackImmediate();
+            localStackCopy.add(command.getScreenKey());
 
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                setupFragmentTransactionAnimation(
-                        command,
-                        fragmentManager.findFragmentById(containerId),
-                        fragment,
-                        fragmentTransaction
-                );
+        } else {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                fragmentTransaction
-                        .replace(containerId, fragment)
-                        .addToBackStack(replace.getScreenKey())
-                        .commit();
-            } else {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                setupFragmentTransactionAnimation(
-                        command,
-                        fragmentManager.findFragmentById(containerId),
-                        fragment,
-                        fragmentTransaction
-                );
+            setupFragmentTransactionAnimation(
+                    command,
+                    fragmentManager.findFragmentById(containerId),
+                    fragment,
+                    fragmentTransaction
+            );
 
-                fragmentTransaction
-                        .replace(containerId, fragment)
-                        .commit();
-            }
-        } else if (command instanceof BackTo) {
-            String key = ((BackTo) command).getScreenKey();
+            fragmentTransaction
+                    .replace(containerId, fragment)
+                    .commit();
+        }
+    }
 
-            if (key == null) {
-                backToRoot();
-            } else {
-                boolean hasScreen = false;
-                for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
-                    if (key.equals(fragmentManager.getBackStackEntryAt(i).getName())) {
-                        fragmentManager.popBackStackImmediate(key, 0);
-                        hasScreen = true;
-                        break;
-                    }
+    /**
+     * Performs {@link BackTo} command transition
+     */
+    protected void backTo(BackTo command) {
+        String key = command.getScreenKey();
+
+        if (key == null) {
+            backToRoot();
+
+        } else {
+            int index = localStackCopy.indexOf(key);
+            int size = localStackCopy.size();
+
+            if (index != -1) {
+                for (int i = 1; i < size - index; i++) {
+                    localStackCopy.pop();
                 }
-                if (!hasScreen) {
-                    backToUnexisting();
-                }
+                fragmentManager.popBackStack(key, 0);
+            } else {
+                backToUnexisting(command.getScreenKey());
             }
-        } else if (command instanceof SystemMessage) {
-            showSystemMessage(((SystemMessage) command).getMessage());
         }
     }
 
     private void backToRoot() {
-        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        localStackCopy.clear();
     }
 
     /**
@@ -170,9 +236,11 @@ public abstract class SupportFragmentNavigator implements Navigator {
     protected abstract void exit();
 
     /**
-     * Called when we tried to back to some specific screen, but didn't found it.
+     * Called when we tried to back to some specific screen (via {@link BackTo} command),
+     * but didn't found it.
+     * @param screenKey screen key
      */
-    protected void backToUnexisting() {
+    protected void backToUnexisting(String screenKey) {
         backToRoot();
     }
 

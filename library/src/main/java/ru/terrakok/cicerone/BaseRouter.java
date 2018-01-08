@@ -1,11 +1,10 @@
+/*
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
+ */
+
 package ru.terrakok.cicerone;
 
 import ru.terrakok.cicerone.commands.Command;
-
-/**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
- * on 12.10.16
- */
 
 /**
  * BaseRouter is an abstract class to implement high-level navigation.
@@ -23,11 +22,11 @@ public abstract class BaseRouter {
     }
 
     /**
-     * Sends navigation command to {@link CommandBuffer}.
+     * Sends navigation command array to {@link CommandBuffer}.
      *
-     * @param command navigation command to execute
+     * @param commands navigation command array to execute
      */
-    protected void executeCommand(Command command) {
-        commandBuffer.executeCommand(command);
+    protected void executeCommands(Command... commands) {
+        commandBuffer.executeCommands(commands);
     }
 }

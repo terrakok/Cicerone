@@ -1,5 +1,6 @@
 package ru.terrakok.cicerone.sample.ui.animations;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,7 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_container);
 
         if (savedInstanceState == null) {
-            navigator.applyCommand(new Replace(Screens.PROFILE_SCREEN, null));
+            navigator.applyCommands(new Command[]{new Replace(Screens.PROFILE_SCREEN, null)});
         }
     }
 
@@ -60,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
         @Override
-        protected Intent createActivityIntent(String screenKey, Object data) {
+        protected Intent createActivityIntent(Context context, String screenKey, Object data) {
             return null;
         }
 

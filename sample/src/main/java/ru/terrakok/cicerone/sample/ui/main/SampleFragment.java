@@ -59,6 +59,10 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
         return fragment;
     }
 
+    public int getNumber() {
+        return getArguments().getInt(EXTRA_NUMBER);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         SampleApplication.INSTANCE.getAppComponent().inject(this);
