@@ -122,8 +122,8 @@ protected void onPause() {
 
 private Navigator navigator = new Navigator() {
     @Override
-    public void applyCommand(Command command) {
-        //implement commands logic
+    public void applyCommands(Command[] commands) {
+        //implement commands logic (apply command batch to navigation container)
     }
 };
 ```
