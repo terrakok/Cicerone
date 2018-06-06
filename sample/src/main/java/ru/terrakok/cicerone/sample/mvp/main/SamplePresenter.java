@@ -1,5 +1,8 @@
 package ru.terrakok.cicerone.sample.mvp.main;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
@@ -56,8 +59,15 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
         future = executorService.schedule(new Runnable() {
             @Override
             public void run() {
-                //WARNING! Navigation must be only in UI thread. this method works only for sample :)
-                router.navigateTo(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+                //WARNING! Navigation must be only in UI thread.
+                new Handler(Looper.getMainLooper()).post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                router.navigateTo(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+                            }
+                        }
+                );
             }
         }, 5, TimeUnit.SECONDS);
     }
