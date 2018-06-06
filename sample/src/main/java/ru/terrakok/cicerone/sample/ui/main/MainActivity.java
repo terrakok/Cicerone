@@ -105,21 +105,26 @@ public class MainActivity extends MvpAppCompatActivity {
     }
 
     private void printScreensScheme() {
-        ArrayList<Integer> keys = new ArrayList<>();
-
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        for (Fragment fragment : fragments) {
+        ArrayList<SampleFragment> fragments = new ArrayList<>();
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             if (fragment instanceof SampleFragment) {
-                keys.add(((SampleFragment) fragment).getNumber());
+                fragments.add((SampleFragment) fragment);
             }
         }
-        Collections.sort(keys, new Comparator<Integer>() {
+        Collections.sort(fragments, new Comparator<SampleFragment>() {
             @Override
-            public int compare(Integer o1, Integer o2) {
-                return o1 - o2;
+            public int compare(SampleFragment f1, SampleFragment f2) {
+                long t = f1.getCreationTime() - f2.getCreationTime();
+                if (t > 0) return 1;
+                else if (t < 0) return -1;
+                else return 0;
             }
         });
 
+        ArrayList<Integer> keys = new ArrayList<>();
+        for (SampleFragment fragment : fragments) {
+            keys.add(fragment.getNumber());
+        }
         screensSchemeTV.setText("Chain: " + keys.toString() + "");
     }
 }

@@ -27,6 +27,7 @@ import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
 
 public class SampleFragment extends MvpAppCompatFragment implements SampleView, BackButtonListener {
     private static final String EXTRA_NUMBER = "extra_number";
+    private static final String EXTRA_TIME = "extra_time";
 
     private Toolbar toolbar;
     private View backCommandBt;
@@ -53,6 +54,7 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
 
         Bundle args = new Bundle();
         args.putInt(EXTRA_NUMBER, number);
+        args.putLong(EXTRA_TIME, System.currentTimeMillis());
         fragment.setArguments(args);
 
         return fragment;
@@ -60,6 +62,10 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
 
     public int getNumber() {
         return getArguments().getInt(EXTRA_NUMBER);
+    }
+
+    public long getCreationTime() {
+        return getArguments().getLong(EXTRA_TIME, 0L);
     }
 
     @Override
