@@ -45,7 +45,8 @@ public abstract class SupportFragmentNavigator implements Navigator {
     }
 
     /**
-     * Override this method to setup custom fragment transaction animation.
+     * Override this method to setup fragment transaction {@link FragmentTransaction}.
+     * For example: setCustomAnimations(...), addSharedElement(...) or setReorderingAllowed(...)
      *
      * @param command             current navigation command. Will be only {@link Forward} or {@link Replace}
      * @param currentFragment     current fragment in container
@@ -53,7 +54,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
      * @param nextFragment        next screen fragment
      * @param fragmentTransaction fragment transaction
      */
-    protected void setupFragmentTransactionAnimation(Command command,
+    protected void setupFragmentTransaction(Command command,
                                                      Fragment currentFragment,
                                                      Fragment nextFragment,
                                                      FragmentTransaction fragmentTransaction) {
@@ -110,7 +111,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        setupFragmentTransactionAnimation(
+        setupFragmentTransaction(
                 command,
                 fragmentManager.findFragmentById(containerId),
                 fragment,
@@ -153,7 +154,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            setupFragmentTransactionAnimation(
+            setupFragmentTransaction(
                     command,
                     fragmentManager.findFragmentById(containerId),
                     fragment,
@@ -169,7 +170,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
         } else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            setupFragmentTransactionAnimation(
+            setupFragmentTransaction(
                     command,
                     fragmentManager.findFragmentById(containerId),
                     fragment,

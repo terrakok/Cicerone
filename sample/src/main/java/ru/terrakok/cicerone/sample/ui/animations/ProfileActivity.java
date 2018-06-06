@@ -77,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void setupFragmentTransactionAnimation(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
+        protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             if (command instanceof Forward
                     && currentFragment instanceof ProfileFragment
                     && nextFragment instanceof SelectPhotoFragment) {
