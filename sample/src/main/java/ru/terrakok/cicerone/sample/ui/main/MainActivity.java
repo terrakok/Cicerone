@@ -7,11 +7,9 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,9 +29,6 @@ import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
  */
 
 public class MainActivity extends MvpAppCompatActivity {
-    private static final String STATE_SCREEN_NAMES = "state_screen_names";
-
-    private List<String> screenNames = new ArrayList<>();
     private TextView screensSchemeTV;
 
     @Inject
@@ -69,7 +64,6 @@ public class MainActivity extends MvpAppCompatActivity {
         if (savedInstanceState == null) {
             navigator.applyCommands(new Command[]{new Replace(Screens.SAMPLE_SCREEN, 1)});
         } else {
-            screenNames = (List<String>) savedInstanceState.getSerializable(STATE_SCREEN_NAMES);
             printScreensScheme();
         }
     }
@@ -96,12 +90,6 @@ public class MainActivity extends MvpAppCompatActivity {
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(STATE_SCREEN_NAMES, (Serializable) screenNames);
     }
 
     private void printScreensScheme() {
