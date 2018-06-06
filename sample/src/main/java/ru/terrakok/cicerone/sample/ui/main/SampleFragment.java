@@ -34,7 +34,6 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
     private View replaceCommandBt;
     private View newChainCommandBt;
     private View newRootCommandBt;
-    private View backWithMessageCommandBt;
     private View forwardWithDelayCommandBt;
     private View backToCommandBt;
 
@@ -84,7 +83,6 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
         replaceCommandBt = view.findViewById(R.id.replace_command);
         newChainCommandBt = view.findViewById(R.id.new_chain_command);
         newRootCommandBt = view.findViewById(R.id.new_root_command);
-        backWithMessageCommandBt = view.findViewById(R.id.back_with_message_command);
         forwardWithDelayCommandBt = view.findViewById(R.id.forward_delay_command);
         backToCommandBt = view.findViewById(R.id.back_to_command);
     }
@@ -126,12 +124,6 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
             @Override
             public void onClick(View view) {
                 presenter.onNewRootCommandClick();
-            }
-        });
-        backWithMessageCommandBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.onBackWithMessageCommandClick();
             }
         });
         forwardWithDelayCommandBt.setOnClickListener(new View.OnClickListener() {

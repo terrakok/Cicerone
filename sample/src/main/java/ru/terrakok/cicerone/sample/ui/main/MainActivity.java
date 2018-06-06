@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 
@@ -44,11 +43,6 @@ public class MainActivity extends MvpAppCompatActivity {
         @Override
         protected Fragment createFragment(String screenKey, Object data) {
             return SampleFragment.getNewInstance((int) data);
-        }
-
-        @Override
-        protected void showSystemMessage(String message) {
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
         }
 
         @Override

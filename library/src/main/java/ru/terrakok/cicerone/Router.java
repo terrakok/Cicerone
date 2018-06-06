@@ -10,7 +10,6 @@ import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
-import ru.terrakok.cicerone.commands.SystemMessage;
 import ru.terrakok.cicerone.result.ResultListener;
 
 /**
@@ -194,26 +193,5 @@ public class Router extends BaseRouter {
     public void exitWithResult(Integer resultCode, Object result) {
         exit();
         sendResult(resultCode, result);
-    }
-
-    /**
-     * Return to the previous screen in the chain and show system message.
-     *
-     * @param message message to show
-     */
-    public void exitWithMessage(String message) {
-        executeCommands(
-                new Back(),
-                new SystemMessage(message)
-        );
-    }
-
-    /**
-     * Show system message.
-     *
-     * @param message message to show
-     */
-    public void showSystemMessage(String message) {
-        executeCommands(new SystemMessage(message));
     }
 }

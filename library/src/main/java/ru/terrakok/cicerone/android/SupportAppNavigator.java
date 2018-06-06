@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
 
 import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Command;
@@ -107,12 +106,6 @@ public abstract class SupportAppNavigator extends SupportFragmentNavigator {
      * @return intent to start Activity for the passed screen key
      */
     protected abstract Intent createActivityIntent(Context context, String screenKey, Object data);
-
-    @Override
-    protected void showSystemMessage(String message) {
-        // Toast by default
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     protected void exit() {
