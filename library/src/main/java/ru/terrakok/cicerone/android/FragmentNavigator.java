@@ -16,7 +16,6 @@ import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
-import ru.terrakok.cicerone.commands.SystemMessage;
 
 /**
  * {@link Navigator} implementation based on the fragments.
@@ -95,8 +94,6 @@ public abstract class FragmentNavigator implements Navigator {
             replace((Replace) command);
         } else if (command instanceof BackTo) {
             backTo((BackTo) command);
-        } else if (command instanceof SystemMessage) {
-            showSystemMessage(((SystemMessage) command).getMessage());
         }
     }
 
@@ -222,13 +219,6 @@ public abstract class FragmentNavigator implements Navigator {
      * @return instantiated fragment for the passed screen key
      */
     protected abstract Fragment createFragment(String screenKey, Object data);
-
-    /**
-     * Shows system message.
-     *
-     * @param message message to show
-     */
-    protected abstract void showSystemMessage(String message);
 
     /**
      * Called when we try to back from the root.

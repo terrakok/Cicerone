@@ -51,10 +51,6 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
         router.newRootScreen(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
     }
 
-    public void onBackWithMessageCommandClick() {
-        router.exitWithMessage("Exit from 'Screen " + screenNumber + "'");
-    }
-
     public void onForwardWithDelayCommandClick() {
         if (future != null) future.cancel(true);
         future = executorService.schedule(new Runnable() {
