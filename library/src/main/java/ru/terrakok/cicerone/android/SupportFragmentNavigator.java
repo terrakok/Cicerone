@@ -131,7 +131,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
     protected void back() {
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
-            localStackCopy.pop();
+            localStackCopy.removeLast();
         } else {
             exit();
         }
@@ -150,7 +150,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
-            localStackCopy.pop();
+            localStackCopy.removeLast();
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -198,7 +198,7 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
             if (index != -1) {
                 for (int i = 1; i < size - index; i++) {
-                    localStackCopy.pop();
+                    localStackCopy.removeLast();
                 }
                 fragmentManager.popBackStack(key, 0);
             } else {
