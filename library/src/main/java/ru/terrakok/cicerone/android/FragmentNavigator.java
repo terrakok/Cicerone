@@ -8,7 +8,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
+import java.util.Iterator;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.commands.Back;
@@ -31,7 +32,7 @@ import ru.terrakok.cicerone.commands.Replace;
 public abstract class FragmentNavigator implements Navigator {
     private FragmentManager fragmentManager;
     private int containerId;
-    private LinkedList<String> localStackCopy;
+    private ArrayDeque<String> localStackCopy;
 
     /**
      * Creates FragmentNavigator.
@@ -73,11 +74,11 @@ public abstract class FragmentNavigator implements Navigator {
     }
 
     private void copyStackToLocal() {
-        localStackCopy = new LinkedList<>();
+        localStackCopy = new ArrayDeque<>();
 
         final int stackSize = fragmentManager.getBackStackEntryCount();
         for (int i = 0; i < stackSize; i++) {
-            localStackCopy.add(fragmentManager.getBackStackEntryAt(i).getName());
+            localStackCopy.push(fragmentManager.getBackStackEntryAt(i).getName());
         }
     }
 
@@ -122,7 +123,7 @@ public abstract class FragmentNavigator implements Navigator {
                 .replace(containerId, fragment)
                 .addToBackStack(command.getScreenKey())
                 .commit();
-        localStackCopy.add(command.getScreenKey());
+        localStackCopy.push(command.getScreenKey());
     }
 
     /**
@@ -165,7 +166,7 @@ public abstract class FragmentNavigator implements Navigator {
                     .replace(containerId, fragment)
                     .addToBackStack(command.getScreenKey())
                     .commit();
-            localStackCopy.add(command.getScreenKey());
+            localStackCopy.push(command.getScreenKey());
 
         } else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -193,11 +194,9 @@ public abstract class FragmentNavigator implements Navigator {
             backToRoot();
 
         } else {
-            int index = localStackCopy.indexOf(key);
-            int size = localStackCopy.size();
-
-            if (index != -1) {
-                for (int i = 1; i < size - index; i++) {
+            if (localStackCopy.contains(key)) {
+                Iterator<String> stackIterator = localStackCopy.iterator();
+                while (!key.equals(stackIterator.next())) {
                     localStackCopy.pop();
                 }
                 fragmentManager.popBackStack(key, 0);
