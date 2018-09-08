@@ -5,6 +5,7 @@
 package ru.terrakok.cicerone.commands;
 
 import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.Screen;
 
 /**
  * Rolls back to the needed screen from the screens chain.
@@ -12,18 +13,18 @@ import ru.terrakok.cicerone.Navigator;
  * But the recommended behavior is to return to the root.
  */
 public class BackTo implements Command {
-    private String screenKey;
+    private Screen screen;
 
     /**
      * Creates a {@link BackTo} navigation command.
      *
-     * @param screenKey screen key
+     * @param screen screen
      */
-    public BackTo(String screenKey) {
-        this.screenKey = screenKey;
+    public BackTo(Screen screen) {
+        this.screen = screen;
     }
 
-    public String getScreenKey() {
-        return screenKey;
+    public Screen getScreen() {
+        return screen;
     }
 }

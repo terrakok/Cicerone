@@ -22,7 +22,7 @@ import ru.terrakok.cicerone.commands.Replace;
  * <p>
  * {@link BackTo} navigation command will return to the root if
  * needed screen isn't found in the screens chain.
- * To change this behavior override {@link #backToUnexisting(String)} method.
+ * To change this behavior override {@link #backToUnexisting(AppScreen)} method.
  * </p>
  * <p>
  * {@link Back} command will call {@link #exit()} method if current screen is the root.
@@ -102,12 +102,8 @@ public abstract class FragmentNavigator implements Navigator {
      * Performs {@link Forward} command transition
      */
     protected void forward(Forward command) {
-        Fragment fragment = createFragment(command.getScreenKey(), command.getTransitionData());
-
-        if (fragment == null) {
-            unknownScreen(command);
-            return;
-        }
+        AppScreen screen = (AppScreen) command.getScreen();
+        Fragment fragment = createFragment(screen);
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -120,18 +116,18 @@ public abstract class FragmentNavigator implements Navigator {
 
         fragmentTransaction
                 .replace(containerId, fragment)
-                .addToBackStack(command.getScreenKey())
+                .addToBackStack(screen.getScreenKey())
                 .commit();
-        localStackCopy.add(command.getScreenKey());
+        localStackCopy.add(screen.getScreenKey());
     }
 
     /**
-     * Performs {@link Forward} command transition
+     * Performs {@link Back} command transition
      */
     protected void back() {
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
-            localStackCopy.pop();
+            localStackCopy.removeLast();
         } else {
             exit();
         }
@@ -141,16 +137,12 @@ public abstract class FragmentNavigator implements Navigator {
      * Performs {@link Replace} command transition
      */
     protected void replace(Replace command) {
-        Fragment fragment = createFragment(command.getScreenKey(), command.getTransitionData());
-
-        if (fragment == null) {
-            unknownScreen(command);
-            return;
-        }
+        AppScreen screen = (AppScreen) command.getScreen();
+        Fragment fragment = createFragment(screen);
 
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
-            localStackCopy.pop();
+            localStackCopy.removeLast();
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -163,9 +155,9 @@ public abstract class FragmentNavigator implements Navigator {
 
             fragmentTransaction
                     .replace(containerId, fragment)
-                    .addToBackStack(command.getScreenKey())
+                    .addToBackStack(screen.getScreenKey())
                     .commit();
-            localStackCopy.add(command.getScreenKey());
+            localStackCopy.add(screen.getScreenKey());
 
         } else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -187,7 +179,7 @@ public abstract class FragmentNavigator implements Navigator {
      * Performs {@link BackTo} command transition
      */
     protected void backTo(BackTo command) {
-        String key = command.getScreenKey();
+        String key = command.getScreen().getScreenKey();
 
         if (key == null) {
             backToRoot();
@@ -198,11 +190,11 @@ public abstract class FragmentNavigator implements Navigator {
 
             if (index != -1) {
                 for (int i = 1; i < size - index; i++) {
-                    localStackCopy.pop();
+                    localStackCopy.removeLast();
                 }
                 fragmentManager.popBackStack(key, 0);
             } else {
-                backToUnexisting(command.getScreenKey());
+                backToUnexisting((AppScreen) command.getScreen());
             }
         }
     }
@@ -215,11 +207,17 @@ public abstract class FragmentNavigator implements Navigator {
     /**
      * Creates Fragment matching {@code screenKey}.
      *
-     * @param screenKey screen key
-     * @param data      initialization data
-     * @return instantiated fragment for the passed screen key
+     * @param screen screen
+     * @return instantiated fragment for the passed screen
      */
-    protected abstract Fragment createFragment(String screenKey, Object data);
+    protected Fragment createFragment(AppScreen screen) {
+        Fragment fragment = screen.getFragment();
+
+        if (fragment == null) {
+            errorWhileCreatingFragment(screen);
+        }
+        return fragment;
+    }
 
     /**
      * Called when we try to back from the root.
@@ -229,17 +227,17 @@ public abstract class FragmentNavigator implements Navigator {
     /**
      * Called when we tried to back to some specific screen (via {@link BackTo} command),
      * but didn't found it.
-     * @param screenKey screen key
+     * @param screen screen
      */
-    protected void backToUnexisting(String screenKey) {
+    protected void backToUnexisting(AppScreen screen) {
         backToRoot();
     }
 
 
     /**
-     * Called if we can't create a screen.
+     * Called if we can't create a fragment.
      */
-    protected void unknownScreen(Command command) {
-        throw new RuntimeException("Can't create a screen for passed screenKey.");
+    protected void errorWhileCreatingFragment(AppScreen screen) {
+        throw new RuntimeException("Can't create a fragment: " + screen.getClass().getSimpleName());
     }
 }
