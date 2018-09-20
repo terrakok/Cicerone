@@ -5,7 +5,7 @@
 package ru.terrakok.cicerone.commands;
 
 /**
- * Rolls back the last transition from the screens chain.
+ * Rolls fragmentBack the last transition from the screens chain.
  */
 public class Back implements Command {
 

@@ -1,10 +1,10 @@
-/*
- * Created by Konstantin Tskhovrebov (aka @terrakok)
- */
+package ru.terrakok.cicerone.android.support;
 
-package ru.terrakok.cicerone.android;
-
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
@@ -18,46 +18,23 @@ import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 
 /**
- * {@link Navigator} implementation based on the support fragments.
- * <p>
- * {@link BackTo} navigation command will return to the root if
- * needed screen isn't found in the screens chain.
- * To change this behavior override {@link #backToUnexisting(SupportAppScreen)} method.
- * </p>
- * <p>
- * {@link Back} command will call {@link #exit()} method if current screen is the root.
- * </p>
+ * Created by Konstantin Tskhovrebov (aka @terrakok) on 20.09.18.
  */
-public abstract class SupportFragmentNavigator implements Navigator {
-    private FragmentManager fragmentManager;
-    private int containerId;
+public class SupportAppNavigator implements Navigator {
+
+    private final Activity activity;
+    private final FragmentManager fragmentManager;
+    private final int containerId;
     private LinkedList<String> localStackCopy;
 
-    /**
-     * Creates SupportFragmentNavigator.
-     *
-     * @param fragmentManager support fragment manager
-     * @param containerId     id of the fragments container layout
-     */
-    public SupportFragmentNavigator(FragmentManager fragmentManager, int containerId) {
-        this.fragmentManager = fragmentManager;
-        this.containerId = containerId;
+    public SupportAppNavigator(FragmentActivity activity, int containerId) {
+        this(activity, activity.getSupportFragmentManager(), containerId);
     }
 
-    /**
-     * Override this method to setup fragment transaction {@link FragmentTransaction}.
-     * For example: setCustomAnimations(...), addSharedElement(...) or setReorderingAllowed(...)
-     *
-     * @param command             current navigation command. Will be only {@link Forward} or {@link Replace}
-     * @param currentFragment     current fragment in container
-     *                            (for {@link Replace} command it will be screen previous in new chain, NOT replaced screen)
-     * @param nextFragment        next screen fragment
-     * @param fragmentTransaction fragment transaction
-     */
-    protected void setupFragmentTransaction(Command command,
-                                            Fragment currentFragment,
-                                            Fragment nextFragment,
-                                            FragmentTransaction fragmentTransaction) {
+    public SupportAppNavigator(FragmentActivity activity, FragmentManager fragmentManager, int containerId) {
+        this.activity = activity;
+        this.fragmentManager = fragmentManager;
+        this.containerId = containerId;
     }
 
     @Override
@@ -88,20 +65,31 @@ public abstract class SupportFragmentNavigator implements Navigator {
      */
     protected void applyCommand(Command command) {
         if (command instanceof Forward) {
-            forward((Forward) command);
-        } else if (command instanceof Back) {
-            back();
+            activityForward((Forward) command);
         } else if (command instanceof Replace) {
-            replace((Replace) command);
+            activityReplace((Replace) command);
         } else if (command instanceof BackTo) {
             backTo((BackTo) command);
+        } else if (command instanceof Back) {
+            fragmentBack();
         }
     }
 
-    /**
-     * Performs {@link Forward} command transition
-     */
-    protected void forward(Forward command) {
+
+    protected void activityForward(Forward command) {
+        SupportAppScreen screen = (SupportAppScreen) command.getScreen();
+        Intent activityIntent = screen.getActivityIntent(activity);
+
+        // Start activity
+        if (activityIntent != null) {
+            Bundle options = createStartActivityOptions(command, activityIntent);
+            checkAndStartActivity(screen, activityIntent, options);
+        } else {
+            fragmentForward(command);
+        }
+    }
+
+    protected void fragmentForward(Forward command) {
         SupportAppScreen screen = (SupportAppScreen) command.getScreen();
         Fragment fragment = createFragment(screen);
 
@@ -121,22 +109,34 @@ public abstract class SupportFragmentNavigator implements Navigator {
         localStackCopy.add(screen.getScreenKey());
     }
 
-    /**
-     * Performs {@link Back} command transition
-     */
-    protected void back() {
+    protected void fragmentBack() {
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
             localStackCopy.removeLast();
         } else {
-            exit();
+            activityBack();
         }
     }
 
-    /**
-     * Performs {@link Replace} command transition
-     */
-    protected void replace(Replace command) {
+    protected void activityBack() {
+        activity.finish();
+    }
+
+    protected void activityReplace(Replace command) {
+        SupportAppScreen screen = (SupportAppScreen) command.getScreen();
+        Intent activityIntent = screen.getActivityIntent(activity);
+
+        // Replace activity
+        if (activityIntent != null) {
+            Bundle options = createStartActivityOptions(command, activityIntent);
+            checkAndStartActivity(screen, activityIntent, options);
+            activity.finish();
+        } else {
+            fragmentReplace(command);
+        }
+    }
+
+    protected void fragmentReplace(Replace command) {
         SupportAppScreen screen = (SupportAppScreen) command.getScreen();
         Fragment fragment = createFragment(screen);
 
@@ -183,7 +183,6 @@ public abstract class SupportFragmentNavigator implements Navigator {
 
         if (key == null) {
             backToRoot();
-
         } else {
             int index = localStackCopy.indexOf(key);
             int size = localStackCopy.size();
@@ -205,6 +204,52 @@ public abstract class SupportFragmentNavigator implements Navigator {
     }
 
     /**
+     * Override this method to setup fragment transaction {@link FragmentTransaction}.
+     * For example: setCustomAnimations(...), addSharedElement(...) or setReorderingAllowed(...)
+     *
+     * @param command             current navigation command. Will be only {@link Forward} or {@link Replace}
+     * @param currentFragment     current fragment in container
+     *                            (for {@link Replace} command it will be screen previous in new chain, NOT replaced screen)
+     * @param nextFragment        next screen fragment
+     * @param fragmentTransaction fragment transaction
+     */
+    protected void setupFragmentTransaction(Command command,
+                                            Fragment currentFragment,
+                                            Fragment nextFragment,
+                                            FragmentTransaction fragmentTransaction) {
+    }
+
+    /**
+     * Override this method to create option for start activity
+     *
+     * @param command        current navigation command. Will be only {@link Forward} or {@link Replace}
+     * @param activityIntent activity intent
+     * @return transition options
+     */
+    protected Bundle createStartActivityOptions(Command command, Intent activityIntent) {
+        return null;
+    }
+
+    private void checkAndStartActivity(SupportAppScreen screen, Intent activityIntent, Bundle options) {
+        // Check if we can start activity
+        if (activityIntent.resolveActivity(activity.getPackageManager()) != null) {
+            activity.startActivity(activityIntent, options);
+        } else {
+            unexistingActivity(screen, activityIntent);
+        }
+    }
+
+    /**
+     * Called when there is no activity to open {@code screenKey}.
+     *
+     * @param screen         screen
+     * @param activityIntent intent passed to start Activity for the {@code screenKey}
+     */
+    protected void unexistingActivity(SupportAppScreen screen, Intent activityIntent) {
+        // Do nothing by default
+    }
+
+    /**
      * Creates Fragment matching {@code screenKey}.
      *
      * @param screen screen
@@ -214,30 +259,22 @@ public abstract class SupportFragmentNavigator implements Navigator {
         Fragment fragment = screen.getFragment();
 
         if (fragment == null) {
-            errorWhileCreatingFragment(screen);
+            errorWhileCreatingScreen(screen);
         }
         return fragment;
     }
 
     /**
-     * Called when we try to back from the root.
-     */
-    protected abstract void exit();
-
-    /**
-     * Called when we tried to back to some specific screen (via {@link BackTo} command),
+     * Called when we tried to fragmentBack to some specific screen (via {@link BackTo} command),
      * but didn't found it.
+     *
      * @param screen screen
      */
     protected void backToUnexisting(SupportAppScreen screen) {
         backToRoot();
     }
 
-
-    /**
-     * Called if we can't create a fragment.
-     */
-    protected void errorWhileCreatingFragment(SupportAppScreen screen) {
-        throw new RuntimeException("Can't create a fragment: " + screen.getClass().getSimpleName());
+    protected void errorWhileCreatingScreen(SupportAppScreen screen) {
+        throw new RuntimeException("Can't create a screen: " + screen.getScreenKey());
     }
 }

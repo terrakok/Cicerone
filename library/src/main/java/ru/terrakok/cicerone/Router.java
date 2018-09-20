@@ -100,7 +100,7 @@ public class Router extends BaseRouter {
     /**
      * Replace current screen.
      * By replacing the screen, you alters the backstack,
-     * so by going back you will return to the previous screen
+     * so by going fragmentBack you will return to the previous screen
      * and not to the replaced one.
      *
      * @param screen screen
@@ -110,7 +110,7 @@ public class Router extends BaseRouter {
     }
 
     /**
-     * Return back to the needed screen from the chain.
+     * Return fragmentBack to the needed screen from the chain.
      * Behavior in the case when no needed screens found depends on
      * the processing of the {@link BackTo} command in a {@link Navigator} implementation.
      *
