@@ -4,29 +4,24 @@
 
 package ru.terrakok.cicerone.commands;
 
+import ru.terrakok.cicerone.Screen;
+
 /**
  * Opens new screen.
  */
 public class Forward implements Command {
-    private String screenKey;
-    private Object transitionData;
+    private Screen screen;
 
     /**
      * Creates a {@link Forward} navigation command.
      *
-     * @param screenKey      screen key
-     * @param transitionData initial data
+     * @param screen screen
      */
-    public Forward(String screenKey, Object transitionData) {
-        this.screenKey = screenKey;
-        this.transitionData = transitionData;
+    public Forward(Screen screen) {
+        this.screen = screen;
     }
 
-    public String getScreenKey() {
-        return screenKey;
-    }
-
-    public Object getTransitionData() {
-        return transitionData;
+    public Screen getScreen() {
+        return screen;
     }
 }

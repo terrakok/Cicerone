@@ -66,102 +66,58 @@ public class Router extends BaseRouter {
     /**
      * Open new screen and add it to the screens chain.
      *
-     * @param screenKey screen key
+     * @param screen screen
      */
-    public void navigateTo(String screenKey) {
-        navigateTo(screenKey, null);
-    }
-
-    /**
-     * Open new screen and add it to screens chain.
-     *
-     * @param screenKey screen key
-     * @param data      initialisation parameters for the new screen
-     */
-    public void navigateTo(String screenKey, Object data) {
-        executeCommands(new Forward(screenKey, data));
+    public void navigateTo(Screen screen) {
+        executeCommands(new Forward(screen));
     }
 
     /**
      * Clear the current screens chain and start new one
      * by opening a new screen right after the root.
      *
-     * @param screenKey screen key
+     * @param screen screen
      */
-    public void newScreenChain(String screenKey) {
-        newScreenChain(screenKey, null);
-    }
-
-    /**
-     * Clear the current screens chain and start new one
-     * by opening a new screen right after the root.
-     *
-     * @param screenKey screen key
-     * @param data      initialisation parameters for the new screen
-     */
-    public void newScreenChain(String screenKey, Object data) {
+    public void newScreenChain(Screen screen) {
         executeCommands(
                 new BackTo(null),
-                new Forward(screenKey, data)
+                new Forward(screen)
         );
     }
 
     /**
      * Clear all screens and open new one as root.
      *
-     * @param screenKey screen key
+     * @param screen screen
      */
-    public void newRootScreen(String screenKey) {
-        newRootScreen(screenKey, null);
-    }
-
-    /**
-     * Clear all screens and open new one as root.
-     *
-     * @param screenKey screen key
-     * @param data      initialisation parameters for the root
-     */
-    public void newRootScreen(String screenKey, Object data) {
+    public void newRootScreen(Screen screen) {
         executeCommands(
                 new BackTo(null),
-                new Replace(screenKey, data)
+                new Replace(screen)
         );
     }
 
     /**
      * Replace current screen.
      * By replacing the screen, you alters the backstack,
-     * so by going back you will return to the previous screen
+     * so by going fragmentBack you will return to the previous screen
      * and not to the replaced one.
      *
-     * @param screenKey screen key
+     * @param screen screen
      */
-    public void replaceScreen(String screenKey) {
-        replaceScreen(screenKey, null);
+    public void replaceScreen(Screen screen) {
+        executeCommands(new Replace(screen));
     }
 
     /**
-     * Replace current screen.
-     * By replacing the screen, you alters the backstack,
-     * so by going back you will return to the previous screen
-     * and not to the replaced one.
-     *
-     * @param screenKey screen key
-     * @param data      initialisation parameters for the new screen
-     */
-    public void replaceScreen(String screenKey, Object data) {
-        executeCommands(new Replace(screenKey, data));
-    }
-
-    /**
-     * Return back to the needed screen from the chain.
+     * Return fragmentBack to the needed screen from the chain.
      * Behavior in the case when no needed screens found depends on
      * the processing of the {@link BackTo} command in a {@link Navigator} implementation.
      *
-     * @param screenKey screen key
+     * @param screen screen
      */
-    public void backTo(String screenKey) {
-        executeCommands(new BackTo(screenKey));
+    public void backTo(Screen screen) {
+        executeCommands(new BackTo(screen));
     }
 
     /**

@@ -39,19 +39,19 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
     }
 
     public void onForwardCommandClick() {
-        router.navigateTo(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+        router.navigateTo(new Screens.SampleScreen(screenNumber + 1));
     }
 
     public void onReplaceCommandClick() {
-        router.replaceScreen(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+        router.replaceScreen(new Screens.SampleScreen(screenNumber + 1));
     }
 
     public void onNewChainCommandClick() {
-        router.newScreenChain(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+        router.newScreenChain(new Screens.SampleScreen(screenNumber + 1));
     }
 
     public void onNewRootCommandClick() {
-        router.newRootScreen(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+        router.newRootScreen(new Screens.SampleScreen(screenNumber + 1));
     }
 
     public void onForwardWithDelayCommandClick() {
@@ -64,7 +64,7 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
                         new Runnable() {
                             @Override
                             public void run() {
-                                router.navigateTo(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+                                router.navigateTo(new Screens.SampleScreen(screenNumber + 1));
                             }
                         }
                 );
@@ -73,6 +73,6 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
     }
 
     public void onBackToCommandClick() {
-        router.backTo(Screens.SAMPLE_SCREEN + 3);
+        router.backTo(new Screens.SampleScreen(3));
     }
 }

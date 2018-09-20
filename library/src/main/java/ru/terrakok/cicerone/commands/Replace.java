@@ -4,29 +4,24 @@
 
 package ru.terrakok.cicerone.commands;
 
+import ru.terrakok.cicerone.Screen;
+
 /**
  * Replaces the current screen.
  */
 public class Replace implements Command {
-    private String screenKey;
-    private Object transitionData;
+    private Screen screen;
 
     /**
      * Creates a {@link Replace} navigation command.
      *
-     * @param screenKey      screen key
-     * @param transitionData initial data
+     * @param screen screen
      */
-    public Replace(String screenKey, Object transitionData) {
-        this.screenKey = screenKey;
-        this.transitionData = transitionData;
+    public Replace(Screen screen) {
+        this.screen = screen;
     }
 
-    public String getScreenKey() {
-        return screenKey;
-    }
-
-    public Object getTransitionData() {
-        return transitionData;
+    public Screen getScreen() {
+        return screen;
     }
 }

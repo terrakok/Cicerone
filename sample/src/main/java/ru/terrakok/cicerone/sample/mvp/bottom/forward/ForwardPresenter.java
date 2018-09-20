@@ -12,10 +12,12 @@ import ru.terrakok.cicerone.sample.Screens;
 
 @InjectViewState
 public class ForwardPresenter extends MvpPresenter<ForwardView> {
+    private String container;
     private Router router;
     private int number;
 
-    public ForwardPresenter(Router router, int number) {
+    public ForwardPresenter(String container, Router router, int number) {
+        this.container = container;
         this.router = router;
         this.number = number;
 
@@ -33,11 +35,11 @@ public class ForwardPresenter extends MvpPresenter<ForwardView> {
     }
 
     public void onForwardPressed() {
-        router.navigateTo(Screens.FORWARD_SCREEN, number + 1);
+        router.navigateTo(new Screens.ForwardScreen(container, number + 1));
     }
 
     public void onGithubPressed() {
-        router.navigateTo(Screens.GITHUB_SCREEN);
+        router.navigateTo(new Screens.GithubScreen());
     }
 
     public void onBackPressed() {
