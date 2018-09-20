@@ -36,6 +36,7 @@ public class ForwardFragment extends MvpAppCompatFragment implements ForwardView
     @ProvidePresenter
     ForwardPresenter provideForwardPresenter() {
         return new ForwardPresenter(
+                getArguments().getString(EXTRA_NAME),
                 ((RouterProvider) getParentFragment()).getRouter(),
                 getArguments().getInt(EXTRA_NUMBER)
         );

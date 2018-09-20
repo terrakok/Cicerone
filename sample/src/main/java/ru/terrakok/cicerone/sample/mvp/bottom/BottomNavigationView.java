@@ -9,9 +9,4 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
  */
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface BottomNavigationView extends MvpView {
-    int ANDROID_TAB_POSITION = 0;
-    int BUG_TAB_POSITION = 1;
-    int DOG_TAB_POSITION = 2;
-
-    void highlightTab(int position);
 }
