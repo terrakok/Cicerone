@@ -179,11 +179,10 @@ public class SupportAppNavigator implements Navigator {
      * Performs {@link BackTo} command transition
      */
     protected void backTo(BackTo command) {
-        String key = command.getScreen().getScreenKey();
-
-        if (key == null) {
+        if (command.getScreen() == null) {
             backToRoot();
         } else {
+            String key = command.getScreen().getScreenKey();
             int index = localStackCopy.indexOf(key);
             int size = localStackCopy.size();
 
