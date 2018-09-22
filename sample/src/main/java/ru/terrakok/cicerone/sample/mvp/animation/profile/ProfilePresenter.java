@@ -4,8 +4,8 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.result.ResultListener;
 import ru.terrakok.cicerone.sample.Screens;
+import ru.terrakok.cicerone.sample.mvp.animation.PhotoSelection;
 
 /**
  * Created by Konstantin Tskhovrebov (aka @terrakok) on 14.07.17.
@@ -13,19 +13,17 @@ import ru.terrakok.cicerone.sample.Screens;
 
 @InjectViewState
 public class ProfilePresenter extends MvpPresenter<ProfileView> {
-    private static final int PHOTO_RESULT_CODE = 42;
 
     private Router router;
-    private int currentPhoto;
+    private PhotoSelection photoSelection;
 
-    public ProfilePresenter(int defaultPhoto, Router router) {
-        currentPhoto = defaultPhoto;
+    public ProfilePresenter(PhotoSelection photoSelection, Router router) {
+        this.photoSelection = photoSelection;
         this.router = router;
 
-        router.setResultListener(PHOTO_RESULT_CODE, new ResultListener() {
+        photoSelection.setListener(new PhotoSelection.Listener() {
             @Override
-            public void onResult(Object resultData) {
-                currentPhoto = (int) resultData;
+            public void onChange(int selectedPhoto) {
                 updatePhoto();
             }
         });
@@ -39,16 +37,16 @@ public class ProfilePresenter extends MvpPresenter<ProfileView> {
 
     @Override
     public void onDestroy() {
-        router.removeResultListener(PHOTO_RESULT_CODE);
+        photoSelection.setListener(null);
         super.onDestroy();
     }
 
     private void updatePhoto() {
-        getViewState().showPhoto(currentPhoto);
+        getViewState().showPhoto(photoSelection.getSelectedPhoto());
     }
 
     public void onPhotoClicked() {
-        router.navigateTo(new Screens.SelectPhotoScreen(PHOTO_RESULT_CODE));
+        router.navigateTo(new Screens.SelectPhotoScreen());
     }
 
     public void onBackPressed() {

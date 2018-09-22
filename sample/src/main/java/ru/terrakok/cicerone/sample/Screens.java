@@ -107,15 +107,9 @@ public class Screens {
     }
 
     public static final class SelectPhotoScreen extends SupportAppScreen {
-        private final int resultCode;
-
-        public SelectPhotoScreen(int resultCode) {
-            this.resultCode = resultCode;
-        }
-
         @Override
         public Fragment getFragment() {
-            return SelectPhotoFragment.getNewInstance(resultCode);
+            return new SelectPhotoFragment();
         }
     }
 }

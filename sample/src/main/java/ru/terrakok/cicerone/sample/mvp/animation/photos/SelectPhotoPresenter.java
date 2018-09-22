@@ -5,6 +5,7 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.R;
+import ru.terrakok.cicerone.sample.mvp.animation.PhotoSelection;
 
 /**
  * Created by Konstantin Tskhovrebov (aka @terrakok) on 14.07.17.
@@ -13,11 +14,11 @@ import ru.terrakok.cicerone.sample.R;
 @InjectViewState
 public class SelectPhotoPresenter extends MvpPresenter<SelectPhotoView> {
     private Router router;
-    private final int RESULT_CODE;
+    private PhotoSelection photoSelection;
 
-    public SelectPhotoPresenter(Router router, int resultCode) {
+    public SelectPhotoPresenter(PhotoSelection photoSelection, Router router) {
+        this.photoSelection = photoSelection;
         this.router = router;
-        RESULT_CODE = resultCode;
     }
 
     @Override
@@ -33,7 +34,8 @@ public class SelectPhotoPresenter extends MvpPresenter<SelectPhotoView> {
     }
 
     public void onPhotoClick(int photoRes) {
-        router.exitWithResult(RESULT_CODE, photoRes);
+        photoSelection.setSelectedPhoto(photoRes);
+        router.exit();
     }
 
     public void onBackPressed() {

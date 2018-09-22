@@ -43,7 +43,7 @@ dependencies {
     annotationProcessor "com.arello-mobile:moxy-compiler:$moxyVersion"
 
     //Cicerone
-    compile project(':library')
+    implementation project(':library')
 
     //DI
     implementation "com.google.dagger:dagger:$daggerVersion"
