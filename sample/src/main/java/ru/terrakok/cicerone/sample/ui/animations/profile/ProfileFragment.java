@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
+import ru.terrakok.cicerone.sample.mvp.animation.PhotoSelection;
 import ru.terrakok.cicerone.sample.mvp.animation.profile.ProfilePresenter;
 import ru.terrakok.cicerone.sample.mvp.animation.profile.ProfileView;
 import ru.terrakok.cicerone.sample.ui.animations.ProfileActivity;
@@ -34,9 +35,12 @@ public class ProfileFragment extends MvpAppCompatFragment implements ProfileView
     @InjectPresenter
     ProfilePresenter presenter;
 
+    @Inject
+    PhotoSelection photoSelection;
+
     @ProvidePresenter
     ProfilePresenter providePresenter() {
-        return new ProfilePresenter(R.drawable.ava_1, router);
+        return new ProfilePresenter(photoSelection, router);
     }
 
     @Override
