@@ -47,7 +47,15 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
     }
 
     public void onNewChainCommandClick() {
-        router.newScreenChain(new Screens.SampleScreen(screenNumber + 1));
+        router.newChain(
+                new Screens.SampleScreen(screenNumber + 1),
+                new Screens.SampleScreen(screenNumber + 2),
+                new Screens.SampleScreen(screenNumber + 3)
+        );
+    }
+
+    public void onFinishChainCommandClick() {
+        router.finishChain();
     }
 
     public void onNewRootCommandClick() {

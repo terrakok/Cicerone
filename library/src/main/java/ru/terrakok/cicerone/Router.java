@@ -6,6 +6,7 @@ package ru.terrakok.cicerone;
 
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
+import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 
@@ -28,19 +29,6 @@ public class Router extends BaseRouter {
      */
     public void navigateTo(Screen screen) {
         executeCommands(new Forward(screen));
-    }
-
-    /**
-     * Clear the current screens chain and start new one
-     * by opening a new screen right after the root.
-     *
-     * @param screen screen
-     */
-    public void newScreenChain(Screen screen) {
-        executeCommands(
-                new BackTo(null),
-                new Forward(screen)
-        );
     }
 
     /**
@@ -76,6 +64,14 @@ public class Router extends BaseRouter {
      */
     public void backTo(Screen screen) {
         executeCommands(new BackTo(screen));
+    }
+
+    public void newChain(Screen... screens) {
+        Command[] commands = new Command[screens.length];
+        for (int i = 0; i < commands.length; i++) {
+            commands[i] = new Forward(screens[i]);
+        }
+        executeCommands(commands);
     }
 
     /**

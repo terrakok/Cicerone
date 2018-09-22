@@ -13,26 +13,30 @@
         app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
         app:title="@string/app_name"/>
 
-    <LinearLayout
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:columnCount="2">
 
         <TextView
+            android:layout_margin="4dp"
             android:id="@+id/back_command"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_rowWeight="1"
             android:background="@color/carrot"
             android:gravity="center"
             android:text="Back"
+            android:layout_columnWeight="1"
             android:textSize="28sp"/>
 
         <TextView
             android:id="@+id/forward_command"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_rowWeight="1"
             android:background="@color/sunflower"
             android:gravity="center"
             android:text="Forward"
@@ -40,9 +44,11 @@
 
         <TextView
             android:id="@+id/replace_command"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_rowWeight="1"
             android:background="@color/greensea"
             android:gravity="center"
             android:text="Replace"
@@ -50,9 +56,11 @@
 
         <TextView
             android:id="@+id/new_chain_command"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_rowWeight="1"
             android:background="@color/nephritis"
             android:gravity="center"
             android:text="New chain"
@@ -60,9 +68,11 @@
 
         <TextView
             android:id="@+id/new_root_command"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_rowWeight="1"
             android:background="@color/belizehole"
             android:gravity="center"
             android:text="New root"
@@ -70,9 +80,11 @@
 
         <TextView
             android:id="@+id/forward_delay_command"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_rowWeight="1"
             android:background="@color/carrot"
             android:gravity="center"
             android:text="Forward with 5 sec delay"
@@ -80,13 +92,27 @@
 
         <TextView
             android:id="@+id/back_to_command"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_rowWeight="1"
             android:background="@color/sunflower"
             android:gravity="center"
             android:text="Back to '3'"
             android:textSize="28sp"/>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/finish_chain_command"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="4dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:background="@color/greensea"
+            android:gravity="center"
+            android:text="Finish chain"
+            android:textSize="28sp"/>
+
+    </GridLayout>
 </LinearLayout>
