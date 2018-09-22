@@ -37,6 +37,7 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
     private View newRootCommandBt;
     private View forwardWithDelayCommandBt;
     private View backToCommandBt;
+    private View finishChainCommandBt;
 
     @Inject
     Router router;
@@ -91,6 +92,7 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
         newRootCommandBt = view.findViewById(R.id.new_root_command);
         forwardWithDelayCommandBt = view.findViewById(R.id.forward_delay_command);
         backToCommandBt = view.findViewById(R.id.back_to_command);
+        finishChainCommandBt = view.findViewById(R.id.finish_chain_command);
     }
 
     @Override
@@ -142,6 +144,12 @@ public class SampleFragment extends MvpAppCompatFragment implements SampleView, 
             @Override
             public void onClick(View view) {
                 presenter.onBackToCommandClick();
+            }
+        });
+        finishChainCommandBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.onFinishChainCommandClick();
             }
         });
     }
