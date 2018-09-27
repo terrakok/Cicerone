@@ -1,8 +1,5 @@
 package ru.terrakok.cicerone.sample.ui.bottom;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +12,7 @@ import javax.inject.Inject;
 import ru.terrakok.cicerone.Cicerone;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.android.SupportAppNavigator;
+import ru.terrakok.cicerone.android.support.SupportAppNavigator;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
@@ -69,7 +66,7 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
         super.onActivityCreated(savedInstanceState);
 
         if (getChildFragmentManager().findFragmentById(R.id.ftc_container) == null) {
-            getCicerone().getRouter().replaceScreen(Screens.FORWARD_SCREEN, 0);
+            getCicerone().getRouter().replaceScreen(new Screens.ForwardScreen(getContainerName(), 0));
         }
     }
 
@@ -87,29 +84,7 @@ public class TabContainerFragment extends Fragment implements RouterProvider, Ba
 
     private Navigator getNavigator() {
         if (navigator == null) {
-            navigator = new SupportAppNavigator(getActivity(), getChildFragmentManager(), R.id.ftc_container) {
-
-                @Override
-                protected Intent createActivityIntent(Context context, String screenKey, Object data) {
-                    if (screenKey.equals(Screens.GITHUB_SCREEN)) {
-                        return new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/terrakok/Cicerone"));
-                    }
-                    return null;
-                }
-
-                @Override
-                protected Fragment createFragment(String screenKey, Object data) {
-                    if (screenKey.equals(Screens.FORWARD_SCREEN)) {
-                        return ForwardFragment.getNewInstance(getContainerName(), (int) data);
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void exit() {
-                    ((RouterProvider) getActivity()).getRouter().exit();
-                }
-            };
+            navigator = new SupportAppNavigator(getActivity(), getChildFragmentManager(), R.id.ftc_container);
         }
         return navigator;
     }

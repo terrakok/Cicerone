@@ -4,21 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
-import ru.terrakok.cicerone.android.SupportFragmentNavigator;
+import ru.terrakok.cicerone.android.support.SupportAppNavigator;
 import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.sample.R;
@@ -32,30 +29,12 @@ import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
  */
 
 public class MainActivity extends MvpAppCompatActivity {
-    private static final String STATE_SCREEN_NAMES = "state_screen_names";
-
-    private List<String> screenNames = new ArrayList<>();
     private TextView screensSchemeTV;
 
     @Inject
     NavigatorHolder navigatorHolder;
 
-    private Navigator navigator = new SupportFragmentNavigator(getSupportFragmentManager(), R.id.main_container) {
-        @Override
-        protected Fragment createFragment(String screenKey, Object data) {
-            return SampleFragment.getNewInstance((int) data);
-        }
-
-        @Override
-        protected void showSystemMessage(String message) {
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        protected void exit() {
-            finish();
-        }
-
+    private Navigator navigator = new SupportAppNavigator(this, R.id.main_container) {
         @Override
         public void applyCommands(Command[] commands) {
             super.applyCommands(commands);
@@ -73,9 +52,8 @@ public class MainActivity extends MvpAppCompatActivity {
         screensSchemeTV = (TextView) findViewById(R.id.screens_scheme);
 
         if (savedInstanceState == null) {
-            navigator.applyCommands(new Command[]{new Replace(Screens.SAMPLE_SCREEN, 1)});
+            navigator.applyCommands(new Command[]{new Replace(new Screens.SampleScreen(1))});
         } else {
-            screenNames = (List<String>) savedInstanceState.getSerializable(STATE_SCREEN_NAMES);
             printScreensScheme();
         }
     }
@@ -104,28 +82,27 @@ public class MainActivity extends MvpAppCompatActivity {
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(STATE_SCREEN_NAMES, (Serializable) screenNames);
-    }
-
     private void printScreensScheme() {
-        ArrayList<Integer> keys = new ArrayList<>();
-
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        for (Fragment fragment : fragments) {
+        ArrayList<SampleFragment> fragments = new ArrayList<>();
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             if (fragment instanceof SampleFragment) {
-                keys.add(((SampleFragment) fragment).getNumber());
+                fragments.add((SampleFragment) fragment);
             }
         }
-        Collections.sort(keys, new Comparator<Integer>() {
+        Collections.sort(fragments, new Comparator<SampleFragment>() {
             @Override
-            public int compare(Integer o1, Integer o2) {
-                return o1 - o2;
+            public int compare(SampleFragment f1, SampleFragment f2) {
+                long t = f1.getCreationTime() - f2.getCreationTime();
+                if (t > 0) return 1;
+                else if (t < 0) return -1;
+                else return 0;
             }
         });
 
+        ArrayList<Integer> keys = new ArrayList<>();
+        for (SampleFragment fragment : fragments) {
+            keys.add(fragment.getNumber());
+        }
         screensSchemeTV.setText("Chain: " + keys.toString() + "");
     }
 }

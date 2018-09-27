@@ -3,7 +3,7 @@ package ru.terrakok.cicerone.sample.ui.bottom;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
+import android.support.v4.app.FragmentTransaction;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -11,15 +11,11 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.commands.Back;
-import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Replace;
-import ru.terrakok.cicerone.commands.SystemMessage;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
@@ -33,15 +29,9 @@ import ru.terrakok.cicerone.sample.ui.common.RouterProvider;
  */
 public class BottomNavigationActivity extends MvpAppCompatActivity implements BottomNavigationView, RouterProvider {
     private BottomNavigationBar bottomNavigationBar;
-    private TabContainerFragment androidTabFragment;
-    private TabContainerFragment bugTabFragment;
-    private TabContainerFragment dogTabFragment;
 
     @Inject
     Router router;
-
-    @Inject
-    NavigatorHolder navigatorHolder;
 
     @InjectPresenter
     BottomNavigationPresenter presenter;
@@ -60,10 +50,9 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
         bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.ab_bottom_navigation_bar);
 
         initViews();
-        initContainers();
 
         if (savedInstanceState == null) {
-            bottomNavigationBar.selectTab(ANDROID_TAB_POSITION, true);
+            bottomNavigationBar.selectTab(0, true);
         }
     }
 
@@ -77,16 +66,17 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
             @Override
             public void onTabSelected(int position) {
                 switch (position) {
-                    case ANDROID_TAB_POSITION:
-                        presenter.onTabAndroidClick();
+                    case 0:
+                        selectTab("ANDROID");
                         break;
-                    case BUG_TAB_POSITION:
-                        presenter.onTabBugClick();
+                    case 1:
+                        selectTab("BUG");
                         break;
-                    case DOG_TAB_POSITION:
-                        presenter.onTabDogClick();
+                    case 2:
+                        selectTab("DOG");
                         break;
                 }
+                bottomNavigationBar.selectTab(position, false);
             }
 
             @Override
@@ -102,48 +92,50 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
 
     }
 
-    private void initContainers() {
+    private void selectTab(String tab) {
         FragmentManager fm = getSupportFragmentManager();
-        androidTabFragment = (TabContainerFragment) fm.findFragmentByTag("ANDROID");
-        if (androidTabFragment == null) {
-            androidTabFragment = TabContainerFragment.getNewInstance("ANDROID");
-            fm.beginTransaction()
-                    .add(R.id.ab_container, androidTabFragment, "ANDROID")
-                    .detach(androidTabFragment).commitNow();
+        Fragment currentFragment = null;
+        List<Fragment> fragments = fm.getFragments();
+        if (fragments != null) {
+            for (Fragment f : fragments) {
+                if (f.isVisible()) {
+                    currentFragment = f;
+                    break;
+                }
+            }
+        }
+        Fragment newFragment = fm.findFragmentByTag(tab);
+
+        if (currentFragment != null && newFragment != null && currentFragment == newFragment) return;
+
+        FragmentTransaction transaction = fm.beginTransaction();
+        if (newFragment == null) {
+            transaction.add(R.id.ab_container, new Screens.TabScreen(tab).getFragment(), tab);
         }
 
-        bugTabFragment = (TabContainerFragment) fm.findFragmentByTag("BUG");
-        if (bugTabFragment == null) {
-            bugTabFragment = TabContainerFragment.getNewInstance("BUG");
-            fm.beginTransaction()
-                    .add(R.id.ab_container, bugTabFragment, "BUG")
-                    .detach(bugTabFragment).commitNow();
+        if (currentFragment != null) {
+            transaction.hide(currentFragment);
         }
 
-        dogTabFragment = (TabContainerFragment) fm.findFragmentByTag("DOG");
-        if (dogTabFragment == null) {
-            dogTabFragment = TabContainerFragment.getNewInstance("DOG");
-            fm.beginTransaction()
-                    .add(R.id.ab_container, dogTabFragment, "DOG")
-                    .detach(dogTabFragment).commitNow();
+        if (newFragment != null) {
+            transaction.show(newFragment);
         }
-    }
-
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-        navigatorHolder.setNavigator(navigator);
-    }
-
-    @Override
-    protected void onPause() {
-        navigatorHolder.removeNavigator();
-        super.onPause();
+        transaction.commitNow();
     }
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.ab_container);
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = null;
+        List<Fragment> fragments = fm.getFragments();
+        if (fragments != null) {
+            for (Fragment f : fragments) {
+                if (f.isVisible()) {
+                    fragment = f;
+                    break;
+                }
+            }
+        }
         if (fragment != null
                 && fragment instanceof BackButtonListener
                 && ((BackButtonListener) fragment).onBackPressed()) {
@@ -151,52 +143,6 @@ public class BottomNavigationActivity extends MvpAppCompatActivity implements Bo
         } else {
             presenter.onBackPressed();
         }
-    }
-
-    private Navigator navigator = new Navigator() {
-        @Override
-        public void applyCommands(Command[] commands) {
-            for (Command command : commands) applyCommand(command);
-        }
-
-        private void applyCommand(Command command) {
-            if (command instanceof Back) {
-                finish();
-            } else if (command instanceof SystemMessage) {
-                Toast.makeText(BottomNavigationActivity.this, ((SystemMessage) command).getMessage(), Toast.LENGTH_SHORT).show();
-            } else if (command instanceof Replace) {
-                FragmentManager fm = getSupportFragmentManager();
-
-                switch (((Replace) command).getScreenKey()) {
-                    case Screens.ANDROID_SCREEN:
-                        fm.beginTransaction()
-                                .detach(bugTabFragment)
-                                .detach(dogTabFragment)
-                                .attach(androidTabFragment)
-                                .commitNow();
-                        break;
-                    case Screens.BUG_SCREEN:
-                        fm.beginTransaction()
-                                .detach(androidTabFragment)
-                                .detach(dogTabFragment)
-                                .attach(bugTabFragment)
-                                .commitNow();
-                        break;
-                    case Screens.DOG_SCREEN:
-                        fm.beginTransaction()
-                                .detach(androidTabFragment)
-                                .detach(bugTabFragment)
-                                .attach(dogTabFragment)
-                                .commitNow();
-                        break;
-                }
-            }
-        }
-    };
-
-    @Override
-    public void highlightTab(int position) {
-        bottomNavigationBar.selectTab(position, false);
     }
 
     @Override

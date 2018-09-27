@@ -4,14 +4,11 @@
 
 package ru.terrakok.cicerone;
 
-import java.util.HashMap;
-
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
+import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
-import ru.terrakok.cicerone.commands.SystemMessage;
-import ru.terrakok.cicerone.result.ResultListener;
 
 /**
  * Router is the class for high-level navigation.
@@ -21,148 +18,77 @@ import ru.terrakok.cicerone.result.ResultListener;
  */
 public class Router extends BaseRouter {
 
-    private HashMap<Integer, ResultListener> resultListeners = new HashMap<>();
-
     public Router() {
         super();
     }
 
     /**
-     * Subscribe to the screen result.<br>
-     * <b>Note:</b> only one listener can subscribe to a unique resultCode!<br>
-     * You must call a <b>removeResultListener()</b> to avoid a memory leak.
-     *
-     * @param resultCode key for filter results
-     * @param listener   result listener
-     */
-    public void setResultListener(Integer resultCode, ResultListener listener) {
-        resultListeners.put(resultCode, listener);
-    }
-
-    /**
-     * Unsubscribe from the screen result.
-     *
-     * @param resultCode key for filter results
-     */
-    public void removeResultListener(Integer resultCode) {
-        resultListeners.remove(resultCode);
-    }
-
-    /**
-     * Send result data to subscriber.
-     *
-     * @param resultCode result data key
-     * @param result     result data
-     * @return TRUE if listener was notified and FALSE otherwise
-     */
-    protected boolean sendResult(Integer resultCode, Object result) {
-        ResultListener resultListener = resultListeners.get(resultCode);
-        if (resultListener != null) {
-            resultListener.onResult(result);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Open new screen and add it to the screens chain.
      *
-     * @param screenKey screen key
+     * @param screen screen
      */
-    public void navigateTo(String screenKey) {
-        navigateTo(screenKey, null);
-    }
-
-    /**
-     * Open new screen and add it to screens chain.
-     *
-     * @param screenKey screen key
-     * @param data      initialisation parameters for the new screen
-     */
-    public void navigateTo(String screenKey, Object data) {
-        executeCommands(new Forward(screenKey, data));
-    }
-
-    /**
-     * Clear the current screens chain and start new one
-     * by opening a new screen right after the root.
-     *
-     * @param screenKey screen key
-     */
-    public void newScreenChain(String screenKey) {
-        newScreenChain(screenKey, null);
-    }
-
-    /**
-     * Clear the current screens chain and start new one
-     * by opening a new screen right after the root.
-     *
-     * @param screenKey screen key
-     * @param data      initialisation parameters for the new screen
-     */
-    public void newScreenChain(String screenKey, Object data) {
-        executeCommands(
-                new BackTo(null),
-                new Forward(screenKey, data)
-        );
+    public void navigateTo(Screen screen) {
+        executeCommands(new Forward(screen));
     }
 
     /**
      * Clear all screens and open new one as root.
      *
-     * @param screenKey screen key
+     * @param screen screen
      */
-    public void newRootScreen(String screenKey) {
-        newRootScreen(screenKey, null);
-    }
-
-    /**
-     * Clear all screens and open new one as root.
-     *
-     * @param screenKey screen key
-     * @param data      initialisation parameters for the root
-     */
-    public void newRootScreen(String screenKey, Object data) {
+    public void newRootScreen(Screen screen) {
         executeCommands(
                 new BackTo(null),
-                new Replace(screenKey, data)
+                new Replace(screen)
         );
     }
 
     /**
      * Replace current screen.
      * By replacing the screen, you alters the backstack,
-     * so by going back you will return to the previous screen
+     * so by going fragmentBack you will return to the previous screen
      * and not to the replaced one.
      *
-     * @param screenKey screen key
+     * @param screen screen
      */
-    public void replaceScreen(String screenKey) {
-        replaceScreen(screenKey, null);
+    public void replaceScreen(Screen screen) {
+        executeCommands(new Replace(screen));
     }
 
     /**
-     * Replace current screen.
-     * By replacing the screen, you alters the backstack,
-     * so by going back you will return to the previous screen
-     * and not to the replaced one.
-     *
-     * @param screenKey screen key
-     * @param data      initialisation parameters for the new screen
-     */
-    public void replaceScreen(String screenKey, Object data) {
-        executeCommands(new Replace(screenKey, data));
-    }
-
-    /**
-     * Return back to the needed screen from the chain.
+     * Return fragmentBack to the needed screen from the chain.
      * Behavior in the case when no needed screens found depends on
      * the processing of the {@link BackTo} command in a {@link Navigator} implementation.
      *
-     * @param screenKey screen key
+     * @param screen screen
      */
-    public void backTo(String screenKey) {
-        executeCommands(new BackTo(screenKey));
+    public void backTo(Screen screen) {
+        executeCommands(new BackTo(screen));
+    }
+
+    /**
+     * Opens several screens inside single transaction.
+     * @param screens
+     */
+    public void newChain(Screen... screens) {
+        Command[] commands = new Command[screens.length];
+        for (int i = 0; i < commands.length; i++) {
+            commands[i] = new Forward(screens[i]);
+        }
+        executeCommands(commands);
+    }
+
+    /**
+     * Clear current stack and open several screens inside single transaction.
+     * @param screens
+     */
+    public void newRootChain(Screen... screens) {
+        Command[] commands = new Command[screens.length + 1];
+        commands[0] = new BackTo(null);
+        for (int i = 0; i < commands.length; i++) {
+            commands[i + 1] = new Forward(screens[i]);
+        }
+        executeCommands(commands);
     }
 
     /**
@@ -185,35 +111,4 @@ public class Router extends BaseRouter {
         executeCommands(new Back());
     }
 
-    /**
-     * Return to the previous screen in the chain and send result data.
-     *
-     * @param resultCode result data key
-     * @param result     result data
-     */
-    public void exitWithResult(Integer resultCode, Object result) {
-        exit();
-        sendResult(resultCode, result);
-    }
-
-    /**
-     * Return to the previous screen in the chain and show system message.
-     *
-     * @param message message to show
-     */
-    public void exitWithMessage(String message) {
-        executeCommands(
-                new Back(),
-                new SystemMessage(message)
-        );
-    }
-
-    /**
-     * Show system message.
-     *
-     * @param message message to show
-     */
-    public void showSystemMessage(String message) {
-        executeCommands(new SystemMessage(message));
-    }
 }

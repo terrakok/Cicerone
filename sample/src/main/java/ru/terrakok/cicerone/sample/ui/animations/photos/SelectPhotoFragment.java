@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
+import ru.terrakok.cicerone.sample.mvp.animation.PhotoSelection;
 import ru.terrakok.cicerone.sample.mvp.animation.photos.SelectPhotoPresenter;
 import ru.terrakok.cicerone.sample.mvp.animation.photos.SelectPhotoView;
 import ru.terrakok.cicerone.sample.ui.animations.ProfileActivity;
@@ -26,7 +27,6 @@ import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
  */
 
 public class SelectPhotoFragment extends MvpAppCompatFragment implements SelectPhotoView, BackButtonListener {
-    private static final String ARG_RESULT_CODE = "arg_result_code";
     private static final String ARG_ANIM_DESTINATION = "arg_anim_dest";
 
     private ImageView photo1;
@@ -37,19 +37,15 @@ public class SelectPhotoFragment extends MvpAppCompatFragment implements SelectP
     @Inject
     Router router;
 
+    @Inject
+    PhotoSelection photoSelection;
+
     @InjectPresenter
     SelectPhotoPresenter presenter;
 
-    public static SelectPhotoFragment getNewInstance(int resultCode) {
-        SelectPhotoFragment fragment = new SelectPhotoFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_RESULT_CODE, resultCode);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     public void setAnimationDestinationId(int resId) {
         Bundle arguments = getArguments();
+        if (arguments == null) arguments = new Bundle();
         arguments.putInt(ARG_ANIM_DESTINATION, resId);
         setArguments(arguments);
     }
@@ -60,7 +56,7 @@ public class SelectPhotoFragment extends MvpAppCompatFragment implements SelectP
 
     @ProvidePresenter
     SelectPhotoPresenter providePresenter() {
-        return new SelectPhotoPresenter(router, getArguments().getInt(ARG_RESULT_CODE));
+        return new SelectPhotoPresenter(photoSelection, router);
     }
 
     @Override

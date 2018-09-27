@@ -6,10 +6,9 @@ repositories {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0.0"
@@ -44,7 +43,7 @@ dependencies {
     annotationProcessor "com.arello-mobile:moxy-compiler:$moxyVersion"
 
     //Cicerone
-    compile project(':library')
+    implementation project(':library')
 
     //DI
     implementation "com.google.dagger:dagger:$daggerVersion"

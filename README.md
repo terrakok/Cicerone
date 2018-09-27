@@ -22,8 +22,11 @@ It was designed to be used with the MVP pattern (try [Moxy](https://github.com/A
 + suitable for Unit Testing
 
 ## Additional features
-+ easy screen result subscription
++ opening several screens inside single call (for example: deeplink)
++ implementation of parallel navigation (Instagram like)
++ predefined navigator ready for Single-Activity apps
 + predefined navigator ready for setup transition animation
+
 **See the sample application**
 
 ## How to add
@@ -64,7 +67,7 @@ public class SampleApplication extends MvpApplication {
 ```
 
 ## How it works?
-![](https://habrastorage.org/files/4df/45d/973/4df45d9733fc4ee0a2f0be933de475b1.png)
+<img src="https://github.com/terrakok/Cicerone/raw/develop/media/CiceroneDiagram.png" alt="drawing" width="800"/>
 
 Presenter calls navigation method of Router.
 
@@ -81,14 +84,14 @@ public class SamplePresenter extends Presenter<SampleView> {
     }
 
     public void onForwardCommandClick() {
-        router.navigateTo("Some screen");
+        router.navigateTo(new SomeScreen());
     }
 }
 ```
 
-Router converts the navigation call to the set of Commands and sends them to CommandBuffer.  
+Router converts the navigation call to the set of Commands and sends them to CommandBuffer.
 
-CommandBuffer checks whether there are _"active"_ Navigator:  
+CommandBuffer checks whether there are _"active"_ Navigator:
 - If yes, it passes the commands to the Navigator. Navigator will process them to achive the desired transition.
 - If no, then CommandBuffer saves the commands in a queue, and will apply them as soon as new _"active"_ Navigator will appear.
 
@@ -122,8 +125,8 @@ protected void onPause() {
 
 private Navigator navigator = new Navigator() {
     @Override
-    public void applyCommand(Command command) {
-        //implement commands logic
+    public void applyCommands(Command[] commands) {
+        //implement commands logic (apply command batch to navigation container)
     }
 };
 ```
@@ -131,53 +134,27 @@ private Navigator navigator = new Navigator() {
 ## Navigation commands
 This commands set will fulfill the needs of the most applications. But if you need something special - just add it!
 + Forward - Opens new screen
-![](https://habrastorage.org/files/862/77e/b20/86277eb20b574dae8307ac4f64b0f090.png)
+![](https://github.com/terrakok/Cicerone/raw/develop/media/forward_img.png)
 + Back - Rolls back the last transition
-![](https://habrastorage.org/files/059/b63/2d3/059b632d3a7c4515a534b9e5e881c8f0.png)
+![](https://github.com/terrakok/Cicerone/raw/develop/media/back_img.png)
 + BackTo - Rolls back to the needed screen in the screens chain
-![](https://habrastorage.org/files/a45/4f4/c34/a454f4c340764632ad0669014ad5550d.png)
+![](https://github.com/terrakok/Cicerone/raw/develop/media/backTo_img.png)
 + Replace - Replaces the current screen
-![](https://habrastorage.org/files/4ae/95c/fee/4ae95cfee4c04f038ad17d358ab08d07.png)
-+ SystemMessage - Shows system message (Alert, Toast, Snack, etc.)
-![](https://habrastorage.org/files/6e7/1a6/4ed/6e71a64edec04079bf33faa7ab39606f.png)
+![](https://github.com/terrakok/Cicerone/raw/develop/media/replace_img.png)
 
 ## Predefined navigators
-The library provides predefined navigators for _Fragments_ to use inside _Activity_.
-To use, just provide it with the container and _FragmentManager_ and override few simple methods.
+The library provides predefined navigators for _Fragments_ and _Activity_.
+To use, just provide it with the container and _FragmentManager_.
 ```java
-private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
-    @Override
-    protected Intent createActivityIntent(Context context, String screenKey, Object data) {
-        return null;
-    }
-
-    @Override
-    protected Fragment createFragment(String screenKey, Object data) {
-        switch (screenKey) {
-            case Screens.PROFILE_SCREEN:
-                return new ProfileFragment();
-            case Screens.SELECT_PHOTO_SCREEN:
-                return SelectPhotoFragment.getNewInstance((int) data);
-        }
-        return null;
-    }
-
-    @Override
-    protected void setupFragmentTransactionAnimation(
-                Command command,
-                Fragment currentFragment,
-                Fragment nextFragment,
-                FragmentTransaction fragmentTransaction) {
-        //setup animation
-    }
-};
+private Navigator navigator = new SupportAppNavigator(this, R.id.container);
 ```
 ## Sample
 To see how to add, initialize and use the library and predefined navigators check out the sample.
+Or look at [GitFox (Android GitLab client)](https://gitlab.com/terrakok/gitlab-client)
 
-![](https://habrastorage.org/web/a94/d73/653/a94d736534694d9daa994e0c260fca28.gif)
-![](https://habrastorage.org/web/6dd/a19/15c/6dda1915cdcf4f14bed16fcffb3fd938.gif)
-![](https://habrastorage.org/web/a63/881/7f8/a638817f8bba49daacc4fa427987fabb.gif)
+![](https://github.com/terrakok/Cicerone/raw/develop/media/navigation.gif)
+![](https://github.com/terrakok/Cicerone/raw/develop/media/insta_tabs.gif)
+![](https://github.com/terrakok/Cicerone/raw/develop/media/animations.gif)
 
 ## Participants
 + idea and code - Konstantin Tskhovrebov (@terrakok)

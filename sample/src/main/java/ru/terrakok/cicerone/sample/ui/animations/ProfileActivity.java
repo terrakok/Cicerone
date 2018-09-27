@@ -1,7 +1,5 @@
 package ru.terrakok.cicerone.sample.ui.animations;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +12,7 @@ import javax.inject.Inject;
 
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
-import ru.terrakok.cicerone.android.SupportAppNavigator;
+import ru.terrakok.cicerone.android.support.SupportAppNavigator;
 import ru.terrakok.cicerone.commands.Command;
 import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
@@ -43,7 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_container);
 
         if (savedInstanceState == null) {
-            navigator.applyCommands(new Command[]{new Replace(Screens.PROFILE_SCREEN, null)});
+            navigator.applyCommands(new Command[]{new Replace(new Screens.ProfileInfoScreen())});
         }
     }
 
@@ -61,23 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
         @Override
-        protected Intent createActivityIntent(Context context, String screenKey, Object data) {
-            return null;
-        }
-
-        @Override
-        protected Fragment createFragment(String screenKey, Object data) {
-            switch (screenKey) {
-                case Screens.PROFILE_SCREEN:
-                    return new ProfileFragment();
-                case Screens.SELECT_PHOTO_SCREEN:
-                    return SelectPhotoFragment.getNewInstance((int) data);
-            }
-            return null;
-        }
-
-        @Override
-        protected void setupFragmentTransactionAnimation(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
+        protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
             if (command instanceof Forward
                     && currentFragment instanceof ProfileFragment
                     && nextFragment instanceof SelectPhotoFragment) {

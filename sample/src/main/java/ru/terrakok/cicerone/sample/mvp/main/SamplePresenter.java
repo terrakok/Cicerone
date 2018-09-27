@@ -1,5 +1,8 @@
 package ru.terrakok.cicerone.sample.mvp.main;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
@@ -36,23 +39,27 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
     }
 
     public void onForwardCommandClick() {
-        router.navigateTo(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+        router.navigateTo(new Screens.SampleScreen(screenNumber + 1));
     }
 
     public void onReplaceCommandClick() {
-        router.replaceScreen(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+        router.replaceScreen(new Screens.SampleScreen(screenNumber + 1));
     }
 
     public void onNewChainCommandClick() {
-        router.newScreenChain(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+        router.newChain(
+                new Screens.SampleScreen(screenNumber + 1),
+                new Screens.SampleScreen(screenNumber + 2),
+                new Screens.SampleScreen(screenNumber + 3)
+        );
+    }
+
+    public void onFinishChainCommandClick() {
+        router.finishChain();
     }
 
     public void onNewRootCommandClick() {
-        router.newRootScreen(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
-    }
-
-    public void onBackWithMessageCommandClick() {
-        router.exitWithMessage("Exit from 'Screen " + screenNumber + "'");
+        router.newRootScreen(new Screens.SampleScreen(screenNumber + 1));
     }
 
     public void onForwardWithDelayCommandClick() {
@@ -60,13 +67,20 @@ public class SamplePresenter extends MvpPresenter<SampleView> {
         future = executorService.schedule(new Runnable() {
             @Override
             public void run() {
-                //WARNING! Navigation must be only in UI thread. this method works only for sample :)
-                router.navigateTo(Screens.SAMPLE_SCREEN + (screenNumber + 1), screenNumber + 1);
+                //WARNING! Navigation must be only in UI thread.
+                new Handler(Looper.getMainLooper()).post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                router.navigateTo(new Screens.SampleScreen(screenNumber + 1));
+                            }
+                        }
+                );
             }
         }, 5, TimeUnit.SECONDS);
     }
 
     public void onBackToCommandClick() {
-        router.backTo(Screens.SAMPLE_SCREEN + 3);
+        router.backTo(new Screens.SampleScreen(3));
     }
 }
