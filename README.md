@@ -22,8 +22,11 @@ It was designed to be used with the MVP pattern (try [Moxy](https://github.com/A
 + suitable for Unit Testing
 
 ## Additional features
-+ easy screen result subscription
++ opening several screens inside single call (for example: deeplink)
++ implementation of parallel navigation (Instagram like)
++ predefined navigator ready for Single-Activity apps
 + predefined navigator ready for setup transition animation
+
 **See the sample application**
 
 ## How to add
@@ -64,7 +67,7 @@ public class SampleApplication extends MvpApplication {
 ```
 
 ## How it works?
-![](https://habrastorage.org/files/4df/45d/973/4df45d9733fc4ee0a2f0be933de475b1.png)
+<img src="https://github.com/terrakok/Cicerone/raw/develop/media/CiceroneDiagram.png" alt="drawing" width="800"/>
 
 Presenter calls navigation method of Router.
 
@@ -81,14 +84,14 @@ public class SamplePresenter extends Presenter<SampleView> {
     }
 
     public void onForwardCommandClick() {
-        router.navigateTo("Some screen");
+        router.navigateTo(new SomeScreen());
     }
 }
 ```
 
-Router converts the navigation call to the set of Commands and sends them to CommandBuffer.  
+Router converts the navigation call to the set of Commands and sends them to CommandBuffer.
 
-CommandBuffer checks whether there are _"active"_ Navigator:  
+CommandBuffer checks whether there are _"active"_ Navigator:
 - If yes, it passes the commands to the Navigator. Navigator will process them to achive the desired transition.
 - If no, then CommandBuffer saves the commands in a queue, and will apply them as soon as new _"active"_ Navigator will appear.
 
@@ -138,39 +141,12 @@ This commands set will fulfill the needs of the most applications. But if you ne
 ![](https://habrastorage.org/files/a45/4f4/c34/a454f4c340764632ad0669014ad5550d.png)
 + Replace - Replaces the current screen
 ![](https://habrastorage.org/files/4ae/95c/fee/4ae95cfee4c04f038ad17d358ab08d07.png)
-+ SystemMessage - Shows system message (Alert, Toast, Snack, etc.)
-![](https://habrastorage.org/files/6e7/1a6/4ed/6e71a64edec04079bf33faa7ab39606f.png)
 
 ## Predefined navigators
-The library provides predefined navigators for _Fragments_ to use inside _Activity_.
-To use, just provide it with the container and _FragmentManager_ and override few simple methods.
+The library provides predefined navigators for _Fragments_ and _Activity_.
+To use, just provide it with the container and _FragmentManager_.
 ```java
-private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
-    @Override
-    protected Intent createActivityIntent(Context context, String screenKey, Object data) {
-        return null;
-    }
-
-    @Override
-    protected Fragment createFragment(String screenKey, Object data) {
-        switch (screenKey) {
-            case Screens.PROFILE_SCREEN:
-                return new ProfileFragment();
-            case Screens.SELECT_PHOTO_SCREEN:
-                return SelectPhotoFragment.getNewInstance((int) data);
-        }
-        return null;
-    }
-
-    @Override
-    protected void setupFragmentTransactionAnimation(
-                Command command,
-                Fragment currentFragment,
-                Fragment nextFragment,
-                FragmentTransaction fragmentTransaction) {
-        //setup animation
-    }
-};
+private Navigator navigator = new SupportAppNavigator(this, R.id.container);
 ```
 ## Sample
 To see how to add, initialize and use the library and predefined navigators check out the sample.
