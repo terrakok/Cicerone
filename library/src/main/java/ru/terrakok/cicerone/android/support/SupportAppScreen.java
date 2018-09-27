@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import ru.terrakok.cicerone.Screen;
 
 /**
- * Created by Konstantin Tskhovrebov (aka @terrakok) on 09.09.18.
+ * AppScreen is base class for description and creation application screen. <br/>
+ * NOTE: If you have described the creation of Intent then Activity will be started. <br/>
+ * Recommendation: Use Intents for launch external application.
  */
 public abstract class SupportAppScreen extends Screen {
 

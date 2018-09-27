@@ -17,7 +17,9 @@ import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 
 /**
- * Created by Konstantin Tskhovrebov (aka @terrakok) on 20.09.18.
+ * Navigator implementation for launch fragments and activities. <br/>
+ * Feature {@link BackTo} works only for fragments. <br/>
+ * Recommendation: most useful for Single-Activity application.
  */
 public class AppNavigator implements Navigator {
 

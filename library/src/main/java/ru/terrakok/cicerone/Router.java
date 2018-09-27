@@ -66,6 +66,10 @@ public class Router extends BaseRouter {
         executeCommands(new BackTo(screen));
     }
 
+    /**
+     * Opens several screens inside single transaction.
+     * @param screens
+     */
     public void newChain(Screen... screens) {
         Command[] commands = new Command[screens.length];
         for (int i = 0; i < commands.length; i++) {
