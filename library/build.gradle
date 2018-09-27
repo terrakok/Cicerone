@@ -16,7 +16,7 @@ ext {
     bintrayName = 'cicerone'
     publishedGroupId = 'ru.terrakok.cicerone'
     artifact = 'cicerone'
-    libraryVersion = '3.0.0'
+    libraryVersion = '4.0.0'
     gitUrl = 'https://github.com/terrakok/Cicerone'
     allLicenses = ['MIT']
 }
