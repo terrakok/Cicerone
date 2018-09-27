@@ -1,10 +1,10 @@
 package ru.terrakok.cicerone;
 
 /**
- * Created by Konstantin Tskhovrebov (aka @terrakok) on 09.09.18.
+ * Screen is class for description application screen.
  */
 public abstract class Screen {
-    protected String screenKey = getClass().getSimpleName();
+    protected String screenKey = getClass().getCanonicalName();
 
     public String getScreenKey() {
         return screenKey;
