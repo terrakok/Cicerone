@@ -17,8 +17,8 @@ import ru.terrakok.cicerone.commands.Forward;
 import ru.terrakok.cicerone.commands.Replace;
 
 /**
- * Navigator implementation for launch fragments and activities. <br/>
- * Feature {@link BackTo} works only for fragments. <br/>
+ * Navigator implementation for launch fragments and activities.<br>
+ * Feature {@link BackTo} works only for fragments.<br>
  * Recommendation: most useful for Single-Activity application.
  */
 public class AppNavigator implements Navigator {
