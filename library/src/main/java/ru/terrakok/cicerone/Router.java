@@ -79,6 +79,19 @@ public class Router extends BaseRouter {
     }
 
     /**
+     * Clear current stack and open several screens inside single transaction.
+     * @param screens
+     */
+    public void newRootChain(Screen... screens) {
+        Command[] commands = new Command[screens.length + 1];
+        commands[0] = new BackTo(null);
+        for (int i = 0; i < commands.length; i++) {
+            commands[i + 1] = new Forward(screens[i]);
+        }
+        executeCommands(commands);
+    }
+
+    /**
      * Remove all screens from the chain and exit.
      * It's mostly used to finish the application or close a supplementary navigation chain.
      */
