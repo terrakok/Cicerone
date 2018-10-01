@@ -85,8 +85,11 @@ public class Router extends BaseRouter {
     public void newRootChain(Screen... screens) {
         Command[] commands = new Command[screens.length + 1];
         commands[0] = new BackTo(null);
-        for (int i = 0; i < commands.length; i++) {
-            commands[i + 1] = new Forward(screens[i]);
+        if (screens.length > 0) {
+            commands[1] = new Replace(screens[0]);
+            for (int i = 1; i < commands.length; i++) {
+                commands[i + 1] = new Forward(screens[i]);
+            }
         }
         executeCommands(commands);
     }
