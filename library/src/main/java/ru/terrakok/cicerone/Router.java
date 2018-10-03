@@ -87,7 +87,7 @@ public class Router extends BaseRouter {
         commands[0] = new BackTo(null);
         if (screens.length > 0) {
             commands[1] = new Replace(screens[0]);
-            for (int i = 1; i < commands.length; i++) {
+            for (int i = 1; i < screens.length; i++) {
                 commands[i + 1] = new Forward(screens[i]);
             }
         }
