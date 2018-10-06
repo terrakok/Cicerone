@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+
+// This is important even if Android Studio claims it isn't
+// used. Android can't interpret Java 8 byte code.
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+        debug {}
+    }
+
+}
+
+dependencies {
+    //Cicerone
+    implementation project(':library')
+
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
+}

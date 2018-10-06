@@ -6,6 +6,10 @@ import dagger.Component;
 import ru.terrakok.cicerone.sample.dagger.module.LocalNavigationModule;
 import ru.terrakok.cicerone.sample.dagger.module.NavigationModule;
 import ru.terrakok.cicerone.sample.dagger.module.PhotoSelectionModule;
+import ru.terrakok.cicerone.sample.ui.aac.AacActivity;
+import ru.terrakok.cicerone.sample.ui.aac.AacBlankFragment;
+import ru.terrakok.cicerone.sample.ui.aac.AacFirstSampleFragment;
+import ru.terrakok.cicerone.sample.ui.aac.AacSecondSampleFragment;
 import ru.terrakok.cicerone.sample.ui.animations.ProfileActivity;
 import ru.terrakok.cicerone.sample.ui.animations.photos.SelectPhotoFragment;
 import ru.terrakok.cicerone.sample.ui.animations.profile.ProfileFragment;
@@ -42,4 +46,12 @@ public interface AppComponent {
     void inject(SelectPhotoFragment fragment);
 
     void inject(ProfileActivity activity);
+
+    void inject(AacActivity activity);
+
+    void inject(AacBlankFragment fragment);
+
+    void inject(AacFirstSampleFragment fragment);
+
+    void inject(AacSecondSampleFragment fragment);
 }

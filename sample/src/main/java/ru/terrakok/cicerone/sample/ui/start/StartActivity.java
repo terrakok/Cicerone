@@ -66,6 +66,12 @@ public class StartActivity extends MvpAppCompatActivity implements StartActivity
                 presenter.onResultWithAnimationPressed();
             }
         });
+        findViewById(R.id.aac_flow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.onAacFlowPressed();
+            }
+        });
     }
 
     @Override
