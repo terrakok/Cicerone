@@ -20,5 +20,4 @@
         <activity android:name=".ui.animations.ProfileActivity" />
         <activity android:name=".ui.aac.AacActivity" />
     </application>
-
 </manifest>
