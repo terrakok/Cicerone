@@ -43,4 +43,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/result_and_anim_nav"/>
+
+    <Button
+        android:id="@+id/aac_flow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/aac_flow"/>
 </LinearLayout>

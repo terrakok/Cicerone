@@ -27,6 +27,10 @@ public class StartActivityPresenter extends MvpPresenter<StartActivityView> {
         router.navigateTo(new Screens.ProfileScreen());
     }
 
+    public void onAacFlowPressed() {
+        router.navigateTo(new Screens.AacScreenFlow());
+    }
+
     public void onBackPressed() {
         router.exit();
     }

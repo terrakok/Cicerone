@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 
+import ru.terrakok.cicerone.android.aac.AacScreen;
 import ru.terrakok.cicerone.android.support.SupportAppScreen;
+import ru.terrakok.cicerone.sample.ui.aac.AacActivity;
 import ru.terrakok.cicerone.sample.ui.animations.ProfileActivity;
 import ru.terrakok.cicerone.sample.ui.animations.photos.SelectPhotoFragment;
 import ru.terrakok.cicerone.sample.ui.animations.profile.ProfileFragment;
@@ -110,6 +112,38 @@ public class Screens {
         @Override
         public Fragment getFragment() {
             return new SelectPhotoFragment();
+        }
+    }
+
+    public static final class AacScreenFlow extends SupportAppScreen {
+
+        @Override
+        public Intent getActivityIntent(Context context) {
+            return new Intent(context, AacActivity.class);
+        }
+    }
+
+    public static final class AacBlankSampleScreen extends AacScreen {
+
+        @Override
+        public int getNavigationResId() {
+            return R.id.next_action_aac_blank;
+        }
+    }
+
+    public static final class AacFirstSampleScreen extends AacScreen {
+
+        @Override
+        public int getNavigationResId() {
+            return R.id.next_action_aac_first;
+        }
+    }
+
+    public static final class AacSecondSampleScreen extends AacScreen {
+
+        @Override
+        public int getNavigationResId() {
+            return R.id.next_action_aac_second;
         }
     }
 }
