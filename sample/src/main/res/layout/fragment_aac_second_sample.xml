@@ -13,10 +13,10 @@
     </android.support.v7.widget.Toolbar>
 
     <Button
-        android:id="@+id/btn_aac_blank"
+        android:id="@+id/aac_blank_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/btn_aac_blank"/>
+        android:text="@string/aac_blank"/>
 
 </FrameLayout>

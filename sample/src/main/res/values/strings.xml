@@ -10,7 +10,7 @@
     <string name="tab_bug">Bug</string>
     <string name="tab_dog">Dog</string>
 
-    <string name="btn_aac_blank">Aac blank fragment</string>
-    <string name="btn_aac_first">Aac first fragment</string>
-    <string name="btn_aac_second">Aac second fragment</string>
+    <string name="aac_blank">Aac blank fragment</string>
+    <string name="aac_first">Aac first fragment</string>
+    <string name="aac_second">Aac second fragment</string>
 </resources>

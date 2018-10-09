@@ -114,36 +114,4 @@ public class Screens {
             return new SelectPhotoFragment();
         }
     }
-
-    public static final class AacScreenFlow extends SupportAppScreen {
-
-        @Override
-        public Intent getActivityIntent(Context context) {
-            return new Intent(context, AacActivity.class);
-        }
-    }
-
-    public static final class AacBlankSampleScreen extends AacScreen {
-
-        @Override
-        public int getNavigationResId() {
-            return R.id.next_action_aac_blank;
-        }
-    }
-
-    public static final class AacFirstSampleScreen extends AacScreen {
-
-        @Override
-        public int getNavigationResId() {
-            return R.id.next_action_aac_first;
-        }
-    }
-
-    public static final class AacSecondSampleScreen extends AacScreen {
-
-        @Override
-        public int getNavigationResId() {
-            return R.id.next_action_aac_second;
-        }
-    }
 }

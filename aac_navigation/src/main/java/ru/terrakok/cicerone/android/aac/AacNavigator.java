@@ -36,7 +36,11 @@ public class AacNavigator implements Navigator {
         }
     }
 
-    protected void applyCommand(Command command) {
+    protected void finishActivity() {
+        activity.finish();
+    }
+
+    private void applyCommand(Command command) {
         if (command instanceof Forward) {
             fragmentForward(((Forward) command).getScreen());
         } else if (command instanceof Replace) {
@@ -55,15 +59,17 @@ public class AacNavigator implements Navigator {
 
     private void fragmentForward(Screen screen) {
         AacScreen aacScreen = checkScreenInstance(screen);
-        navController.navigate(aacScreen.getNavigationResId(),
+        navController.navigate(
+                aacScreen.getNavigationResId(),
                 aacScreen.getArgs(),
-                aacScreen.getNavOptions(), aacScreen.getNavExtras());
+                aacScreen.getNavOptions(),
+                aacScreen.getNavExtras());
     }
 
     private void fragmentBack() {
         // if we haven't popped fragment it means that no fragments left and we have to finish an activity
         if (!navController.popBackStack()) {
-            activity.finish();
+            finishActivity();
         }
     }
 

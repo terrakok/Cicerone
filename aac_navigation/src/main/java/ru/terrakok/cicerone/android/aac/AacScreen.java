@@ -9,8 +9,8 @@ import ru.terrakok.cicerone.Screen;
 
 public abstract class AacScreen extends Screen {
 
-    /*
-    It could be actionId or destinationId
+    /**
+     * It could be actionId or destinationId
      */
     @IdRes
     public abstract int getNavigationResId();

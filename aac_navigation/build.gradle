@@ -28,5 +28,5 @@ dependencies {
     //Cicerone
     implementation project(':library')
 
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
+    api 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
 }

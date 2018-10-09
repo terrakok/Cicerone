@@ -1,11 +1,12 @@
 package ru.terrakok.cicerone.sample.mvp.aac;
 
 import com.arellomobile.mvp.MvpPresenter;
+import com.arellomobile.mvp.MvpView;
 
 import ru.terrakok.cicerone.Router;
-import ru.terrakok.cicerone.sample.Screens;
+import ru.terrakok.cicerone.sample.AacScreens;
 
-public class AacFirstSamplePresenter extends MvpPresenter<AacFirstSampleView> {
+public class AacFirstSamplePresenter extends MvpPresenter<MvpView> {
 
     private final Router router;
 
@@ -14,6 +15,6 @@ public class AacFirstSamplePresenter extends MvpPresenter<AacFirstSampleView> {
     }
 
     public void onAacSecondPressed() {
-        router.navigateTo(new Screens.AacSecondSampleScreen());
+        router.navigateTo(new AacScreens.AacSecondSampleScreen());
     }
 }

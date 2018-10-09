@@ -13,10 +13,10 @@
     </android.support.v7.widget.Toolbar>
 
     <Button
-        android:id="@+id/btn_aac_first"
+        android:id="@+id/aac_first_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/btn_aac_first" />
+        android:text="@string/aac_first" />
 
 </FrameLayout>

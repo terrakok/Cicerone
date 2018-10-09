@@ -24,6 +24,14 @@ public class AacActivity extends MvpAppCompatActivity {
     private Navigator navigator;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SampleApplication.INSTANCE.getAppComponent().inject(this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_aac);
+        getOrCreateNavigator();
+    }
+
+    @Override
     protected void onResumeFragments() {
         super.onResumeFragments();
         navigatorHolder.setNavigator(getOrCreateNavigator());
@@ -33,14 +41,6 @@ public class AacActivity extends MvpAppCompatActivity {
     protected void onPause() {
         navigatorHolder.removeNavigator();
         super.onPause();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        SampleApplication.INSTANCE.getAppComponent().inject(this);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_aac);
-        getOrCreateNavigator();
     }
 
     @Override
