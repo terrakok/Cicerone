@@ -3,6 +3,7 @@ package ru.terrakok.cicerone.sample.mvp.start;
 import com.arellomobile.mvp.MvpPresenter;
 
 import ru.terrakok.cicerone.Router;
+import ru.terrakok.cicerone.sample.AacScreens;
 import ru.terrakok.cicerone.sample.Screens;
 
 /**
@@ -28,7 +29,7 @@ public class StartActivityPresenter extends MvpPresenter<StartActivityView> {
     }
 
     public void onAacFlowPressed() {
-        router.navigateTo(new Screens.AacScreenFlow());
+        router.navigateTo(new AacScreens.AacScreenFlow());
     }
 
     public void onBackPressed() {

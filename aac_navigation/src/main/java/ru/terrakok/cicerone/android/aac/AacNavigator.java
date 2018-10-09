@@ -53,7 +53,7 @@ public class AacNavigator implements Navigator {
     }
 
     private void fragmentReplace(Screen screen) {
-        fragmentBack();
+        navController.popBackStack();
         fragmentForward(screen);
     }
 
