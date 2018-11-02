@@ -5,11 +5,11 @@ repositories {
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0.0"
         applicationId "ru.terrakok.cicerone.sample"
@@ -27,15 +27,15 @@ android {
 }
 
 ext {
-    supportLibraryVersion = "25.3.0"
+    androidXVersion = "1.0.0"
     moxyVersion = "1.4.6"
     daggerVersion = "2.10"
 }
 
 dependencies {
     // Support libraries
-    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
-    implementation "com.android.support:design:$supportLibraryVersion"
+    implementation "androidx.appcompat:appcompat:$androidXVersion"
+    implementation "com.google.android.material:material:$androidXVersion"
 
     //MVP Moxy
     implementation "com.arello-mobile:moxy:$moxyVersion"

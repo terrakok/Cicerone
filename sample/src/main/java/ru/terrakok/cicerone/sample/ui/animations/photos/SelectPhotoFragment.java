@@ -1,12 +1,12 @@
 package ru.terrakok.cicerone.sample.ui.animations.photos;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -26,7 +26,8 @@ import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
  * Created by Konstantin Tskhovrebov (aka @terrakok) on 14.07.17.
  */
 
-public class SelectPhotoFragment extends MvpAppCompatFragment implements SelectPhotoView, BackButtonListener {
+public class SelectPhotoFragment extends MvpAppCompatFragment
+    implements SelectPhotoView, BackButtonListener {
     private static final String ARG_ANIM_DESTINATION = "arg_anim_dest";
 
     private ImageView photo1;

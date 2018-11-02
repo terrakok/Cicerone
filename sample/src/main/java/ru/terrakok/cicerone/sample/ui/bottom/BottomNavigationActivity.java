@@ -1,9 +1,9 @@
 package ru.terrakok.cicerone.sample.ui.bottom;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -27,7 +27,8 @@ import ru.terrakok.cicerone.sample.ui.common.RouterProvider;
 /**
  * Created by terrakok 25.11.16
  */
-public class BottomNavigationActivity extends MvpAppCompatActivity implements BottomNavigationView, RouterProvider {
+public class BottomNavigationActivity extends MvpAppCompatActivity
+    implements BottomNavigationView, RouterProvider {
     private BottomNavigationBar bottomNavigationBar;
 
     @Inject

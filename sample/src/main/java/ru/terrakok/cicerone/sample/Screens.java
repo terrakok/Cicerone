@@ -3,7 +3,7 @@ package ru.terrakok.cicerone.sample;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import ru.terrakok.cicerone.android.support.SupportAppScreen;
 import ru.terrakok.cicerone.sample.ui.animations.ProfileActivity;
