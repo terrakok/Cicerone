@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
@@ -25,7 +23,7 @@ import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
  * on 11.10.16
  */
 
-public class SampleFragment extends MvpAppCompatFragment implements SampleView, BackButtonListener {
+public class SampleFragment extends BaseFragment implements SampleView, BackButtonListener {
     private static final String EXTRA_NUMBER = "extra_number";
     private static final String EXTRA_TIME = "extra_time";
 
