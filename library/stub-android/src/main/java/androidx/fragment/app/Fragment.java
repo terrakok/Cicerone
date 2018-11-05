@@ -1,6 +1,7 @@
-package android.support.v4.app;
+package androidx.fragment.app;
 
 import android.os.Bundle;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)

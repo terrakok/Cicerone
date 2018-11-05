@@ -1,12 +1,11 @@
 package ru.terrakok.cicerone.sample.ui.main;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
