@@ -7,6 +7,9 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.LinkedList;
 
 import ru.terrakok.cicerone.Navigator;
@@ -28,18 +31,18 @@ public class AppNavigator implements Navigator {
     private final int containerId;
     private LinkedList<String> localStackCopy;
 
-    public AppNavigator(Activity activity, int containerId) {
+    public AppNavigator(@NotNull Activity activity, int containerId) {
         this(activity, activity.getFragmentManager(), containerId);
     }
 
-    public AppNavigator(Activity activity, FragmentManager fragmentManager, int containerId) {
+    public AppNavigator(@NotNull Activity activity, @NotNull FragmentManager fragmentManager, int containerId) {
         this.activity = activity;
         this.fragmentManager = fragmentManager;
         this.containerId = containerId;
     }
 
     @Override
-    public void applyCommands(Command[] commands) {
+    public void applyCommands(@NotNull Command[] commands) {
         fragmentManager.executePendingTransactions();
 
         //copy stack before apply commands
@@ -64,7 +67,7 @@ public class AppNavigator implements Navigator {
      *
      * @param command the navigation command to apply
      */
-    protected void applyCommand(Command command) {
+    protected void applyCommand(@NotNull Command command) {
         if (command instanceof Forward) {
             activityForward((Forward) command);
         } else if (command instanceof Replace) {
@@ -77,7 +80,7 @@ public class AppNavigator implements Navigator {
     }
 
 
-    protected void activityForward(Forward command) {
+    protected void activityForward(@NotNull Forward command) {
         AppScreen screen = (AppScreen) command.getScreen();
         Intent activityIntent = screen.getActivityIntent(activity);
 
@@ -90,7 +93,7 @@ public class AppNavigator implements Navigator {
         }
     }
 
-    protected void fragmentForward(Forward command) {
+    protected void fragmentForward(@NotNull Forward command) {
         AppScreen screen = (AppScreen) command.getScreen();
         Fragment fragment = createFragment(screen);
 
@@ -123,7 +126,7 @@ public class AppNavigator implements Navigator {
         activity.finish();
     }
 
-    protected void activityReplace(Replace command) {
+    protected void activityReplace(@NotNull Replace command) {
         AppScreen screen = (AppScreen) command.getScreen();
         Intent activityIntent = screen.getActivityIntent(activity);
 
@@ -137,7 +140,7 @@ public class AppNavigator implements Navigator {
         }
     }
 
-    protected void fragmentReplace(Replace command) {
+    protected void fragmentReplace(@NotNull Replace command) {
         AppScreen screen = (AppScreen) command.getScreen();
         Fragment fragment = createFragment(screen);
 
@@ -179,7 +182,7 @@ public class AppNavigator implements Navigator {
     /**
      * Performs {@link BackTo} command transition
      */
-    protected void backTo(BackTo command) {
+    protected void backTo(@NotNull BackTo command) {
         if (command.getScreen() == null) {
             backToRoot();
         } else {
@@ -213,10 +216,10 @@ public class AppNavigator implements Navigator {
      * @param nextFragment        next screen fragment
      * @param fragmentTransaction fragment transaction
      */
-    protected void setupFragmentTransaction(Command command,
-                                            Fragment currentFragment,
-                                            Fragment nextFragment,
-                                            FragmentTransaction fragmentTransaction) {
+    protected void setupFragmentTransaction(@NotNull Command command,
+                                            @Nullable Fragment currentFragment,
+                                            @Nullable Fragment nextFragment,
+                                            @NotNull FragmentTransaction fragmentTransaction) {
     }
 
     /**
@@ -226,11 +229,14 @@ public class AppNavigator implements Navigator {
      * @param activityIntent activity intent
      * @return transition options
      */
-    protected Bundle createStartActivityOptions(Command command, Intent activityIntent) {
+    @Nullable
+    protected Bundle createStartActivityOptions(@NotNull Command command, @NotNull Intent activityIntent) {
         return null;
     }
 
-    private void checkAndStartActivity(AppScreen screen, Intent activityIntent, Bundle options) {
+    private void checkAndStartActivity(@NotNull AppScreen screen,
+                                       @NotNull Intent activityIntent,
+                                       @Nullable Bundle options) {
         // Check if we can start activity
         if (activityIntent.resolveActivity(activity.getPackageManager()) != null) {
             activity.startActivity(activityIntent, options);
@@ -245,7 +251,7 @@ public class AppNavigator implements Navigator {
      * @param screen         screen
      * @param activityIntent intent passed to start Activity for the {@code screenKey}
      */
-    protected void unexistingActivity(AppScreen screen, Intent activityIntent) {
+    protected void unexistingActivity(@NotNull AppScreen screen, @NotNull Intent activityIntent) {
         // Do nothing by default
     }
 
@@ -255,7 +261,8 @@ public class AppNavigator implements Navigator {
      * @param screen screen
      * @return instantiated fragment for the passed screen
      */
-    protected Fragment createFragment(AppScreen screen) {
+    @Nullable
+    protected Fragment createFragment(@NotNull AppScreen screen) {
         Fragment fragment = screen.getFragment();
 
         if (fragment == null) {
@@ -270,11 +277,11 @@ public class AppNavigator implements Navigator {
      *
      * @param screen screen
      */
-    protected void backToUnexisting(AppScreen screen) {
+    protected void backToUnexisting(@NotNull AppScreen screen) {
         backToRoot();
     }
 
-    protected void errorWhileCreatingScreen(AppScreen screen) {
+    protected void errorWhileCreatingScreen(@NotNull AppScreen screen) {
         throw new RuntimeException("Can't create a screen: " + screen.getScreenKey());
     }
 }

@@ -4,6 +4,9 @@
 
 package ru.terrakok.cicerone;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import ru.terrakok.cicerone.commands.Back;
 import ru.terrakok.cicerone.commands.BackTo;
 import ru.terrakok.cicerone.commands.Command;
@@ -27,7 +30,7 @@ public class Router extends BaseRouter {
      *
      * @param screen screen
      */
-    public void navigateTo(Screen screen) {
+    public void navigateTo(@NotNull Screen screen) {
         executeCommands(new Forward(screen));
     }
 
@@ -36,7 +39,7 @@ public class Router extends BaseRouter {
      *
      * @param screen screen
      */
-    public void newRootScreen(Screen screen) {
+    public void newRootScreen(@NotNull Screen screen) {
         executeCommands(
                 new BackTo(null),
                 new Replace(screen)
@@ -51,7 +54,7 @@ public class Router extends BaseRouter {
      *
      * @param screen screen
      */
-    public void replaceScreen(Screen screen) {
+    public void replaceScreen(@NotNull Screen screen) {
         executeCommands(new Replace(screen));
     }
 
@@ -62,7 +65,7 @@ public class Router extends BaseRouter {
      *
      * @param screen screen
      */
-    public void backTo(Screen screen) {
+    public void backTo(@Nullable Screen screen) {
         executeCommands(new BackTo(screen));
     }
 
@@ -70,7 +73,7 @@ public class Router extends BaseRouter {
      * Opens several screens inside single transaction.
      * @param screens
      */
-    public void newChain(Screen... screens) {
+    public void newChain(@NotNull Screen... screens) {
         Command[] commands = new Command[screens.length];
         for (int i = 0; i < commands.length; i++) {
             commands[i] = new Forward(screens[i]);
@@ -82,7 +85,7 @@ public class Router extends BaseRouter {
      * Clear current stack and open several screens inside single transaction.
      * @param screens
      */
-    public void newRootChain(Screen... screens) {
+    public void newRootChain(@NotNull Screen... screens) {
         Command[] commands = new Command[screens.length + 1];
         commands[0] = new BackTo(null);
         if (screens.length > 0) {

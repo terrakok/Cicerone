@@ -4,6 +4,9 @@
 
 package ru.terrakok.cicerone;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -18,7 +21,7 @@ class CommandBuffer implements NavigatorHolder {
     private Queue<Command[]> pendingCommands = new LinkedList<>();
 
     @Override
-    public void setNavigator(Navigator navigator) {
+    public void setNavigator(@Nullable Navigator navigator) {
         this.navigator = navigator;
         while (!pendingCommands.isEmpty()) {
             if (navigator != null) {
@@ -37,7 +40,7 @@ class CommandBuffer implements NavigatorHolder {
      * Else puts it to the pending commands queue to pass it later.
      * @param commands navigation command array
      */
-    void executeCommands(Command[] commands) {
+    void executeCommands(@NotNull Command[] commands) {
         if (navigator != null) {
             navigator.applyCommands(commands);
         } else {
