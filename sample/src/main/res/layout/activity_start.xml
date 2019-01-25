@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v4.widget.Space
+    <androidx.legacy.widget.Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"/>
@@ -18,7 +18,7 @@
         android:text="@string/cicerone_description"
         android:textSize="18sp"/>
 
-    <android.support.v4.widget.Space
+    <androidx.legacy.widget.Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"/>

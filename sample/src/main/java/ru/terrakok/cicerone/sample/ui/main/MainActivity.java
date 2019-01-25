@@ -1,16 +1,17 @@
 package ru.terrakok.cicerone.sample.ui.main;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
-
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import java.util.List;
 import javax.inject.Inject;
 
 import ru.terrakok.cicerone.Navigator;
@@ -28,8 +29,9 @@ import ru.terrakok.cicerone.sample.ui.common.BackButtonListener;
  * on 11.10.16
  */
 
-public class MainActivity extends MvpAppCompatActivity {
+public class MainActivity extends MvpAppCompatActivity implements ChainHolder {
     private TextView screensSchemeTV;
+    private List<WeakReference<Fragment>> chain = new ArrayList<>();
 
     @Inject
     NavigatorHolder navigatorHolder;
@@ -84,10 +86,11 @@ public class MainActivity extends MvpAppCompatActivity {
 
     private void printScreensScheme() {
         ArrayList<SampleFragment> fragments = new ArrayList<>();
-        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-            if (fragment instanceof SampleFragment) {
-                fragments.add((SampleFragment) fragment);
-            }
+        for (WeakReference<Fragment> fragmentReference : chain) {
+          Fragment fragment = fragmentReference.get();
+          if (fragment != null && fragment instanceof SampleFragment) {
+            fragments.add((SampleFragment) fragment);
+          }
         }
         Collections.sort(fragments, new Comparator<SampleFragment>() {
             @Override
@@ -104,5 +107,10 @@ public class MainActivity extends MvpAppCompatActivity {
             keys.add(fragment.getNumber());
         }
         screensSchemeTV.setText("Chain: " + keys.toString() + "");
+    }
+
+    @Override
+    public List<WeakReference<Fragment>> getChain() {
+        return chain;
     }
 }
