@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.fragment.app.Fragment;
 
+import org.jetbrains.annotations.Nullable;
+
 import ru.terrakok.cicerone.Screen;
 
 /**
@@ -18,6 +20,11 @@ public abstract class SupportAppScreen extends Screen {
     }
 
     public Intent getActivityIntent(Context context) {
+        return null;
+    }
+
+    @Nullable
+    public FragmentParams getFragmentParams() {
         return null;
     }
 }

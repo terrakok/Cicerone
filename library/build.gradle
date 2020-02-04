@@ -8,6 +8,7 @@ targetCompatibility = JavaVersion.VERSION_1_7
 dependencies {
     compileOnly project(':stub-android')
     compileOnly 'com.google.android:android:4.1.1.4'
+    implementation "org.jetbrains:annotations:16.0.3"
 }
 
 ext {
