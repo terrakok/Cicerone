@@ -3,22 +3,16 @@ package ru.terrakok.cicerone.android.support;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.LinkedList;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.commands.Back;
-import ru.terrakok.cicerone.commands.BackTo;
-import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Forward;
-import ru.terrakok.cicerone.commands.Replace;
+import ru.terrakok.cicerone.commands.*;
+
+import java.util.LinkedList;
 
 /**
  * Navigator implementation for launch fragments and activities.<br>
@@ -50,7 +44,11 @@ public class SupportAppNavigator implements Navigator {
         copyStackToLocal();
 
         for (Command command : commands) {
-            applyCommand(command);
+            try {
+                applyCommand(command);
+            } catch (RuntimeException e) {
+                errorOnApplyCommand(command, e);
+            }
         }
     }
 
@@ -281,6 +279,7 @@ public class SupportAppNavigator implements Navigator {
 
         if (fragment == null) {
             errorWhileCreatingScreen(screen);
+            throw new RuntimeException("Can't create a screen: " + screen.getScreenKey());
         }
         return fragment;
     }
@@ -295,7 +294,25 @@ public class SupportAppNavigator implements Navigator {
         backToRoot();
     }
 
+    /**
+     * Called when we tried to create new intent or fragment but didn't receive them.
+     *
+     * @param screen screen
+     */
     protected void errorWhileCreatingScreen(@NotNull SupportAppScreen screen) {
-        throw new RuntimeException("Can't create a screen: " + screen.getScreenKey());
+        // Do nothing by default
+    }
+
+    /**
+     * Override this method if you want to handle apply command error.
+     *
+     * @param command command
+     * @param error error
+     */
+    protected void errorOnApplyCommand(
+            @NotNull Command command,
+            @NotNull RuntimeException error
+    ) {
+        throw error;
     }
 }
