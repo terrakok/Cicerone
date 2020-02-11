@@ -1,5 +1,7 @@
 package androidx.fragment.app;
 
+import android.os.Bundle;
+
 /**
  * Created by Konstantin Tckhovrebov (aka @terrakok)
  * on 11.10.16
@@ -7,6 +9,13 @@ package androidx.fragment.app;
 
 public class FragmentTransaction {
     public FragmentTransaction replace(int containerViewId, Fragment fragment) {
+        throw new RuntimeException("Stub!");
+    }
+
+    public final FragmentTransaction replace(
+            int containerViewId,
+            Class<? extends Fragment> fragmentClass,
+            Bundle args) {
         throw new RuntimeException("Stub!");
     }
 

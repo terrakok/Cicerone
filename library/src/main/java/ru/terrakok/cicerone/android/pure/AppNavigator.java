@@ -26,10 +26,10 @@ import ru.terrakok.cicerone.commands.Replace;
  */
 public class AppNavigator implements Navigator {
 
-    private final Activity activity;
-    private final FragmentManager fragmentManager;
-    private final int containerId;
-    private LinkedList<String> localStackCopy;
+    protected final Activity activity;
+    protected final FragmentManager fragmentManager;
+    protected final int containerId;
+    protected LinkedList<String> localStackCopy;
 
     public AppNavigator(@NotNull Activity activity, int containerId) {
         this(activity, activity.getFragmentManager(), containerId);

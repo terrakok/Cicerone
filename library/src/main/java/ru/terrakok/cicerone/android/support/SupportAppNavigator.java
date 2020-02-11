@@ -27,10 +27,10 @@ import ru.terrakok.cicerone.commands.Replace;
  */
 public class SupportAppNavigator implements Navigator {
 
-    private final Activity activity;
-    private final FragmentManager fragmentManager;
-    private final int containerId;
-    private LinkedList<String> localStackCopy;
+    protected final Activity activity;
+    protected final FragmentManager fragmentManager;
+    protected final int containerId;
+    protected LinkedList<String> localStackCopy;
 
     public SupportAppNavigator(@NotNull FragmentActivity activity, int containerId) {
         this(activity, activity.getSupportFragmentManager(), containerId);
@@ -96,7 +96,9 @@ public class SupportAppNavigator implements Navigator {
 
     protected void fragmentForward(@NotNull Forward command) {
         SupportAppScreen screen = (SupportAppScreen) command.getScreen();
-        Fragment fragment = createFragment(screen);
+
+        FragmentParams fragmentParams = screen.getFragmentParams();
+        Fragment fragment = fragmentParams == null ? createFragment(screen) : null;
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -104,11 +106,15 @@ public class SupportAppNavigator implements Navigator {
                 command,
                 fragmentManager.findFragmentById(containerId),
                 fragment,
-                fragmentTransaction
-        );
+                fragmentTransaction);
+
+        if (fragmentParams != null) {
+            fragmentTransaction.replace(containerId, fragmentParams.getFragmentClass(), fragmentParams.getArguments());
+        } else {
+            fragmentTransaction.replace(containerId, fragment);
+        }
 
         fragmentTransaction
-                .replace(containerId, fragment)
                 .addToBackStack(screen.getScreenKey())
                 .commit();
         localStackCopy.add(screen.getScreenKey());
@@ -143,7 +149,9 @@ public class SupportAppNavigator implements Navigator {
 
     protected void fragmentReplace(@NotNull Replace command) {
         SupportAppScreen screen = (SupportAppScreen) command.getScreen();
-        Fragment fragment = createFragment(screen);
+
+        FragmentParams fragmentParams = screen.getFragmentParams();
+        Fragment fragment = fragmentParams == null ? createFragment(screen) : null;
 
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
@@ -158,8 +166,15 @@ public class SupportAppNavigator implements Navigator {
                     fragmentTransaction
             );
 
+            if (fragmentParams != null) {
+                fragmentTransaction.replace(
+                        containerId,
+                        fragmentParams.getFragmentClass(),
+                        fragmentParams.getArguments());
+            } else {
+                fragmentTransaction.replace(containerId, fragment);
+            }
             fragmentTransaction
-                    .replace(containerId, fragment)
                     .addToBackStack(screen.getScreenKey())
                     .commit();
             localStackCopy.add(screen.getScreenKey());

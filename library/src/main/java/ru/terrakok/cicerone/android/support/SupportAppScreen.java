@@ -25,4 +25,9 @@ public abstract class SupportAppScreen extends Screen {
     public Intent getActivityIntent(@NotNull Context context) {
         return null;
     }
+
+    @Nullable
+    public FragmentParams getFragmentParams() {
+        return null;
+    }
 }
