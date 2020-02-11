@@ -6,18 +6,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.commands.*;
 
 import java.util.LinkedList;
-
-import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.commands.Back;
-import ru.terrakok.cicerone.commands.BackTo;
-import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Forward;
-import ru.terrakok.cicerone.commands.Replace;
 
 /**
  * Navigator implementation for launch fragments and activities.<br>
@@ -49,7 +43,11 @@ public class AppNavigator implements Navigator {
         copyStackToLocal();
 
         for (Command command : commands) {
-            applyCommand(command);
+            try {
+                applyCommand(command);
+            } catch (RuntimeException e) {
+                errorOnApplyCommand(command, e);
+            }
         }
     }
 
@@ -267,6 +265,7 @@ public class AppNavigator implements Navigator {
 
         if (fragment == null) {
             errorWhileCreatingScreen(screen);
+            throw new RuntimeException("Can't create a screen: " + screen.getScreenKey());
         }
         return fragment;
     }
@@ -281,7 +280,25 @@ public class AppNavigator implements Navigator {
         backToRoot();
     }
 
+    /**
+     * Called when we tried to create new intent or fragment but didn't receive them.
+     *
+     * @param screen screen
+     */
     protected void errorWhileCreatingScreen(@NotNull AppScreen screen) {
-        throw new RuntimeException("Can't create a screen: " + screen.getScreenKey());
+        // Do nothing by default
+    }
+
+    /**
+     * Override this method if you want to handle apply command error.
+     *
+     * @param command command
+     * @param error error
+     */
+    protected void errorOnApplyCommand(
+            @NotNull Command command,
+            @NotNull RuntimeException error
+    ) {
+        throw error;
     }
 }
