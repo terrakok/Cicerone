@@ -4,6 +4,8 @@
 
 package ru.terrakok.cicerone.commands;
 
+import org.jetbrains.annotations.Nullable;
+
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.Screen;
 
@@ -20,10 +22,11 @@ public class BackTo implements Command {
      *
      * @param screen screen
      */
-    public BackTo(Screen screen) {
+    public BackTo(@Nullable Screen screen) {
         this.screen = screen;
     }
 
+    @Nullable
     public Screen getScreen() {
         return screen;
     }

@@ -4,6 +4,8 @@
 
 package ru.terrakok.cicerone;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Cicerone is the holder for other library components.
  * To use it, instantiate it using one of the {@link #create()} methods.
@@ -15,14 +17,16 @@ package ru.terrakok.cicerone;
 public class Cicerone<T extends BaseRouter> {
     private T router;
 
-    private Cicerone(T router) {
+    private Cicerone(@NotNull T router) {
         this.router = router;
     }
 
+    @NotNull
     public NavigatorHolder getNavigatorHolder() {
         return router.getCommandBuffer();
     }
 
+    @NotNull
     public T getRouter() {
         return router;
     }
@@ -30,6 +34,7 @@ public class Cicerone<T extends BaseRouter> {
     /**
      * Creates the Cicerone instance with the default {@link Router router}
      */
+    @NotNull
     public static Cicerone<Router> create() {
         return create(new Router());
     }
@@ -38,7 +43,8 @@ public class Cicerone<T extends BaseRouter> {
      * Creates the Cicerone instance with the custom router.
      * @param customRouter the custom router extending {@link BaseRouter}
      */
-    public static <T extends BaseRouter> Cicerone<T> create(T customRouter) {
+    @NotNull
+    public static <T extends BaseRouter> Cicerone<T> create(@NotNull T customRouter) {
         return new Cicerone<>(customRouter);
     }
 }

@@ -4,6 +4,8 @@
 
 package ru.terrakok.cicerone;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Navigator holder interface.
  * Use it to connect a {@link Navigator} to the {@link Cicerone}.
@@ -15,7 +17,7 @@ public interface NavigatorHolder {
      *
      * @param navigator new active Navigator
      */
-    void setNavigator(Navigator navigator);
+    void setNavigator(@NotNull Navigator navigator);
 
     /**
      * Remove the current Navigator and stop receive commands.

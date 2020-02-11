@@ -2,10 +2,11 @@ package ru.terrakok.cicerone.android.support;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.fragment.app.Fragment;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import androidx.fragment.app.Fragment;
 import ru.terrakok.cicerone.Screen;
 
 /**
@@ -15,11 +16,13 @@ import ru.terrakok.cicerone.Screen;
  */
 public abstract class SupportAppScreen extends Screen {
 
+    @Nullable
     public Fragment getFragment() {
         return null;
     }
 
-    public Intent getActivityIntent(Context context) {
+    @Nullable
+    public Intent getActivityIntent(@NotNull Context context) {
         return null;
     }
 
