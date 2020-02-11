@@ -7,15 +7,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.commands.*;
 
 import java.util.LinkedList;
-
-import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.commands.Back;
-import ru.terrakok.cicerone.commands.BackTo;
-import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Forward;
-import ru.terrakok.cicerone.commands.Replace;
 
 /**
  * Navigator implementation for launch fragments and activities.<br>
@@ -24,30 +21,34 @@ import ru.terrakok.cicerone.commands.Replace;
  */
 public class SupportAppNavigator implements Navigator {
 
-    private final Activity activity;
-    private final FragmentManager fragmentManager;
-    private final int containerId;
-    private LinkedList<String> localStackCopy;
+    protected final Activity activity;
+    protected final FragmentManager fragmentManager;
+    protected final int containerId;
+    protected LinkedList<String> localStackCopy;
 
-    public SupportAppNavigator(FragmentActivity activity, int containerId) {
+    public SupportAppNavigator(@NotNull FragmentActivity activity, int containerId) {
         this(activity, activity.getSupportFragmentManager(), containerId);
     }
 
-    public SupportAppNavigator(FragmentActivity activity, FragmentManager fragmentManager, int containerId) {
+    public SupportAppNavigator(@NotNull FragmentActivity activity, @NotNull FragmentManager fragmentManager, int containerId) {
         this.activity = activity;
         this.fragmentManager = fragmentManager;
         this.containerId = containerId;
     }
 
     @Override
-    public void applyCommands(Command[] commands) {
+    public void applyCommands(@NotNull Command[] commands) {
         fragmentManager.executePendingTransactions();
 
         //copy stack before apply commands
         copyStackToLocal();
 
         for (Command command : commands) {
-            applyCommand(command);
+            try {
+                applyCommand(command);
+            } catch (RuntimeException e) {
+                errorOnApplyCommand(command, e);
+            }
         }
     }
 
@@ -65,7 +66,7 @@ public class SupportAppNavigator implements Navigator {
      *
      * @param command the navigation command to apply
      */
-    protected void applyCommand(Command command) {
+    protected void applyCommand(@NotNull Command command) {
         if (command instanceof Forward) {
             activityForward((Forward) command);
         } else if (command instanceof Replace) {
@@ -78,7 +79,7 @@ public class SupportAppNavigator implements Navigator {
     }
 
 
-    protected void activityForward(Forward command) {
+    protected void activityForward(@NotNull Forward command) {
         SupportAppScreen screen = (SupportAppScreen) command.getScreen();
         Intent activityIntent = screen.getActivityIntent(activity);
 
@@ -91,9 +92,11 @@ public class SupportAppNavigator implements Navigator {
         }
     }
 
-    protected void fragmentForward(Forward command) {
+    protected void fragmentForward(@NotNull Forward command) {
         SupportAppScreen screen = (SupportAppScreen) command.getScreen();
-        Fragment fragment = createFragment(screen);
+
+        FragmentParams fragmentParams = screen.getFragmentParams();
+        Fragment fragment = fragmentParams == null ? createFragment(screen) : null;
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -101,11 +104,15 @@ public class SupportAppNavigator implements Navigator {
                 command,
                 fragmentManager.findFragmentById(containerId),
                 fragment,
-                fragmentTransaction
-        );
+                fragmentTransaction);
+
+        if (fragmentParams != null) {
+            fragmentTransaction.replace(containerId, fragmentParams.getFragmentClass(), fragmentParams.getArguments());
+        } else {
+            fragmentTransaction.replace(containerId, fragment);
+        }
 
         fragmentTransaction
-                .replace(containerId, fragment)
                 .addToBackStack(screen.getScreenKey())
                 .commit();
         localStackCopy.add(screen.getScreenKey());
@@ -124,7 +131,7 @@ public class SupportAppNavigator implements Navigator {
         activity.finish();
     }
 
-    protected void activityReplace(Replace command) {
+    protected void activityReplace(@NotNull Replace command) {
         SupportAppScreen screen = (SupportAppScreen) command.getScreen();
         Intent activityIntent = screen.getActivityIntent(activity);
 
@@ -138,9 +145,11 @@ public class SupportAppNavigator implements Navigator {
         }
     }
 
-    protected void fragmentReplace(Replace command) {
+    protected void fragmentReplace(@NotNull Replace command) {
         SupportAppScreen screen = (SupportAppScreen) command.getScreen();
-        Fragment fragment = createFragment(screen);
+
+        FragmentParams fragmentParams = screen.getFragmentParams();
+        Fragment fragment = fragmentParams == null ? createFragment(screen) : null;
 
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
@@ -155,8 +164,15 @@ public class SupportAppNavigator implements Navigator {
                     fragmentTransaction
             );
 
+            if (fragmentParams != null) {
+                fragmentTransaction.replace(
+                        containerId,
+                        fragmentParams.getFragmentClass(),
+                        fragmentParams.getArguments());
+            } else {
+                fragmentTransaction.replace(containerId, fragment);
+            }
             fragmentTransaction
-                    .replace(containerId, fragment)
                     .addToBackStack(screen.getScreenKey())
                     .commit();
             localStackCopy.add(screen.getScreenKey());
@@ -180,7 +196,7 @@ public class SupportAppNavigator implements Navigator {
     /**
      * Performs {@link BackTo} command transition
      */
-    protected void backTo(BackTo command) {
+    protected void backTo(@NotNull BackTo command) {
         if (command.getScreen() == null) {
             backToRoot();
         } else {
@@ -214,10 +230,10 @@ public class SupportAppNavigator implements Navigator {
      * @param nextFragment        next screen fragment
      * @param fragmentTransaction fragment transaction
      */
-    protected void setupFragmentTransaction(Command command,
-                                            Fragment currentFragment,
-                                            Fragment nextFragment,
-                                            FragmentTransaction fragmentTransaction) {
+    protected void setupFragmentTransaction(@NotNull Command command,
+                                            @Nullable Fragment currentFragment,
+                                            @Nullable Fragment nextFragment,
+                                            @NotNull FragmentTransaction fragmentTransaction) {
     }
 
     /**
@@ -227,11 +243,12 @@ public class SupportAppNavigator implements Navigator {
      * @param activityIntent activity intent
      * @return transition options
      */
-    protected Bundle createStartActivityOptions(Command command, Intent activityIntent) {
+    @Nullable
+    protected Bundle createStartActivityOptions(@NotNull Command command, @NotNull Intent activityIntent) {
         return null;
     }
 
-    private void checkAndStartActivity(SupportAppScreen screen, Intent activityIntent, Bundle options) {
+    private void checkAndStartActivity(@NotNull SupportAppScreen screen, @NotNull Intent activityIntent, @Nullable Bundle options) {
         // Check if we can start activity
         if (activityIntent.resolveActivity(activity.getPackageManager()) != null) {
             activity.startActivity(activityIntent, options);
@@ -246,7 +263,7 @@ public class SupportAppNavigator implements Navigator {
      * @param screen         screen
      * @param activityIntent intent passed to start Activity for the {@code screenKey}
      */
-    protected void unexistingActivity(SupportAppScreen screen, Intent activityIntent) {
+    protected void unexistingActivity(@NotNull SupportAppScreen screen, @NotNull Intent activityIntent) {
         // Do nothing by default
     }
 
@@ -256,11 +273,13 @@ public class SupportAppNavigator implements Navigator {
      * @param screen screen
      * @return instantiated fragment for the passed screen
      */
-    protected Fragment createFragment(SupportAppScreen screen) {
+    @Nullable
+    protected Fragment createFragment(@NotNull SupportAppScreen screen) {
         Fragment fragment = screen.getFragment();
 
         if (fragment == null) {
             errorWhileCreatingScreen(screen);
+            throw new RuntimeException("Can't create a screen: " + screen.getScreenKey());
         }
         return fragment;
     }
@@ -271,11 +290,29 @@ public class SupportAppNavigator implements Navigator {
      *
      * @param screen screen
      */
-    protected void backToUnexisting(SupportAppScreen screen) {
+    protected void backToUnexisting(@NotNull SupportAppScreen screen) {
         backToRoot();
     }
 
-    protected void errorWhileCreatingScreen(SupportAppScreen screen) {
-        throw new RuntimeException("Can't create a screen: " + screen.getScreenKey());
+    /**
+     * Called when we tried to create new intent or fragment but didn't receive them.
+     *
+     * @param screen screen
+     */
+    protected void errorWhileCreatingScreen(@NotNull SupportAppScreen screen) {
+        // Do nothing by default
+    }
+
+    /**
+     * Override this method if you want to handle apply command error.
+     *
+     * @param command command
+     * @param error error
+     */
+    protected void errorOnApplyCommand(
+            @NotNull Command command,
+            @NotNull RuntimeException error
+    ) {
+        throw error;
     }
 }

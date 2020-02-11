@@ -4,12 +4,15 @@
 
 package ru.terrakok.cicerone.commands;
 
+import org.jetbrains.annotations.NotNull;
+
 import ru.terrakok.cicerone.Screen;
 
 /**
  * Replaces the current screen.
  */
 public class Replace implements Command {
+    @NotNull
     private Screen screen;
 
     /**
@@ -17,10 +20,11 @@ public class Replace implements Command {
      *
      * @param screen screen
      */
-    public Replace(Screen screen) {
+    public Replace(@NotNull Screen screen) {
         this.screen = screen;
     }
 
+    @NotNull
     public Screen getScreen() {
         return screen;
     }

@@ -4,6 +4,8 @@
 
 package ru.terrakok.cicerone;
 
+import org.jetbrains.annotations.NotNull;
+
 import ru.terrakok.cicerone.commands.Command;
 
 /**
@@ -17,5 +19,5 @@ public interface Navigator {
      *
      * @param commands the navigation command array to apply per single transaction
      */
-    void applyCommands(Command[] commands);
+    void applyCommands(@NotNull Command[] commands);
 }

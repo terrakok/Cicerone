@@ -8,6 +8,7 @@ targetCompatibility = JavaVersion.VERSION_1_7
 dependencies {
     compileOnly project(':stub-android')
     compileOnly 'com.google.android:android:4.1.1.4'
+    implementation "org.jetbrains:annotations:16.0.3"
 }
 
 ext {
@@ -16,7 +17,7 @@ ext {
     bintrayName = 'cicerone'
     publishedGroupId = 'ru.terrakok.cicerone'
     artifact = 'cicerone'
-    libraryVersion = '5.0.0'
+    libraryVersion = '5.1.0'
     gitUrl = 'https://github.com/terrakok/Cicerone'
     allLicenses = ['MIT']
 }
@@ -24,7 +25,7 @@ ext {
 // Configuration of the library uploading to the Bintray
 // Note: Call 'bintrayUpload' task (it will execute 'install' task first)
 // I try to include as little properties as possible in these files
-project.archivesBaseName ='cicerone' // to fix that project name different from artifact name
+project.archivesBaseName = 'cicerone' // to fix that project name different from artifact name
 apply from: 'androidmaven.gradle'
 apply from: 'bintray.gradle'
 

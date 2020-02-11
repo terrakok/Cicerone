@@ -4,6 +4,8 @@
 
 package ru.terrakok.cicerone;
 
+import org.jetbrains.annotations.NotNull;
+
 import ru.terrakok.cicerone.commands.Command;
 
 /**
@@ -17,6 +19,7 @@ public abstract class BaseRouter {
         this.commandBuffer = new CommandBuffer();
     }
 
+    @NotNull
     CommandBuffer getCommandBuffer() {
         return commandBuffer;
     }
@@ -26,7 +29,7 @@ public abstract class BaseRouter {
      *
      * @param commands navigation command array to execute
      */
-    protected void executeCommands(Command... commands) {
+    protected void executeCommands(@NotNull Command... commands) {
         commandBuffer.executeCommands(commands);
     }
 }

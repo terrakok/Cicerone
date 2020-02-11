@@ -4,6 +4,8 @@
 
 package ru.terrakok.cicerone.commands;
 
+import org.jetbrains.annotations.NotNull;
+
 import ru.terrakok.cicerone.Screen;
 
 /**
@@ -17,10 +19,11 @@ public class Forward implements Command {
      *
      * @param screen screen
      */
-    public Forward(Screen screen) {
+    public Forward(@NotNull Screen screen) {
         this.screen = screen;
     }
 
+    @NotNull
     public Screen getScreen() {
         return screen;
     }
