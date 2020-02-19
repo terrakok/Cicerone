@@ -3,16 +3,23 @@ package ru.terrakok.cicerone.android.support;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.commands.*;
 
 import java.util.LinkedList;
+
+import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.commands.Back;
+import ru.terrakok.cicerone.commands.BackTo;
+import ru.terrakok.cicerone.commands.Command;
+import ru.terrakok.cicerone.commands.Forward;
+import ru.terrakok.cicerone.commands.Replace;
 
 /**
  * Navigator implementation for launch fragments and activities.<br>
@@ -164,14 +171,8 @@ public class SupportAppNavigator implements Navigator {
                     fragmentTransaction
             );
 
-            if (fragmentParams != null) {
-                fragmentTransaction.replace(
-                        containerId,
-                        fragmentParams.getFragmentClass(),
-                        fragmentParams.getArguments());
-            } else {
-                fragmentTransaction.replace(containerId, fragment);
-            }
+            fragmentReplaceInternal(fragmentTransaction, fragmentParams, fragment);
+
             fragmentTransaction
                     .addToBackStack(screen.getScreenKey())
                     .commit();
@@ -187,9 +188,25 @@ public class SupportAppNavigator implements Navigator {
                     fragmentTransaction
             );
 
-            fragmentTransaction
-                    .replace(containerId, fragment)
-                    .commit();
+            fragmentReplaceInternal(fragmentTransaction, fragmentParams, fragment);
+
+            fragmentTransaction.commit();
+        }
+    }
+
+    private void fragmentReplaceInternal(
+            @NotNull FragmentTransaction transaction,
+            @Nullable FragmentParams params,
+            @Nullable Fragment fragment
+    ) {
+        if (params != null) {
+            transaction.replace(
+                    containerId,
+                    params.getFragmentClass(),
+                    params.getArguments()
+            );
+        } else {
+            transaction.replace(containerId, fragment);
         }
     }
 
@@ -307,7 +324,7 @@ public class SupportAppNavigator implements Navigator {
      * Override this method if you want to handle apply command error.
      *
      * @param command command
-     * @param error error
+     * @param error   error
      */
     protected void errorOnApplyCommand(
             @NotNull Command command,
