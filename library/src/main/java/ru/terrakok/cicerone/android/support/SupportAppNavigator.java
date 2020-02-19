@@ -113,15 +113,12 @@ public class SupportAppNavigator implements Navigator {
                 fragment,
                 fragmentTransaction);
 
-        if (fragmentParams != null) {
-            fragmentTransaction.replace(containerId, fragmentParams.getFragmentClass(), fragmentParams.getArguments());
-        } else {
-            fragmentTransaction.replace(containerId, fragment);
-        }
+        fragmentReplaceInternal(fragmentTransaction, screen, fragmentParams, fragment);
 
         fragmentTransaction
                 .addToBackStack(screen.getScreenKey())
                 .commit();
+
         localStackCopy.add(screen.getScreenKey());
     }
 
@@ -171,11 +168,12 @@ public class SupportAppNavigator implements Navigator {
                     fragmentTransaction
             );
 
-            fragmentReplaceInternal(fragmentTransaction, fragmentParams, fragment);
+            fragmentReplaceInternal(fragmentTransaction, screen, fragmentParams, fragment);
 
             fragmentTransaction
                     .addToBackStack(screen.getScreenKey())
                     .commit();
+
             localStackCopy.add(screen.getScreenKey());
 
         } else {
@@ -188,7 +186,7 @@ public class SupportAppNavigator implements Navigator {
                     fragmentTransaction
             );
 
-            fragmentReplaceInternal(fragmentTransaction, fragmentParams, fragment);
+            fragmentReplaceInternal(fragmentTransaction, screen, fragmentParams, fragment);
 
             fragmentTransaction.commit();
         }
@@ -196,6 +194,7 @@ public class SupportAppNavigator implements Navigator {
 
     private void fragmentReplaceInternal(
             @NotNull FragmentTransaction transaction,
+            @NotNull SupportAppScreen screen,
             @Nullable FragmentParams params,
             @Nullable Fragment fragment
     ) {
@@ -205,8 +204,11 @@ public class SupportAppNavigator implements Navigator {
                     params.getFragmentClass(),
                     params.getArguments()
             );
-        } else {
+        } else if (fragment != null) {
             transaction.replace(containerId, fragment);
+        } else {
+            throw new IllegalArgumentException("Either 'params' or 'fragment' shouldn't " +
+                    "be null for " + screen.getScreenKey());
         }
     }
 
