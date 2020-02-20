@@ -105,21 +105,7 @@ public class SupportAppNavigator implements Navigator {
         FragmentParams fragmentParams = screen.getFragmentParams();
         Fragment fragment = fragmentParams == null ? createFragment(screen) : null;
 
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        setupFragmentTransaction(
-                command,
-                fragmentManager.findFragmentById(containerId),
-                fragment,
-                fragmentTransaction);
-
-        fragmentReplaceInternal(fragmentTransaction, screen, fragmentParams, fragment);
-
-        fragmentTransaction
-                .addToBackStack(screen.getScreenKey())
-                .commit();
-
-        localStackCopy.add(screen.getScreenKey());
+        forwardFragmentInternal(command, screen, fragmentParams, fragment);
     }
 
     protected void fragmentBack() {
@@ -159,22 +145,7 @@ public class SupportAppNavigator implements Navigator {
             fragmentManager.popBackStack();
             localStackCopy.removeLast();
 
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            setupFragmentTransaction(
-                    command,
-                    fragmentManager.findFragmentById(containerId),
-                    fragment,
-                    fragmentTransaction
-            );
-
-            fragmentReplaceInternal(fragmentTransaction, screen, fragmentParams, fragment);
-
-            fragmentTransaction
-                    .addToBackStack(screen.getScreenKey())
-                    .commit();
-
-            localStackCopy.add(screen.getScreenKey());
+            forwardFragmentInternal(command, screen, fragmentParams, fragment);
 
         } else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -186,13 +157,37 @@ public class SupportAppNavigator implements Navigator {
                     fragmentTransaction
             );
 
-            fragmentReplaceInternal(fragmentTransaction, screen, fragmentParams, fragment);
+            replaceFragmentInternal(fragmentTransaction, screen, fragmentParams, fragment);
 
             fragmentTransaction.commit();
         }
     }
 
-    private void fragmentReplaceInternal(
+    private void forwardFragmentInternal(
+            @NotNull Command command,
+            @NotNull SupportAppScreen screen,
+            @Nullable FragmentParams fragmentParams,
+            @Nullable Fragment fragment
+    ) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        setupFragmentTransaction(
+                command,
+                fragmentManager.findFragmentById(containerId),
+                fragment,
+                fragmentTransaction
+        );
+
+        replaceFragmentInternal(fragmentTransaction, screen, fragmentParams, fragment);
+
+        fragmentTransaction
+                .addToBackStack(screen.getScreenKey())
+                .commit();
+
+        localStackCopy.add(screen.getScreenKey());
+    }
+
+    private void replaceFragmentInternal(
             @NotNull FragmentTransaction transaction,
             @NotNull SupportAppScreen screen,
             @Nullable FragmentParams params,
