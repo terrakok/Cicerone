@@ -3,14 +3,13 @@ package ru.terrakok.cicerone.sample.mvp.main;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.MvpPresenter;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import moxy.InjectViewState;
+import moxy.MvpPresenter;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.Screens;
 

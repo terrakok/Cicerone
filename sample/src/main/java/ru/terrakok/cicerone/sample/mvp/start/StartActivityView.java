@@ -1,6 +1,7 @@
 package ru.terrakok.cicerone.sample.mvp.start;
 
-import com.arellomobile.mvp.MvpView;
+
+import moxy.MvpView;
 
 /**
  * Created by terrakok 21.11.16

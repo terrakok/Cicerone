@@ -24,11 +24,15 @@ android {
         debug {
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 ext {
     androidXVersion = "1.0.0"
-    moxyVersion = "1.4.6"
+    moxyVersion = "2.1.1"
     daggerVersion = "2.10"
 }
 
@@ -38,9 +42,9 @@ dependencies {
     implementation "com.google.android.material:material:$androidXVersion"
 
     //MVP Moxy
-    implementation "com.arello-mobile:moxy:$moxyVersion"
-    implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
-    annotationProcessor "com.arello-mobile:moxy-compiler:$moxyVersion"
+    implementation "com.github.moxy-community:moxy:$moxyVersion"
+    implementation "com.github.moxy-community:moxy-app-compat:$moxyVersion"
+    annotationProcessor "com.github.moxy-community:moxy-compiler:$moxyVersion"
 
     //Cicerone
     implementation project(':library')

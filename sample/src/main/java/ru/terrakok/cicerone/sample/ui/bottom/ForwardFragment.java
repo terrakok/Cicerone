@@ -8,10 +8,10 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import com.arellomobile.mvp.MvpAppCompatFragment;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import moxy.MvpAppCompatFragment;
+import moxy.presenter.InjectPresenter;
+import moxy.presenter.ProvidePresenter;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.mvp.bottom.forward.ForwardPresenter;
 import ru.terrakok.cicerone.sample.mvp.bottom.forward.ForwardView;

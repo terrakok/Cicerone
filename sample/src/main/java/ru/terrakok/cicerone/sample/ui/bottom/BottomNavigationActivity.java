@@ -5,9 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
@@ -15,6 +12,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import moxy.MvpAppCompatActivity;
+import moxy.presenter.InjectPresenter;
+import moxy.presenter.ProvidePresenter;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
@@ -97,17 +97,15 @@ public class BottomNavigationActivity extends MvpAppCompatActivity
         FragmentManager fm = getSupportFragmentManager();
         Fragment currentFragment = null;
         List<Fragment> fragments = fm.getFragments();
-        if (fragments != null) {
-            for (Fragment f : fragments) {
-                if (f.isVisible()) {
-                    currentFragment = f;
-                    break;
-                }
+        for (Fragment f : fragments) {
+            if (f.isVisible()) {
+                currentFragment = f;
+                break;
             }
         }
         Fragment newFragment = fm.findFragmentByTag(tab);
 
-        if (currentFragment != null && newFragment != null && currentFragment == newFragment) return;
+        if (newFragment != null && currentFragment == newFragment) return;
 
         FragmentTransaction transaction = fm.beginTransaction();
         if (newFragment == null) {
@@ -129,18 +127,13 @@ public class BottomNavigationActivity extends MvpAppCompatActivity
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = null;
         List<Fragment> fragments = fm.getFragments();
-        if (fragments != null) {
-            for (Fragment f : fragments) {
-                if (f.isVisible()) {
-                    fragment = f;
-                    break;
-                }
+        for (Fragment f : fragments) {
+            if (f.isVisible()) {
+                fragment = f;
+                break;
             }
         }
-        if (fragment != null
-                && fragment instanceof BackButtonListener
-                && ((BackButtonListener) fragment).onBackPressed()) {
-            return;
+        if (fragment instanceof BackButtonListener && ((BackButtonListener) fragment).onBackPressed()) {
         } else {
             presenter.onBackPressed();
         }

@@ -1,8 +1,8 @@
 package ru.terrakok.cicerone.sample.mvp.bottom;
 
-import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.MvpPresenter;
 
+import moxy.InjectViewState;
+import moxy.MvpPresenter;
 import ru.terrakok.cicerone.Router;
 
 /**

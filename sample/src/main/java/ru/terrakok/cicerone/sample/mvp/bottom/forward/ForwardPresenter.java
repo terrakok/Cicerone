@@ -1,8 +1,7 @@
 package ru.terrakok.cicerone.sample.mvp.bottom.forward;
 
-import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.MvpPresenter;
-
+import moxy.InjectViewState;
+import moxy.MvpPresenter;
 import ru.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.Screens;
 
@@ -25,13 +24,13 @@ public class ForwardPresenter extends MvpPresenter<ForwardView> {
     }
 
     private String createChain(int number) {
-        String chain = "[0]";
+        StringBuilder chain = new StringBuilder("[0]");
 
         for (int i = 0; i < number; i++) {
-            chain += "➔" + (i + 1);
+            chain.append("➔").append(i + 1);
         }
 
-        return chain;
+        return chain.toString();
     }
 
     public void onForwardPressed() {
