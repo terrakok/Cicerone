@@ -5,7 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.widget.TextView;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
+import org.jetbrains.annotations.NotNull;
+
+import moxy.MvpAppCompatActivity;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,7 +40,7 @@ public class MainActivity extends MvpAppCompatActivity implements ChainHolder {
 
     private Navigator navigator = new SupportAppNavigator(this, R.id.main_container) {
         @Override
-        public void applyCommands(Command[] commands) {
+        public void applyCommands(@NotNull Command[] commands) {
             super.applyCommands(commands);
             getSupportFragmentManager().executePendingTransactions();
             printScreensScheme();

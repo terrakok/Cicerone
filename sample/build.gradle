@@ -5,11 +5,11 @@ repositories {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0.0"
         applicationId "ru.terrakok.cicerone.sample"
@@ -24,12 +24,17 @@ android {
         debug {
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 ext {
-    androidXVersion = "1.0.0"
-    moxyVersion = "1.4.6"
-    daggerVersion = "2.10"
+    androidXVersion = "1.1.0"
+    moxyVersion = "2.1.2"
+    daggerVersion = "2.27"
 }
 
 dependencies {
@@ -38,9 +43,9 @@ dependencies {
     implementation "com.google.android.material:material:$androidXVersion"
 
     //MVP Moxy
-    implementation "com.arello-mobile:moxy:$moxyVersion"
-    implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
-    annotationProcessor "com.arello-mobile:moxy-compiler:$moxyVersion"
+    implementation "com.github.moxy-community:moxy:$moxyVersion"
+    implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
+    annotationProcessor "com.github.moxy-community:moxy-compiler:$moxyVersion"
 
     //Cicerone
     implementation project(':library')
@@ -50,7 +55,7 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
     //Bottom Navigation Bar
-    implementation ('com.ashokvarma.android:bottom-navigation-bar:1.3.0') {
+    implementation ('com.ashokvarma.android:bottom-navigation-bar:2.2.0') {
         exclude group: "com.android.support", module: "design"
     }
 }

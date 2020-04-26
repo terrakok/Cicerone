@@ -3,9 +3,9 @@ package ru.terrakok.cicerone.sample.ui.start;
 import android.os.Bundle;
 import android.view.View;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
+import moxy.MvpAppCompatActivity;
+import moxy.presenter.InjectPresenter;
+import moxy.presenter.ProvidePresenter;
 
 import javax.inject.Inject;
 

@@ -3,7 +3,7 @@ package ru.terrakok.cicerone.sample.ui.main;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import com.arellomobile.mvp.MvpAppCompatFragment;
+import moxy.MvpAppCompatFragment;
 
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
