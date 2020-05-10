@@ -3,16 +3,23 @@ package ru.terrakok.cicerone.android.support;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.commands.*;
 
 import java.util.LinkedList;
+
+import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.commands.Back;
+import ru.terrakok.cicerone.commands.BackTo;
+import ru.terrakok.cicerone.commands.Command;
+import ru.terrakok.cicerone.commands.Forward;
+import ru.terrakok.cicerone.commands.Replace;
 
 /**
  * Navigator implementation for launch fragments and activities.<br>
@@ -98,24 +105,7 @@ public class SupportAppNavigator implements Navigator {
         FragmentParams fragmentParams = screen.getFragmentParams();
         Fragment fragment = fragmentParams == null ? createFragment(screen) : null;
 
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        setupFragmentTransaction(
-                command,
-                fragmentManager.findFragmentById(containerId),
-                fragment,
-                fragmentTransaction);
-
-        if (fragmentParams != null) {
-            fragmentTransaction.replace(containerId, fragmentParams.getFragmentClass(), fragmentParams.getArguments());
-        } else {
-            fragmentTransaction.replace(containerId, fragment);
-        }
-
-        fragmentTransaction
-                .addToBackStack(screen.getScreenKey())
-                .commit();
-        localStackCopy.add(screen.getScreenKey());
+        forwardFragmentInternal(command, screen, fragmentParams, fragment);
     }
 
     protected void fragmentBack() {
@@ -155,27 +145,7 @@ public class SupportAppNavigator implements Navigator {
             fragmentManager.popBackStack();
             localStackCopy.removeLast();
 
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            setupFragmentTransaction(
-                    command,
-                    fragmentManager.findFragmentById(containerId),
-                    fragment,
-                    fragmentTransaction
-            );
-
-            if (fragmentParams != null) {
-                fragmentTransaction.replace(
-                        containerId,
-                        fragmentParams.getFragmentClass(),
-                        fragmentParams.getArguments());
-            } else {
-                fragmentTransaction.replace(containerId, fragment);
-            }
-            fragmentTransaction
-                    .addToBackStack(screen.getScreenKey())
-                    .commit();
-            localStackCopy.add(screen.getScreenKey());
+            forwardFragmentInternal(command, screen, fragmentParams, fragment);
 
         } else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -187,9 +157,53 @@ public class SupportAppNavigator implements Navigator {
                     fragmentTransaction
             );
 
-            fragmentTransaction
-                    .replace(containerId, fragment)
-                    .commit();
+            replaceFragmentInternal(fragmentTransaction, screen, fragmentParams, fragment);
+
+            fragmentTransaction.commit();
+        }
+    }
+
+    private void forwardFragmentInternal(
+            @NotNull Command command,
+            @NotNull SupportAppScreen screen,
+            @Nullable FragmentParams fragmentParams,
+            @Nullable Fragment fragment
+    ) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        setupFragmentTransaction(
+                command,
+                fragmentManager.findFragmentById(containerId),
+                fragment,
+                fragmentTransaction
+        );
+
+        replaceFragmentInternal(fragmentTransaction, screen, fragmentParams, fragment);
+
+        fragmentTransaction
+                .addToBackStack(screen.getScreenKey())
+                .commit();
+
+        localStackCopy.add(screen.getScreenKey());
+    }
+
+    private void replaceFragmentInternal(
+            @NotNull FragmentTransaction transaction,
+            @NotNull SupportAppScreen screen,
+            @Nullable FragmentParams params,
+            @Nullable Fragment fragment
+    ) {
+        if (params != null) {
+            transaction.replace(
+                    containerId,
+                    params.getFragmentClass(),
+                    params.getArguments()
+            );
+        } else if (fragment != null) {
+            transaction.replace(containerId, fragment);
+        } else {
+            throw new IllegalArgumentException("Either 'params' or 'fragment' shouldn't " +
+                    "be null for " + screen.getScreenKey());
         }
     }
 
@@ -307,7 +321,7 @@ public class SupportAppNavigator implements Navigator {
      * Override this method if you want to handle apply command error.
      *
      * @param command command
-     * @param error error
+     * @param error   error
      */
     protected void errorOnApplyCommand(
             @NotNull Command command,
