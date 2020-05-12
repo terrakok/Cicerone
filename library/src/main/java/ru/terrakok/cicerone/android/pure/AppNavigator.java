@@ -94,6 +94,7 @@ public class AppNavigator implements Navigator {
     protected void fragmentForward(@NotNull Forward command) {
         AppScreen screen = (AppScreen) command.getScreen();
         Fragment fragment = createFragment(screen);
+        String screenKey = screen.getScreenKey();
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -105,10 +106,10 @@ public class AppNavigator implements Navigator {
         );
 
         fragmentTransaction
-                .replace(containerId, fragment)
-                .addToBackStack(screen.getScreenKey())
+                .replace(containerId, fragment, screenKey)
+                .addToBackStack(screenKey)
                 .commit();
-        localStackCopy.add(screen.getScreenKey());
+        localStackCopy.add(screenKey);
     }
 
     protected void fragmentBack() {
@@ -141,6 +142,7 @@ public class AppNavigator implements Navigator {
     protected void fragmentReplace(@NotNull Replace command) {
         AppScreen screen = (AppScreen) command.getScreen();
         Fragment fragment = createFragment(screen);
+        String screenKey = screen.getScreenKey();
 
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
@@ -156,10 +158,10 @@ public class AppNavigator implements Navigator {
             );
 
             fragmentTransaction
-                    .replace(containerId, fragment)
-                    .addToBackStack(screen.getScreenKey())
+                    .replace(containerId, fragment, screenKey)
+                    .addToBackStack(screenKey)
                     .commit();
-            localStackCopy.add(screen.getScreenKey());
+            localStackCopy.add(screenKey);
 
         } else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -172,7 +174,7 @@ public class AppNavigator implements Navigator {
             );
 
             fragmentTransaction
-                    .replace(containerId, fragment)
+                    .replace(containerId, fragment, screenKey)
                     .commit();
         }
     }

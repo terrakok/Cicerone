@@ -8,14 +8,15 @@ import android.os.Bundle;
  */
 
 public class FragmentTransaction {
-    public FragmentTransaction replace(int containerViewId, Fragment fragment) {
+    public FragmentTransaction replace(int containerViewId, Fragment fragment, String tag) {
         throw new RuntimeException("Stub!");
     }
 
     public final FragmentTransaction replace(
             int containerViewId,
             Class<? extends Fragment> fragmentClass,
-            Bundle args) {
+            Bundle args,
+            String tag) {
         throw new RuntimeException("Stub!");
     }
 

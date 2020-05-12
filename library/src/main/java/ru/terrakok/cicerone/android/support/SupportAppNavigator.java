@@ -193,17 +193,19 @@ public class SupportAppNavigator implements Navigator {
             @Nullable FragmentParams params,
             @Nullable Fragment fragment
     ) {
+        String screenKey = screen.getScreenKey();
         if (params != null) {
             transaction.replace(
                     containerId,
                     params.getFragmentClass(),
-                    params.getArguments()
+                    params.getArguments(),
+                    screenKey
             );
         } else if (fragment != null) {
-            transaction.replace(containerId, fragment);
+            transaction.replace(containerId, fragment, screenKey);
         } else {
             throw new IllegalArgumentException("Either 'params' or 'fragment' shouldn't " +
-                    "be null for " + screen.getScreenKey());
+                    "be null for " + screenKey);
         }
     }
 
