@@ -31,7 +31,17 @@ public class Router extends BaseRouter {
      * @param screen screen
      */
     public void navigateTo(@NotNull Screen screen) {
-        executeCommands(new Forward(screen));
+        navigateTo(screen, true);
+    }
+
+    /**
+     * Open new screen and add it to the screens chain.
+     *
+     * @param screen screen
+     * @param clearContainer if FALSE then new screen shows over previous
+     */
+    public void navigateTo(@NotNull Screen screen, boolean clearContainer) {
+        executeCommands(new Forward(screen, clearContainer));
     }
 
     /**
@@ -71,27 +81,49 @@ public class Router extends BaseRouter {
 
     /**
      * Opens several screens inside single transaction.
+     *
      * @param screens
      */
     public void newChain(@NotNull Screen... screens) {
+        newChain(true, screens);
+    }
+
+    /**
+     * Opens several screens inside single transaction.
+     *
+     * @param showOnlyTopScreenView if FALSE then all screen views show together
+     * @param screens
+     */
+    public void newChain(boolean showOnlyTopScreenView, @NotNull Screen... screens) {
         Command[] commands = new Command[screens.length];
         for (int i = 0; i < commands.length; i++) {
-            commands[i] = new Forward(screens[i]);
+            commands[i] = new Forward(screens[i], showOnlyTopScreenView);
         }
         executeCommands(commands);
     }
 
     /**
      * Clear current stack and open several screens inside single transaction.
+     *
      * @param screens
      */
     public void newRootChain(@NotNull Screen... screens) {
+        newRootChain(true, screens);
+    }
+
+    /**
+     * Clear current stack and open several screens inside single transaction.
+     *
+     * @param showOnlyTopScreenView if FALSE then all screen views show together
+     * @param screens
+     */
+    public void newRootChain(boolean showOnlyTopScreenView, @NotNull Screen... screens) {
         Command[] commands = new Command[screens.length + 1];
         commands[0] = new BackTo(null);
         if (screens.length > 0) {
             commands[1] = new Replace(screens[0]);
             for (int i = 1; i < screens.length; i++) {
-                commands[i + 1] = new Forward(screens[i]);
+                commands[i + 1] = new Forward(screens[i], showOnlyTopScreenView);
             }
         }
         executeCommands(commands);

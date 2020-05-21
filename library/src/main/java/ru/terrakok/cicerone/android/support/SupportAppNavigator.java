@@ -105,7 +105,49 @@ public class SupportAppNavigator implements Navigator {
         FragmentParams fragmentParams = screen.getFragmentParams();
         Fragment fragment = fragmentParams == null ? createFragment(screen) : null;
 
-        forwardFragmentInternal(command, screen, fragmentParams, fragment);
+        Transaction.Type type;
+        if (command.isClearContainer()) type = Transaction.Type.REPLACE;
+        else type = Transaction.Type.ADD;
+
+        fragmentForwardInternal(
+                command,
+                screen,
+                fragmentParams,
+                fragment,
+                type
+        );
+    }
+
+    private void fragmentForwardInternal(
+            @NotNull Command command,
+            @NotNull SupportAppScreen screen,
+            @Nullable FragmentParams fragmentParams,
+            @Nullable Fragment fragment,
+            @NotNull Transaction.Type transactionType
+    ) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        setupFragmentTransaction(
+                command,
+                fragmentManager.findFragmentById(containerId),
+                fragment,
+                fragmentTransaction
+        );
+
+        addNewFragmentToTransaction(
+                fragmentTransaction,
+                screen,
+                fragmentParams,
+                fragment,
+                transactionType
+        );
+
+        Transaction transaction = new Transaction(transactionType, screen.getScreenKey());
+
+        fragmentTransaction
+                .addToBackStack(transaction.toString())
+                .commit();
+        localStackCopy.add(transaction.toString());
     }
 
     protected void fragmentBack() {
@@ -143,9 +185,16 @@ public class SupportAppNavigator implements Navigator {
 
         if (localStackCopy.size() > 0) {
             fragmentManager.popBackStack();
-            localStackCopy.removeLast();
+            String removedTransactionStr = localStackCopy.removeLast();
+            Transaction removedTransaction = Transaction.fromString(removedTransactionStr);
 
-            forwardFragmentInternal(command, screen, fragmentParams, fragment);
+            fragmentForwardInternal(
+                    command,
+                    screen,
+                    fragmentParams,
+                    fragment,
+                    removedTransaction.type
+            );
 
         } else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -157,50 +206,45 @@ public class SupportAppNavigator implements Navigator {
                     fragmentTransaction
             );
 
-            replaceFragmentInternal(fragmentTransaction, screen, fragmentParams, fragment);
+            addNewFragmentToTransaction(
+                    fragmentTransaction,
+                    screen,
+                    fragmentParams,
+                    fragment,
+                    Transaction.Type.REPLACE //cause it's first screen
+            );
 
             fragmentTransaction.commit();
         }
     }
 
-    private void forwardFragmentInternal(
-            @NotNull Command command,
-            @NotNull SupportAppScreen screen,
-            @Nullable FragmentParams fragmentParams,
-            @Nullable Fragment fragment
-    ) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        setupFragmentTransaction(
-                command,
-                fragmentManager.findFragmentById(containerId),
-                fragment,
-                fragmentTransaction
-        );
-
-        replaceFragmentInternal(fragmentTransaction, screen, fragmentParams, fragment);
-
-        fragmentTransaction
-                .addToBackStack(screen.getScreenKey())
-                .commit();
-
-        localStackCopy.add(screen.getScreenKey());
-    }
-
-    private void replaceFragmentInternal(
+    private void addNewFragmentToTransaction(
             @NotNull FragmentTransaction transaction,
             @NotNull SupportAppScreen screen,
             @Nullable FragmentParams params,
-            @Nullable Fragment fragment
+            @Nullable Fragment fragment,
+            @NotNull Transaction.Type transactionType
     ) {
         if (params != null) {
-            transaction.replace(
-                    containerId,
-                    params.getFragmentClass(),
-                    params.getArguments()
-            );
+            if (transactionType == Transaction.Type.REPLACE) {
+                transaction.replace(
+                        containerId,
+                        params.getFragmentClass(),
+                        params.getArguments()
+                );
+            } else if (transactionType == Transaction.Type.ADD) {
+                transaction.add(
+                        containerId,
+                        params.getFragmentClass(),
+                        params.getArguments()
+                );
+            }
         } else if (fragment != null) {
-            transaction.replace(containerId, fragment);
+            if (transactionType == Transaction.Type.REPLACE) {
+                transaction.replace(containerId, fragment);
+            } else if (transactionType == Transaction.Type.ADD) {
+                transaction.add(containerId, fragment);
+            }
         } else {
             throw new IllegalArgumentException("Either 'params' or 'fragment' shouldn't " +
                     "be null for " + screen.getScreenKey());

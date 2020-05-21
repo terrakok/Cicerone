@@ -8,6 +8,17 @@ import android.os.Bundle;
  */
 
 public class FragmentTransaction {
+    public FragmentTransaction add(int containerViewId, Fragment fragment) {
+        throw new RuntimeException("Stub!");
+    }
+
+    public final FragmentTransaction add(
+            int containerViewId,
+            Class<? extends Fragment> fragmentClass,
+            Bundle args) {
+        throw new RuntimeException("Stub!");
+    }
+
     public FragmentTransaction replace(int containerViewId, Fragment fragment) {
         throw new RuntimeException("Stub!");
     }
