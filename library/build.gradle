@@ -1,5 +1,5 @@
-apply plugin: 'java'
 apply plugin: 'kotlin'
+apply plugin: 'maven-publish'
 
 // This is important even if Android Studio claims it isn't
 // used. Android can't interpret Java 8 byte code.
@@ -9,7 +9,6 @@ targetCompatibility = JavaVersion.VERSION_1_7
 dependencies {
     compileOnly project(':stub-android')
     compileOnly 'com.google.android:android:4.1.1.4'
-    implementation "org.jetbrains:annotations:16.0.3"
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
 }
 
@@ -17,9 +16,9 @@ ext {
     // This params is for the library uploading to the Bintray
     bintrayRepo = 'terramaven'
     bintrayName = 'cicerone'
-    publishedGroupId = 'ru.terrakok.cicerone'
+    publishedGroupId = 'com.github.terrakok'
     artifact = 'cicerone'
-    libraryVersion = '5.1.1'
+    libraryVersion = '6.0-dev'
     gitUrl = 'https://github.com/terrakok/Cicerone'
     allLicenses = ['MIT']
 }
@@ -33,7 +32,7 @@ apply from: 'bintray.gradle'
 
 // Tasks for sources and javadocs jars
 task sourcesJar(type: Jar) {
-    from sourceSets.main.java.srcDirs
+    from sourceSets.main.kotlin.srcDirs
     classifier = 'sources'
 }
 
@@ -41,7 +40,22 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
+
 artifacts {
     archives javadocJar
     archives sourcesJar
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = publishedGroupId
+            artifactId = artifact
+            version = libraryVersion
+
+            artifact sourcesJar
+            artifact javadocJar
+            from components.java
+        }
+    }
 }
