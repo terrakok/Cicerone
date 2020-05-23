@@ -10,12 +10,13 @@ import android.view.View;
 
 import javax.inject.Inject;
 
-import ru.terrakok.cicerone.Navigator;
-import ru.terrakok.cicerone.NavigatorHolder;
-import ru.terrakok.cicerone.android.support.SupportAppNavigator;
-import ru.terrakok.cicerone.commands.Command;
-import ru.terrakok.cicerone.commands.Forward;
-import ru.terrakok.cicerone.commands.Replace;
+import com.github.terrakok.cicerone.Navigator;
+import com.github.terrakok.cicerone.NavigatorHolder;
+import com.github.terrakok.cicerone.androidx.AppNavigator;
+import com.github.terrakok.cicerone.androidx.FragmentParams;
+import com.github.terrakok.cicerone.commands.Command;
+import com.github.terrakok.cicerone.commands.Forward;
+import com.github.terrakok.cicerone.commands.Replace;
 import ru.terrakok.cicerone.sample.R;
 import ru.terrakok.cicerone.sample.SampleApplication;
 import ru.terrakok.cicerone.sample.Screens;
@@ -57,9 +58,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private Navigator navigator = new SupportAppNavigator(this, R.id.container) {
+    private Navigator navigator = new AppNavigator(this, R.id.container) {
         @Override
-        protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentTransaction fragmentTransaction) {
+        protected void setupFragmentTransaction(Command command, Fragment currentFragment, Fragment nextFragment, FragmentParams nextFragmentParams, FragmentTransaction fragmentTransaction) {
             if (command instanceof Forward
                     && currentFragment instanceof ProfileFragment
                     && nextFragment instanceof SelectPhotoFragment) {

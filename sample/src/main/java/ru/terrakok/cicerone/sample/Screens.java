@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import androidx.fragment.app.Fragment;
 
-import ru.terrakok.cicerone.android.support.SupportAppScreen;
+import com.github.terrakok.cicerone.androidx.AppScreen;
 import ru.terrakok.cicerone.sample.ui.animations.ProfileActivity;
 import ru.terrakok.cicerone.sample.ui.animations.photos.SelectPhotoFragment;
 import ru.terrakok.cicerone.sample.ui.animations.profile.ProfileFragment;
@@ -22,12 +22,16 @@ import ru.terrakok.cicerone.sample.ui.start.StartActivity;
  */
 
 public class Screens {
-    public static final class SampleScreen extends SupportAppScreen {
+    public static final class SampleScreen extends AppScreen {
         private final int number;
+
+        @Override
+        public String getScreenKey() {
+            return getClass().getSimpleName() + "_" + number;
+        }
 
         public SampleScreen(int number) {
             this.number = number;
-            this.screenKey = getClass().getSimpleName() + "_" + number;
         }
 
         @Override
@@ -36,28 +40,28 @@ public class Screens {
         }
     }
 
-    public static final class StartScreen extends SupportAppScreen {
+    public static final class StartScreen extends AppScreen {
         @Override
         public Intent getActivityIntent(Context context) {
             return new Intent(context, StartActivity.class);
         }
     }
 
-    public static final class MainScreen extends SupportAppScreen {
+    public static final class MainScreen extends AppScreen {
         @Override
         public Intent getActivityIntent(Context context) {
             return new Intent(context, MainActivity.class);
         }
     }
 
-    public static final class BottomNavigationScreen extends SupportAppScreen {
+    public static final class BottomNavigationScreen extends AppScreen {
         @Override
         public Intent getActivityIntent(Context context) {
             return new Intent(context, BottomNavigationActivity.class);
         }
     }
 
-    public static final class TabScreen extends SupportAppScreen {
+    public static final class TabScreen extends AppScreen {
         private final String tabName;
 
         public TabScreen(String tabName) {
@@ -70,7 +74,7 @@ public class Screens {
         }
     }
 
-    public static final class ForwardScreen extends SupportAppScreen {
+    public static final class ForwardScreen extends AppScreen {
         private final String containerName;
         private final int number;
 
@@ -85,28 +89,28 @@ public class Screens {
         }
     }
 
-    public static final class GithubScreen extends SupportAppScreen {
+    public static final class GithubScreen extends AppScreen {
         @Override
         public Intent getActivityIntent(Context context) {
             return new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/terrakok/Cicerone"));
         }
     }
 
-    public static final class ProfileScreen extends SupportAppScreen {
+    public static final class ProfileScreen extends AppScreen {
         @Override
         public Intent getActivityIntent(Context context) {
             return new Intent(context, ProfileActivity.class);
         }
     }
 
-    public static final class ProfileInfoScreen extends SupportAppScreen {
+    public static final class ProfileInfoScreen extends AppScreen {
         @Override
         public Fragment getFragment() {
             return new ProfileFragment();
         }
     }
 
-    public static final class SelectPhotoScreen extends SupportAppScreen {
+    public static final class SelectPhotoScreen extends AppScreen {
         @Override
         public Fragment getFragment() {
             return new SelectPhotoFragment();

@@ -2,8 +2,8 @@ package ru.terrakok.cicerone.sample.subnavigation;
 
 import java.util.HashMap;
 
-import ru.terrakok.cicerone.Cicerone;
-import ru.terrakok.cicerone.Router;
+import com.github.terrakok.cicerone.Cicerone;
+import com.github.terrakok.cicerone.Router;
 
 /**
  * Created by terrakok 27.11.16

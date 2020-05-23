@@ -3,7 +3,7 @@ package ru.terrakok.cicerone.sample.mvp.bottom.forward;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
-import ru.terrakok.cicerone.Router;
+import com.github.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.Screens;
 
 /**

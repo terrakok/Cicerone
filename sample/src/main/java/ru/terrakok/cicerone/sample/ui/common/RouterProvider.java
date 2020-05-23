@@ -1,6 +1,6 @@
 package ru.terrakok.cicerone.sample.ui.common;
 
-import ru.terrakok.cicerone.Router;
+import com.github.terrakok.cicerone.Router;
 
 /**
  * Created by terrakok 25.11.16

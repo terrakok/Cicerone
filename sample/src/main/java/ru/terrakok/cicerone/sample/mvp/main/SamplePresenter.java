@@ -11,7 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import ru.terrakok.cicerone.Router;
+import com.github.terrakok.cicerone.Router;
 import ru.terrakok.cicerone.sample.Screens;
 
 /**
