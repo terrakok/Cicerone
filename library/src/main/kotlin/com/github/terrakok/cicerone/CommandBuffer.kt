@@ -1,7 +1,5 @@
 package com.github.terrakok.cicerone
 
-import com.github.terrakok.cicerone.commands.Command
-
 /**
  * Passes navigation command to an active [Navigator]
  * or stores it in the pending commands queue to pass it later.

@@ -1,6 +1,4 @@
-package com.github.terrakok.cicerone.commands
-
-import com.github.terrakok.cicerone.Screen
+package com.github.terrakok.cicerone
 
 /**
  * Navigation command describes screens transition.

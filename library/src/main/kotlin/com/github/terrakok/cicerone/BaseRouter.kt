@@ -1,7 +1,5 @@
 package com.github.terrakok.cicerone
 
-import com.github.terrakok.cicerone.commands.Command
-
 /**
  * BaseRouter is an abstract class to implement high-level navigation.
  *

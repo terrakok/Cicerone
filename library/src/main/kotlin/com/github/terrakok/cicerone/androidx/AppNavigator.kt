@@ -1,13 +1,13 @@
 package com.github.terrakok.cicerone.androidx
 
 import android.content.Intent
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.github.terrakok.cicerone.Navigator
-import com.github.terrakok.cicerone.commands.*
+import com.github.terrakok.cicerone.*
+import com.github.terrakok.cicerone.androidx.TransactionInfo.Type.ADD
+import com.github.terrakok.cicerone.androidx.TransactionInfo.Type.REPLACE
 
 /**
  * Navigator implementation for launch fragments and activities.
@@ -16,7 +16,7 @@ import com.github.terrakok.cicerone.commands.*
  *
  * Recommendation: most useful for Single-Activity application.
  */
-open class AppNavigator @JvmOverloads constructor(
+open class AppNavigator constructor(
     protected val activity: FragmentActivity,
     protected val containerId: Int,
     protected val fragmentManager: FragmentManager = activity.supportFragmentManager
@@ -54,66 +54,46 @@ open class AppNavigator @JvmOverloads constructor(
      */
     protected open fun applyCommand(command: Command) {
         when (command) {
-            is Forward -> activityForward((command))
-            is Replace -> activityReplace((command))
-            is BackTo -> backTo((command))
-            is Back -> fragmentBack()
+            is Forward -> forward(command)
+            is Replace -> replace(command)
+            is BackTo -> backTo(command)
+            is Back -> back()
         }
     }
 
-    protected open fun activityForward(command: Forward) {
-        val screen = command.screen as AppScreen
-        val activityIntent = screen.getActivityIntent(activity)
-
-        // Start activity
-        if (activityIntent != null) {
-            val options = createStartActivityOptions(command, activityIntent)
-            checkAndStartActivity(screen, activityIntent, options)
-        } else {
-            fragmentForward(command)
+    protected open fun forward(command: Forward) {
+        when (val screen = command.screen as AppScreen) {
+            is ActivityScreen -> {
+                checkAndStartActivity(screen)
+            }
+            is FragmentScreen,
+            is FragmentParamsScreen -> {
+                val type = if (command.clearContainer) REPLACE else ADD
+                commitNewFragmentScreen(screen, type, true)
+            }
         }
     }
 
-    protected open fun fragmentForward(command: Forward) {
-        val screen = command.screen as AppScreen
-        val fragmentParams = screen.getFragmentParams()
-        val fragment = if (fragmentParams == null) createFragment(screen) else null
-        val type = if (command.clearContainer) TransactionInfo.Type.REPLACE else TransactionInfo.Type.ADD
-        fragmentForwardInternal(
-            command,
-            TransactionInfo(screen.screenKey, type),
-            fragment,
-            fragmentParams
-        )
+    protected open fun replace(command: Replace) {
+        when (val screen = command.screen as AppScreen) {
+            is ActivityScreen -> {
+                checkAndStartActivity(screen)
+                activity.finish()
+            }
+            is FragmentScreen,
+            is FragmentParamsScreen -> {
+                if (localStackCopy.isNotEmpty()) {
+                    fragmentManager.popBackStack()
+                    val removed = localStackCopy.removeAt(localStackCopy.lastIndex)
+                    commitNewFragmentScreen(screen, removed.type, true)
+                } else {
+                    commitNewFragmentScreen(screen, REPLACE, false)
+                }
+            }
+        }
     }
 
-    private fun fragmentForwardInternal(
-        command: Command,
-        transactionInfo: TransactionInfo,
-        fragment: Fragment?,
-        fragmentParams: FragmentParams?
-    ) {
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        setupFragmentTransaction(
-            command,
-            fragmentManager.findFragmentById(containerId),
-            fragment,
-            fragmentParams,
-            fragmentTransaction
-        )
-        addNewFragmentToTransaction(
-            fragmentTransaction,
-            transactionInfo,
-            fragment,
-            fragmentParams
-        )
-        fragmentTransaction
-            .addToBackStack(transactionInfo.toString())
-            .commit()
-        localStackCopy.add(transactionInfo)
-    }
-
-    protected open fun fragmentBack() {
+    protected open fun back() {
         if (localStackCopy.isNotEmpty()) {
             fragmentManager.popBackStack()
             localStackCopy.removeAt(localStackCopy.lastIndex)
@@ -126,74 +106,43 @@ open class AppNavigator @JvmOverloads constructor(
         activity.finish()
     }
 
-    protected open fun activityReplace(command: Replace) {
-        val screen = command.screen as AppScreen
-        val activityIntent = screen.getActivityIntent(activity)
-
-        // Replace activity
-        if (activityIntent != null) {
-            val options = createStartActivityOptions(command, activityIntent)
-            checkAndStartActivity(screen, activityIntent, options)
-            activity.finish()
-        } else {
-            fragmentReplace(command)
-        }
-    }
-
-    protected open fun fragmentReplace(command: Replace) {
-        val screen = command.screen as AppScreen
-        val fragmentParams = screen.getFragmentParams()
-        val fragment = if (fragmentParams == null) createFragment(screen) else null
-        if (localStackCopy.isNotEmpty()) {
-            fragmentManager.popBackStack()
-            val removedTransactionInfo = localStackCopy.removeAt(localStackCopy.lastIndex)
-            fragmentForwardInternal(
-                command,
-                TransactionInfo(screen.screenKey, removedTransactionInfo.type),
-                fragment,
-                fragmentParams
-            )
-        } else {
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            setupFragmentTransaction(
-                command,
-                fragmentManager.findFragmentById(containerId),
-                fragment,
-                fragmentParams,
-                fragmentTransaction
-            )
-            addNewFragmentToTransaction(
-                fragmentTransaction,
-                TransactionInfo(screen.screenKey, TransactionInfo.Type.REPLACE),
-                fragment,
-                fragmentParams
-            )
-            fragmentTransaction.commit()
-        }
-    }
-
-    private fun addNewFragmentToTransaction(
-        transaction: FragmentTransaction,
-        transactionInfo: TransactionInfo,
-        fragment: Fragment?,
-        params: FragmentParams?
+    protected open fun commitNewFragmentScreen(
+        screen: AppScreen,
+        type: TransactionInfo.Type,
+        addToBackStack: Boolean
     ) {
-        when (transactionInfo.type) {
-            TransactionInfo.Type.ADD -> when {
-                params != null -> transaction.add(containerId, params.fragmentClass, params.arguments)
-                fragment != null -> transaction.add(containerId, fragment)
-                else -> throw IllegalArgumentException(
-                    "Either 'params' or 'fragment' shouldn't be null for ${transactionInfo.screenKey}"
-                )
+        val fragment = (screen as? FragmentScreen)?.createFragment?.invoke()
+        val fragmentParams = (screen as? FragmentParamsScreen)
+        val transaction = fragmentManager.beginTransaction()
+        setupFragmentTransaction(
+            transaction,
+            fragmentManager.findFragmentById(containerId),
+            fragment
+        )
+        when (type) {
+            ADD -> when {
+                fragmentParams != null -> {
+                    transaction.add(containerId, fragmentParams.fragmentClass, fragmentParams.arguments)
+                }
+                fragment != null -> {
+                    transaction.add(containerId, fragment)
+                }
             }
-            TransactionInfo.Type.REPLACE -> when {
-                params != null -> transaction.replace(containerId, params.fragmentClass, params.arguments)
-                fragment != null -> transaction.replace(containerId, fragment)
-                else -> throw IllegalArgumentException(
-                    "Either 'params' or 'fragment' shouldn't be null for ${transactionInfo.screenKey}"
-                )
+            REPLACE -> when {
+                fragmentParams != null -> {
+                    transaction.replace(containerId, fragmentParams.fragmentClass, fragmentParams.arguments)
+                }
+                fragment != null -> {
+                    transaction.replace(containerId, fragment)
+                }
             }
         }
+        if (addToBackStack) {
+            val transactionInfo = TransactionInfo(screen.screenKey, type)
+            transaction.addToBackStack(transactionInfo.toString())
+            localStackCopy.add(transactionInfo)
+        }
+        transaction.commit()
     }
 
     /**
@@ -224,43 +173,24 @@ open class AppNavigator @JvmOverloads constructor(
      * Override this method to setup fragment transaction [FragmentTransaction].
      * For example: setCustomAnimations(...), addSharedElement(...) or setReorderingAllowed(...)
      *
-     * @param command             current navigation command. Will be only [Forward] or [Replace]
+     * @param fragmentTransaction fragment transaction
      * @param currentFragment     current fragment in container
      *                            (for [Replace] command it will be screen previous in new chain, NOT replaced screen)
      * @param nextFragment        next screen fragment
-     * @param nextFragmentParams  next screen fragment parameters
-     * @param fragmentTransaction fragment transaction
      */
     protected open fun setupFragmentTransaction(
-        command: Command,
+        fragmentTransaction: FragmentTransaction,
         currentFragment: Fragment?,
-        nextFragment: Fragment?,
-        nextFragmentParams: FragmentParams?,
-        fragmentTransaction: FragmentTransaction
+        nextFragment: Fragment?
     ) {
         // Do nothing by default
     }
 
-    /**
-     * Override this method to create option for start activity
-     *
-     * @param command        current navigation command. Will be only [Forward] or [Replace]
-     * @param activityIntent activity intent
-     * @return transition options
-     */
-    protected open fun createStartActivityOptions(
-        command: Command,
-        activityIntent: Intent
-    ): Bundle? = null
-
-    private fun checkAndStartActivity(
-        screen: AppScreen,
-        activityIntent: Intent,
-        options: Bundle?
-    ) {
+    private fun checkAndStartActivity(screen: ActivityScreen) {
         // Check if we can start activity
+        val activityIntent = screen.createIntent(activity)
         if (activityIntent.resolveActivity(activity.packageManager) != null) {
-            activity.startActivity(activityIntent, options)
+            activity.startActivity(activityIntent, screen.startActivityOptions)
         } else {
             unexistingActivity(screen, activityIntent)
         }
@@ -273,23 +203,10 @@ open class AppNavigator @JvmOverloads constructor(
      * @param activityIntent intent passed to start Activity for the `screenKey`
      */
     protected open fun unexistingActivity(
-        screen: AppScreen,
+        screen: ActivityScreen,
         activityIntent: Intent
     ) {
         // Do nothing by default
-    }
-
-    /**
-     * Creates Fragment matching `screenKey`.
-     *
-     * @param screen screen
-     * @return instantiated fragment for the passed screen
-     */
-    protected open fun createFragment(screen: AppScreen): Fragment {
-        return screen.getFragment() ?: run {
-            errorWhileCreatingScreen(screen)
-            throw RuntimeException("Can't create a screen: " + screen.screenKey)
-        }
     }
 
     /**
@@ -300,15 +217,6 @@ open class AppNavigator @JvmOverloads constructor(
      */
     protected open fun backToUnexisting(screen: AppScreen) {
         backToRoot()
-    }
-
-    /**
-     * Called when we tried to create new intent or fragment but didn't receive them.
-     *
-     * @param screen screen
-     */
-    protected open fun errorWhileCreatingScreen(screen: AppScreen) {
-        // Do nothing by default
     }
 
     /**

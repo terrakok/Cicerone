@@ -1,10 +1,5 @@
 package com.github.terrakok.cicerone
 
-import com.github.terrakok.cicerone.commands.Back
-import com.github.terrakok.cicerone.commands.BackTo
-import com.github.terrakok.cicerone.commands.Forward
-import com.github.terrakok.cicerone.commands.Replace
-
 /**
  * Router is the class for high-level navigation.
  *
@@ -19,7 +14,6 @@ open class Router : BaseRouter() {
      * @param screen screen
      * @param clearContainer if FALSE then new screen shows over previous
      */
-    @JvmOverloads
     fun navigateTo(screen: Screen, clearContainer: Boolean = true) {
         executeCommands(Forward(screen, clearContainer))
     }
@@ -64,7 +58,6 @@ open class Router : BaseRouter() {
      * @param screens
      * @param showOnlyTopScreenView if FALSE then all screen views show together
      */
-    @JvmOverloads
     fun newChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
         val commands = screens.map { Forward(it, showOnlyTopScreenView) }
         executeCommands(*commands.toTypedArray())
@@ -76,7 +69,6 @@ open class Router : BaseRouter() {
      * @param screens
      * @param showOnlyTopScreenView if FALSE then all screen views show together
      */
-    @JvmOverloads
     fun newRootChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
         val commands = screens.map { Forward(it, showOnlyTopScreenView) }
         executeCommands(BackTo(null), *commands.toTypedArray())
