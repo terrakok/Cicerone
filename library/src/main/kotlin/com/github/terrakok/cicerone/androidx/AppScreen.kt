@@ -10,7 +10,7 @@ import com.github.terrakok.cicerone.Screen
 sealed class AppScreen : Screen()
 
 open class FragmentScreen(
-    val createFragment: (FragmentFactory?) -> Fragment
+    val createFragment: (FragmentFactory) -> Fragment
 ) : AppScreen()
 
 open class ActivityScreen(

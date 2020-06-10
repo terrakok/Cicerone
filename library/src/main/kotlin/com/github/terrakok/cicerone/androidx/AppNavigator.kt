@@ -17,7 +17,7 @@ open class AppNavigator constructor(
     protected val activity: FragmentActivity,
     protected val containerId: Int,
     protected val fragmentManager: FragmentManager = activity.supportFragmentManager,
-    protected val fragmentFactory: FragmentFactory? = null
+    protected val fragmentFactory: FragmentFactory = FragmentFactory()
 ) : Navigator {
 
     protected val localStackCopy = mutableListOf<TransactionInfo>()
