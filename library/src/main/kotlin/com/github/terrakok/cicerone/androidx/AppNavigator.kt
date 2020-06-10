@@ -1,10 +1,7 @@
 package com.github.terrakok.cicerone.androidx
 
 import android.content.Intent
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.*
 import com.github.terrakok.cicerone.*
 import com.github.terrakok.cicerone.androidx.TransactionInfo.Type.ADD
 import com.github.terrakok.cicerone.androidx.TransactionInfo.Type.REPLACE
@@ -19,7 +16,8 @@ import com.github.terrakok.cicerone.androidx.TransactionInfo.Type.REPLACE
 open class AppNavigator constructor(
     protected val activity: FragmentActivity,
     protected val containerId: Int,
-    protected val fragmentManager: FragmentManager = activity.supportFragmentManager
+    protected val fragmentManager: FragmentManager = activity.supportFragmentManager,
+    protected val fragmentFactory: FragmentFactory? = null
 ) : Navigator {
 
     protected val localStackCopy = mutableListOf<TransactionInfo>()
@@ -66,8 +64,7 @@ open class AppNavigator constructor(
             is ActivityScreen -> {
                 checkAndStartActivity(screen)
             }
-            is FragmentScreen,
-            is FragmentParamsScreen -> {
+            is FragmentScreen -> {
                 val type = if (command.clearContainer) REPLACE else ADD
                 commitNewFragmentScreen(screen, type, true)
             }
@@ -80,8 +77,7 @@ open class AppNavigator constructor(
                 checkAndStartActivity(screen)
                 activity.finish()
             }
-            is FragmentScreen,
-            is FragmentParamsScreen -> {
+            is FragmentScreen -> {
                 if (localStackCopy.isNotEmpty()) {
                     fragmentManager.popBackStack()
                     val removed = localStackCopy.removeAt(localStackCopy.lastIndex)
@@ -107,12 +103,11 @@ open class AppNavigator constructor(
     }
 
     protected open fun commitNewFragmentScreen(
-        screen: AppScreen,
+        screen: FragmentScreen,
         type: TransactionInfo.Type,
         addToBackStack: Boolean
     ) {
-        val fragment = (screen as? FragmentScreen)?.createFragment?.invoke()
-        val fragmentParams = (screen as? FragmentParamsScreen)
+        val fragment = screen.createFragment(fragmentFactory)
         val transaction = fragmentManager.beginTransaction()
         setupFragmentTransaction(
             transaction,
@@ -120,22 +115,8 @@ open class AppNavigator constructor(
             fragment
         )
         when (type) {
-            ADD -> when {
-                fragmentParams != null -> {
-                    transaction.add(containerId, fragmentParams.fragmentClass, fragmentParams.arguments)
-                }
-                fragment != null -> {
-                    transaction.add(containerId, fragment)
-                }
-            }
-            REPLACE -> when {
-                fragmentParams != null -> {
-                    transaction.replace(containerId, fragmentParams.fragmentClass, fragmentParams.arguments)
-                }
-                fragment != null -> {
-                    transaction.replace(containerId, fragment)
-                }
-            }
+            ADD -> transaction.add(containerId, fragment)
+            REPLACE -> transaction.replace(containerId, fragment)
         }
         if (addToBackStack) {
             val transactionInfo = TransactionInfo(screen.screenKey, type)
