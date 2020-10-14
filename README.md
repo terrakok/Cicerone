@@ -23,45 +23,36 @@ It was designed to be used with the MVP pattern (try [Moxy](https://github.com/A
 
 ## Additional features
 + opening several screens inside single call (for example: deeplink)
++ provides `FragmentFactory` if it needed
++ `add` or `replace` strategy for opening next screen (see `router.navigateTo` last parameter)
 + implementation of parallel navigation (Instagram like)
 + predefined navigator ready for Single-Activity apps
 + predefined navigator ready for setup transition animation
 
-**See the sample application**
-
 ## How to add
 Add the dependency in your build.gradle:
-```groovy
+```kotlin
 dependencies {
     //Cicerone
-    compile 'ru.terrakok.cicerone:cicerone:X.X.X'
+    implementation("ru.terrakok.cicerone:cicerone:X.X.X")
 }
 ```
 
 Initialize the library (for example in your Application class):
-```java
-public class SampleApplication extends MvpApplication {
-    public static SampleApplication INSTANCE;
-    private Cicerone<Router> cicerone;
+```kotlin
+class App : Application() {
+    private val cicerone = Cicerone.create()
+    val router get() = cicerone.router
+    val navigatorHolder get() = cicerone.getNavigatorHolder()
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        INSTANCE = this;
-
-        initCicerone();
+    override fun onCreate() {
+        super.onCreate()
+        INSTANCE = this
     }
 
-    private void initCicerone() {
-        cicerone = Cicerone.create();
-    }
-
-    public NavigatorHolder getNavigatorHolder() {
-        return cicerone.getNavigatorHolder();
-    }
-
-    public Router getRouter() {
-        return cicerone.getRouter();
+    companion object {
+        internal lateinit var INSTANCE: App
+            private set
     }
 }
 ```
@@ -71,20 +62,17 @@ public class SampleApplication extends MvpApplication {
 
 Presenter calls navigation method of Router.
 
-```java
-public class SamplePresenter extends Presenter<SampleView> {
-    private Router router;
+```kotlin
+class SamplePresenter(
+    private val router: Router
+) : Presenter<SampleView>() {
 
-    public SamplePresenter() {
-        router = SampleApplication.INSTANCE.getRouter();
+    fun onOpenNewScreen() {
+        router.navigateTo(SomeScreen())
     }
 
-    public void onBackCommandClick() {
-        router.exit();
-    }
-
-    public void onForwardCommandClick() {
-        router.navigateTo(new SomeScreen());
+    fun onBackPressed() {
+        router.exit()
     }
 }
 ```
@@ -95,14 +83,10 @@ CommandBuffer checks whether there are _"active"_ Navigator:
 - If yes, it passes the commands to the Navigator. Navigator will process them to achive the desired transition.
 - If no, then CommandBuffer saves the commands in a queue, and will apply them as soon as new _"active"_ Navigator will appear.
 
-```java
-    void executeCommands(Command[] commands) {
-        if (navigator != null) {
-            navigator.applyCommands(commands);
-        } else {
-            pendingCommands.add(commands);
-        }
-    }
+```kotlin
+fun executeCommands(commands: Array<out Command>) {
+    navigator?.applyCommands(commands) ?: pendingCommands.add(commands)
+}
 ```
 
 Navigator processes the navigation commands. Usually it is an anonymous class inside the Activity.
@@ -110,25 +94,18 @@ Activity provides Navigator to the CommandBuffer in _onResume_ and removes it in
 
 **Attention**: Use _onResumeFragments()_ with FragmentActivity ([more info](https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()))
 
-```java
-@Override
-protected void onResume() {
-    super.onResume();
-    SampleApplication.INSTANCE.getNavigatorHolder().setNavigator(navigator);
+```kotlin
+private val navigator = AppNavigator(this, R.id.container)
+
+override fun onResumeFragments() {
+    super.onResumeFragments()
+    navigatorHolder.setNavigator(navigator)
 }
 
-@Override
-protected void onPause() {
-    super.onPause();
-    SampleApplication.INSTANCE.getNavigatorHolder().removeNavigator();
+override fun onPause() {
+    navigatorHolder.removeNavigator()
+    super.onPause()
 }
-
-private Navigator navigator = new Navigator() {
-    @Override
-    public void applyCommands(Command[] commands) {
-        //implement commands logic (apply command batch to navigation container)
-    }
-};
 ```
 
 ## Navigation commands
@@ -142,15 +119,31 @@ This commands set will fulfill the needs of the most applications. But if you ne
 + Replace - Replaces the current screen
 ![](https://github.com/terrakok/Cicerone/raw/develop/media/replace_img.png)
 
-## Predefined navigators
-The library provides predefined navigators for _Fragments_ and _Activity_.
+## Predefined navigator
+The library provides predefined navigator for _Fragments_ and _Activity_.
 To use, just provide it with the container and _FragmentManager_.
-```java
-private Navigator navigator = new SupportAppNavigator(this, R.id.container);
+```kotlin
+private val navigator = AppNavigator(this, R.id.container)
 ```
+
+## Screens
+Describe your screens as you wish. For me natural way is kotlin `object` with all application screens:
+```kotlin
+object Screens {
+    val Main = FragmentScreen("MainFragment") { MainFragment() }
+    val AddressSearch = FragmentScreen("AddressSearchFragment") { AddressSearchFragment() }
+    fun Profile(userId: Long) = FragmentScreen("ProfileFragment") { ProfileFragment(userId) }
+}
+```
+
+Additional you can use `FragmentFactory` for creating your screens:
+```kotlin
+val SomeScreen = FragmentScreen("SomeScreenId") { factory: FragmentFactory -> ... }
+```
+
 ## Sample
-To see how to add, initialize and use the library and predefined navigators check out the sample.
-Or look at [GitFox (Android GitLab client)](https://gitlab.com/terrakok/gitlab-client)
+To see how to add, initialize and use the library and predefined navigators check out 
+the [GitFox (Android GitLab client)](https://gitlab.com/terrakok/gitlab-client)
 
 ![](https://github.com/terrakok/Cicerone/raw/develop/media/navigation.gif)
 ![](https://github.com/terrakok/Cicerone/raw/develop/media/insta_tabs.gif)
