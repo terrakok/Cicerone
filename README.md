@@ -2,8 +2,6 @@
 [![jCenter](https://api.bintray.com/packages/terrakok/terramaven/cicerone/images/download.svg)](https://bintray.com/terrakok/terramaven/cicerone/_latestVersion)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 
-[![Join the chat at https://gitter.im/terrakok/Cicerone](https://img.shields.io/badge/Gitter-Join%20Chat-brightred.svg?style=flat)](https://gitter.im/terrakok/Cicerone)  
-
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Cicerone-green.svg?style=true)](https://android-arsenal.com/details/1/4700)
 [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-250-green.svg)](http://androidweekly.net/issues/issue-250)
 [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-271-green.svg)](http://androidweekly.net/issues/issue-271)  
@@ -11,7 +9,7 @@
 ![](https://habrastorage.org/files/644/32e/9eb/64432e9eb3664723b3ee438449dab3b0.png)
 
 Cicerone (a guide, one who conducts sightseers) is a lightweight library that makes the navigation in an Android app easy.  
-It was designed to be used with the MVP pattern (try [Moxy](https://github.com/Arello-Mobile/Moxy)), but will work great with any architecture.
+It was designed to be used with the MVP/MVVM/MVI patterns but will work great with any architecture.
 
 ## Main advantages
 + is not tied to Fragments
@@ -126,8 +124,27 @@ To use, just provide it with the container and _FragmentManager_.
 private val navigator = AppNavigator(this, R.id.container)
 ```
 
+Custom navigator can be useful sometimes:
+```kotlin
+private val navigator = object : AppNavigator(this, R.id.container) {
+    override fun setupFragmentTransaction(
+        fragmentTransaction: FragmentTransaction,
+        currentFragment: Fragment?,
+        nextFragment: Fragment?
+    ) {
+        super.setupFragmentTransaction(fragmentTransaction, currentFragment, nextFragment)
+        fragmentTransaction.setReorderingAllowed(true)
+    }
+
+    override fun applyCommands(commands: Array<out Command>) {
+        hideKeyboard()
+        super.applyCommands(commands)
+    }
+}
+```
+
 ## Screens
-Describe your screens as you wish. For me natural way is kotlin `object` with all application screens:
+Describe your screens as you like e.g. create Kotlin `object` with all application screens:
 ```kotlin
 object Screens {
     val Main = FragmentScreen("MainFragment") { MainFragment() }
