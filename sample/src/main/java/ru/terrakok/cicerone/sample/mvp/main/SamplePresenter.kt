@@ -26,7 +26,7 @@ class SamplePresenter(private val router: Router, private val screenNumber: Int)
     }
 
     fun onForwardCommandClick() {
-        router.navigateTo(sampleScreen(screenNumber + 1), true)
+        router.navigateTo(sampleScreen(screenNumber + 1))
     }
 
     fun onReplaceCommandClick() {
@@ -53,7 +53,7 @@ class SamplePresenter(private val router: Router, private val screenNumber: Int)
         future?.cancel(true)
         future = executorService.schedule({ //WARNING! Navigation must be only in UI thread.
             Handler(Looper.getMainLooper()).post {
-                router.navigateTo(sampleScreen(screenNumber + 1), true)
+                router.navigateTo(sampleScreen(screenNumber + 1))
             }
         }, 5, TimeUnit.SECONDS)
     }

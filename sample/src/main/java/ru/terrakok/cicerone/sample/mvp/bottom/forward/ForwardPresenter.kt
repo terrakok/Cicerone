@@ -25,11 +25,11 @@ class ForwardPresenter(
     }
 
     fun onForwardPressed() {
-        router.navigateTo(forwardScreen(container, number + 1), true)
+        router.navigateTo(forwardScreen(container, number + 1))
     }
 
     fun onGithubPressed() {
-        router.navigateTo(githubScreen(), true)
+        router.navigateTo(githubScreen())
     }
 
     fun onBackPressed() {

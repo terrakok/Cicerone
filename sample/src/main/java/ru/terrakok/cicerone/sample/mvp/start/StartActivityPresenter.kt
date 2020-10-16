@@ -12,15 +12,15 @@ import ru.terrakok.cicerone.sample.Screens.profileScreen
 class StartActivityPresenter(private val router: Router) : MvpPresenter<StartActivityView>() {
 
     fun onOrdinaryPressed() {
-        router.navigateTo(mainScreen(), true)
+        router.navigateTo(mainScreen())
     }
 
     fun onMultiPressed() {
-        router.navigateTo(bottomNavigationScreen(), true)
+        router.navigateTo(bottomNavigationScreen())
     }
 
     fun onResultWithAnimationPressed() {
-        router.navigateTo(profileScreen(), true)
+        router.navigateTo(profileScreen())
     }
 
     fun onBackPressed() {
