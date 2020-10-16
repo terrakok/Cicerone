@@ -14,7 +14,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0.0"
-        applicationId "ru.terrakok.cicerone.sample"
+        applicationId "com.github.terrakok.cicerone.sample"
     }
 
     buildTypes {
