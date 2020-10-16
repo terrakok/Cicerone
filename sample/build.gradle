@@ -26,6 +26,10 @@ android {
         debug {
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 ext {
