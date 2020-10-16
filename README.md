@@ -32,7 +32,7 @@ Add the dependency in your build.gradle:
 ```kotlin
 dependencies {
     //Cicerone
-    implementation("ru.terrakok.cicerone:cicerone:X.X.X")
+    implementation("com.github.terrakok:cicerone:X.X.X")
 }
 ```
 
