@@ -1,13 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext.kotlin_version = '1.4.10'
     repositories {
         jcenter()
         google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // For the library uploading to the Bintray
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'

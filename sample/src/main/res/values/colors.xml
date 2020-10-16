@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#e74c3c</color>
+    <color name="primary_dark">#c0392b</color>
+    <color name="accent">#e67e22</color>
+
+
+    <color name="alizarin">#e74c3c</color>
+    <color name="carrot">#e67e22</color>
+    <color name="sunflower">#f1c40f</color>
+    <color name="greensea">#16a085</color>
+    <color name="nephritis">#27ae60</color>
+    <color name="belizehole">#2980b9</color>
+</resources>
