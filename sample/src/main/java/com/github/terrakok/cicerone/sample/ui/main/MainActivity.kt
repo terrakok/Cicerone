@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.arellomobile.mvp.MvpAppCompatActivity
 import com.github.terrakok.cicerone.Command
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.NavigatorHolder
@@ -14,6 +13,7 @@ import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.SampleApplication
 import com.github.terrakok.cicerone.sample.Screens.sampleScreen
 import com.github.terrakok.cicerone.sample.ui.common.BackButtonListener
+import moxy.MvpAppCompatActivity
 import java.lang.ref.WeakReference
 import java.util.*
 import javax.inject.Inject

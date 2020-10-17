@@ -1,10 +1,10 @@
 package com.github.terrakok.cicerone.sample.mvp.bottom.forward
 
-import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.sample.Screens.forwardScreen
 import com.github.terrakok.cicerone.sample.Screens.githubScreen
+import moxy.InjectViewState
+import moxy.MvpPresenter
 
 /**
  * Created by terrakok 26.11.16

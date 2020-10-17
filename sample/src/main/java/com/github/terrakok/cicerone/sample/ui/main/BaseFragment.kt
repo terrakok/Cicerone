@@ -2,7 +2,7 @@ package com.github.terrakok.cicerone.sample.ui.main
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.arellomobile.mvp.MvpAppCompatFragment
+import moxy.MvpAppCompatFragment
 import java.lang.ref.WeakReference
 
 abstract class BaseFragment : MvpAppCompatFragment() {

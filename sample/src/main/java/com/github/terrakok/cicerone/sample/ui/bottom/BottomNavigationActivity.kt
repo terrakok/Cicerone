@@ -3,9 +3,6 @@ package com.github.terrakok.cicerone.sample.ui.bottom
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.arellomobile.mvp.MvpAppCompatActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.github.terrakok.cicerone.Router
@@ -16,6 +13,9 @@ import com.github.terrakok.cicerone.sample.mvp.bottom.BottomNavigationPresenter
 import com.github.terrakok.cicerone.sample.mvp.bottom.BottomNavigationView
 import com.github.terrakok.cicerone.sample.ui.common.BackButtonListener
 import com.github.terrakok.cicerone.sample.ui.common.RouterProvider
+import moxy.MvpAppCompatActivity
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
 
 /**

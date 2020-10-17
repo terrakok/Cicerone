@@ -2,9 +2,6 @@ package com.github.terrakok.cicerone.sample.ui.start
 
 import android.os.Bundle
 import android.view.View
-import com.arellomobile.mvp.MvpAppCompatActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
@@ -13,6 +10,9 @@ import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.SampleApplication
 import com.github.terrakok.cicerone.sample.mvp.start.StartActivityPresenter
 import com.github.terrakok.cicerone.sample.mvp.start.StartActivityView
+import moxy.MvpAppCompatActivity
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
 
 /**

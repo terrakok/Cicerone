@@ -20,52 +20,42 @@ import com.github.terrakok.cicerone.sample.ui.start.StartActivity
  */
 object Screens {
 
-    @JvmStatic
     fun sampleScreen(number: Int) = FragmentScreen("SampleScreen_$number") {
         SampleFragment.getNewInstance(number)
     }
 
-    @JvmStatic
     fun startScreen() = ActivityScreen("StartScreen") {
         Intent(it, StartActivity::class.java)
     }
 
-    @JvmStatic
     fun mainScreen() = ActivityScreen("MainScreen") {
         Intent(it, MainActivity::class.java)
     }
 
-    @JvmStatic
     fun bottomNavigationScreen() = ActivityScreen("BottomNavigationScreen") {
         Intent(it, BottomNavigationActivity::class.java)
     }
 
-    @JvmStatic
     fun tabScreen(tabName: String) = FragmentScreen("FragmentScreen") {
         TabContainerFragment.getNewInstance(tabName)
     }
 
-    @JvmStatic
     fun forwardScreen(containerName: String, number: Int) = FragmentScreen("ForwardScreen") {
         ForwardFragment.getNewInstance(containerName, number)
     }
 
-    @JvmStatic
     fun githubScreen() = ActivityScreen("GithubScreen") {
         Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/terrakok/Cicerone"))
     }
 
-    @JvmStatic
     fun profileScreen() = ActivityScreen("ProfileScreen") {
         Intent(it, ProfileActivity::class.java)
     }
 
-    @JvmStatic
     fun profileInfoScreen() = FragmentScreen("ProfileInfoScreen") {
         ProfileFragment()
     }
 
-    @JvmStatic
     fun selectPhotoScreen() = FragmentScreen("SelectPhotoScreen") {
         SelectPhotoFragment()
     }

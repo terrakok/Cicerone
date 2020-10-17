@@ -30,12 +30,21 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 ext {
     androidXVersion = "1.2.0"
     materialVersion = "1.2.1"
-    moxyVersion = "1.7.0"
+    moxyVersion = "2.2.0"
     daggerVersion = "2.29.1"
 }
 
@@ -45,9 +54,9 @@ dependencies {
     implementation "com.google.android.material:material:$materialVersion"
 
     //MVP Moxy
-    implementation "tech.schoolhelper:moxy-x:$moxyVersion"
-    implementation "tech.schoolhelper:moxy-x-androidx:$moxyVersion"
-    kapt "tech.schoolhelper:moxy-x-compiler:$moxyVersion"
+    implementation "com.github.moxy-community:moxy:$moxyVersion"
+    implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
+    kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 
     //Cicerone
     implementation project(':library')

@@ -2,10 +2,10 @@ package com.github.terrakok.cicerone.sample.mvp.main
 
 import android.os.Handler
 import android.os.Looper
-import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.sample.Screens.sampleScreen
+import moxy.InjectViewState
+import moxy.MvpPresenter
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -15,7 +15,10 @@ import java.util.concurrent.TimeUnit
  * on 11.10.16
  */
 @InjectViewState
-class SamplePresenter(private val router: Router, private val screenNumber: Int) : MvpPresenter<SampleView?>() {
+class SamplePresenter(
+        private val router: Router,
+        private val screenNumber: Int
+) : MvpPresenter<SampleView>() {
 
     private val executorService = Executors.newSingleThreadScheduledExecutor()
 

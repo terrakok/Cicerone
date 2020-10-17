@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.arellomobile.mvp.MvpAppCompatFragment
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.github.terrakok.cicerone.sample.databinding.FragmentForwardBinding
 import com.github.terrakok.cicerone.sample.mvp.bottom.forward.ForwardPresenter
 import com.github.terrakok.cicerone.sample.mvp.bottom.forward.ForwardView
 import com.github.terrakok.cicerone.sample.ui.common.BackButtonListener
 import com.github.terrakok.cicerone.sample.ui.common.RouterProvider
+import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
 /**
  * Created by terrakok 26.11.16
