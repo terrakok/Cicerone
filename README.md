@@ -1,5 +1,5 @@
 # Cicerone
-[![jCenter](https://api.bintray.com/packages/terrakok/terramaven/cicerone/images/download.svg)](https://bintray.com/terrakok/terramaven/cicerone/_latestVersion)
+[![jCenter](https://api.bintray.com/packages/terrakok/terramaven/cicerone-kotlin/images/download.svg)](https://bintray.com/terrakok/terramaven/cicerone-kotlin/_latestVersion)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Cicerone-green.svg?style=true)](https://android-arsenal.com/details/1/4700)
@@ -159,8 +159,10 @@ val SomeScreen = FragmentScreen("SomeScreenId") { factory: FragmentFactory -> ..
 ```
 
 ## Sample
-To see how to add, initialize and use the library and predefined navigators check out 
-the [GitFox (Android GitLab client)](https://gitlab.com/terrakok/gitlab-client)
+To see how to add, initialize and use the library and predefined navigators see **sample project**  
+(thank you [@Javernaut](https://github.com/Javernaut) for support new library version and migrate sample project to Kotlin!)
+
+For more complex use case check out the [GitFox (Android GitLab client)](https://gitlab.com/terrakok/gitlab-client)
 
 ![](https://github.com/terrakok/Cicerone/raw/develop/media/navigation.gif)
 ![](https://github.com/terrakok/Cicerone/raw/develop/media/insta_tabs.gif)
