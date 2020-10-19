@@ -19,7 +19,7 @@ import java.util.*
 import javax.inject.Inject
 
 /**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
  * on 11.10.16
  */
 class MainActivity : MvpAppCompatActivity(), ChainHolder {

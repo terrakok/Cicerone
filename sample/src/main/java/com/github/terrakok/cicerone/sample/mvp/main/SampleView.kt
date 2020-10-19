@@ -5,7 +5,7 @@ import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
 /**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
  * on 11.10.16
  */
 @StateStrategyType(AddToEndSingleStrategy::class)

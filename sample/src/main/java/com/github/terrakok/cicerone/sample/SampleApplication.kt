@@ -5,7 +5,7 @@ import com.github.terrakok.cicerone.sample.dagger.AppComponent
 import com.github.terrakok.cicerone.sample.dagger.DaggerAppComponent
 
 /**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
  * on 11.10.16
  */
 class SampleApplication : Application() {

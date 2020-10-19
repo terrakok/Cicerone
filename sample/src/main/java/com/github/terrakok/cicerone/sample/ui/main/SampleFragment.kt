@@ -15,7 +15,7 @@ import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
 
 /**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
  * on 11.10.16
  */
 class SampleFragment : BaseFragment(), SampleView, BackButtonListener {

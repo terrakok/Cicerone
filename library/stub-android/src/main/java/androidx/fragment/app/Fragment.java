@@ -4,7 +4,7 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 
 /**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
  * on 11.10.16
  */
 

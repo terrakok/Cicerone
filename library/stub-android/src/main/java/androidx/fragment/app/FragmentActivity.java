@@ -3,7 +3,7 @@ package androidx.fragment.app;
 import android.app.Activity;
 
 /**
- * Created by Konstantin Tckhovrebov (aka @terrakok)
+ * Created by Konstantin Tskhovrebov (aka @terrakok)
  * on 11.10.16
  */
 
