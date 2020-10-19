@@ -15,10 +15,10 @@ dependencies {
 ext {
     // This params is for the library uploading to the Bintray
     bintrayRepo = 'terramaven'
-    bintrayName = 'cicerone'
+    bintrayName = 'cicerone-kotlin'
     publishedGroupId = 'com.github.terrakok'
     artifact = 'cicerone'
-    libraryVersion = '6.1'
+    libraryVersion = '6.0'
     gitUrl = 'https://github.com/terrakok/Cicerone'
     allLicenses = ['MIT']
 }
