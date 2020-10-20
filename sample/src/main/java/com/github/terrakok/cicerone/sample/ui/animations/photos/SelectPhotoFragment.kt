@@ -8,7 +8,6 @@ import android.widget.ImageView
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.sample.SampleApplication
 import com.github.terrakok.cicerone.sample.databinding.FragmentSelectPhotoBinding
-import com.github.terrakok.cicerone.sample.mvp.animation.PhotoSelection
 import com.github.terrakok.cicerone.sample.mvp.animation.photos.SelectPhotoPresenter
 import com.github.terrakok.cicerone.sample.mvp.animation.photos.SelectPhotoView
 import com.github.terrakok.cicerone.sample.ui.animations.ProfileActivity
@@ -29,9 +28,6 @@ class SelectPhotoFragment : MvpAppCompatFragment(), SelectPhotoView, BackButtonL
     @Inject
     lateinit var router: Router
 
-    @Inject
-    lateinit var photoSelection: PhotoSelection
-
     @InjectPresenter
     lateinit var presenter: SelectPhotoPresenter
 
@@ -45,8 +41,11 @@ class SelectPhotoFragment : MvpAppCompatFragment(), SelectPhotoView, BackButtonL
     private val animationDestionationId: Int
         get() = arguments!!.getInt(ARG_ANIM_DESTINATION)
 
+    private val resultKey: String
+        get() = arguments!!.getString(EXTRA_RESULT_KEY)!!
+
     @ProvidePresenter
-    fun providePresenter() = SelectPhotoPresenter(photoSelection, router)
+    fun providePresenter() = SelectPhotoPresenter(resultKey, router)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         SampleApplication.INSTANCE.appComponent.inject(this)
@@ -100,5 +99,14 @@ class SelectPhotoFragment : MvpAppCompatFragment(), SelectPhotoView, BackButtonL
 
     companion object {
         private const val ARG_ANIM_DESTINATION = "arg_anim_dest"
+        private const val EXTRA_RESULT_KEY = "extra_result_key"
+
+        fun getNewInstance(resultKey: String): SelectPhotoFragment {
+            return SelectPhotoFragment().apply {
+                arguments = Bundle().apply {
+                    putString(EXTRA_RESULT_KEY, resultKey)
+                }
+            }
+        }
     }
 }

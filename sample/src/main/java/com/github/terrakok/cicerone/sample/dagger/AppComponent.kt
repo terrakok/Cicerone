@@ -2,7 +2,6 @@ package com.github.terrakok.cicerone.sample.dagger
 
 import com.github.terrakok.cicerone.sample.dagger.module.LocalNavigationModule
 import com.github.terrakok.cicerone.sample.dagger.module.NavigationModule
-import com.github.terrakok.cicerone.sample.dagger.module.PhotoSelectionModule
 import com.github.terrakok.cicerone.sample.ui.animations.ProfileActivity
 import com.github.terrakok.cicerone.sample.ui.animations.photos.SelectPhotoFragment
 import com.github.terrakok.cicerone.sample.ui.animations.profile.ProfileFragment
@@ -20,8 +19,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [
     NavigationModule::class,
-    LocalNavigationModule::class,
-    PhotoSelectionModule::class]
+    LocalNavigationModule::class]
 )
 interface AppComponent {
     fun inject(activity: StartActivity)

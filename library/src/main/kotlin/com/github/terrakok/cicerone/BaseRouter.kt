@@ -7,6 +7,23 @@ package com.github.terrakok.cicerone
  */
 abstract class BaseRouter {
     internal val commandBuffer = CommandBuffer()
+    private val resultBus = ResultBus()
+
+    /**
+     * Sets data listener with given key.
+     *
+     * After first call listener will be removed.
+     */
+    fun setResultListener(key: String, listener: (data: Any) -> Unit) {
+        resultBus.setResultListener(key, listener)
+    }
+
+    /**
+     * Sends data to listener with given key.
+     */
+    fun sendResult(key: String, data: Any) {
+        resultBus.sendResult(key, data)
+    }
 
     /**
      * Sends navigation command array to [CommandBuffer].
@@ -15,5 +32,6 @@ abstract class BaseRouter {
      */
     protected fun executeCommands(vararg commands: Command) {
         commandBuffer.executeCommands(commands)
+        resultBus.flush()
     }
 }
