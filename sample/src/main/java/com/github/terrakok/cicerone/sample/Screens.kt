@@ -56,7 +56,7 @@ object Screens {
         ProfileFragment()
     }
 
-    fun selectPhotoScreen() = FragmentScreen("SelectPhotoScreen") {
-        SelectPhotoFragment()
+    fun selectPhotoScreen(resultKey: String) = FragmentScreen("SelectPhotoScreen") {
+        SelectPhotoFragment.getNewInstance(resultKey)
     }
 }

@@ -8,7 +8,6 @@ import android.widget.ImageView
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.SampleApplication
-import com.github.terrakok.cicerone.sample.mvp.animation.PhotoSelection
 import com.github.terrakok.cicerone.sample.mvp.animation.profile.ProfilePresenter
 import com.github.terrakok.cicerone.sample.mvp.animation.profile.ProfileView
 import com.github.terrakok.cicerone.sample.ui.animations.ProfileActivity
@@ -31,11 +30,8 @@ class ProfileFragment : MvpAppCompatFragment(), ProfileView, BackButtonListener 
     @InjectPresenter
     lateinit var presenter: ProfilePresenter
 
-    @Inject
-    lateinit var photoSelection: PhotoSelection
-
     @ProvidePresenter
-    fun providePresenter() = ProfilePresenter(photoSelection, router)
+    fun providePresenter() = ProfilePresenter(router)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         SampleApplication.INSTANCE.appComponent.inject(this)

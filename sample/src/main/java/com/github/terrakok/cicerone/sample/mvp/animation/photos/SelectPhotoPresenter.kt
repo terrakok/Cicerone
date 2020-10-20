@@ -2,7 +2,6 @@ package com.github.terrakok.cicerone.sample.mvp.animation.photos
 
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.sample.R
-import com.github.terrakok.cicerone.sample.mvp.animation.PhotoSelection
 import moxy.InjectViewState
 import moxy.MvpPresenter
 
@@ -11,7 +10,7 @@ import moxy.MvpPresenter
  */
 @InjectViewState
 class SelectPhotoPresenter(
-        private val photoSelection: PhotoSelection,
+        private val resultKey: String,
         private val router: Router
 ) : MvpPresenter<SelectPhotoView>() {
 
@@ -26,7 +25,7 @@ class SelectPhotoPresenter(
     }
 
     fun onPhotoClick(photoRes: Int) {
-        photoSelection.setSelectedPhoto(photoRes)
+        router.sendResult(resultKey, photoRes)
         router.exit()
     }
 
