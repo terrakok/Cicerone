@@ -56,7 +56,7 @@ class App : Application() {
 ```
 
 ## How it works?
-<img src="https://github.com/terrakok/Cicerone/raw/develop/media/CiceroneDiagram.png" alt="drawing" width="800"/>
+<img src="https://github.com/terrakok/Cicerone/blob/master/media/CiceroneDiagram.png" alt="CiceroneDiagram.png" width="800"/>
 
 Presenter calls navigation method of Router.
 
@@ -156,6 +156,30 @@ object Screens {
 Additional you can use `FragmentFactory` for creating your screens:
 ```kotlin
 val SomeScreen = FragmentScreen("SomeScreenId") { factory: FragmentFactory -> ... }
+```
+
+## Screen parameters and result listener
+```kotlin
+//you have to specify screen parameters via new FragmentScreen creation
+fun SelectPhoto(resultKey: String) = FragmentScreen("SelectPhoto") {
+    SelectPhotoFragment.getNewInstance(resultKey)
+}
+```
+
+```kotlin
+//listen result
+fun onSelectPhotoClicked() {
+    router.setResultListener(RESULT_KEY) { data ->
+        view.showPhoto(data as Bitmap)
+    }
+    router.navigateTo(SelectPhoto(RESULT_KEY))
+}
+
+//send result
+fun onPhotoClick(photo: Bitmap) {
+    router.sendResult(resultKey, photoRes)
+    router.exit()
+}
 ```
 
 ## Sample
