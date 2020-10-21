@@ -2,7 +2,7 @@ package com.github.terrakok.cicerone
 
 import java.lang.ref.WeakReference
 
-internal class ResultBus {
+internal class ResultWire {
     private val listeners = mutableMapOf<String, WeakReference<(Any) -> Unit>>()
 
     fun setResultListener(key: String, listener: (data: Any) -> Unit) {
