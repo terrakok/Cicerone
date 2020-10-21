@@ -2,7 +2,7 @@ package com.github.terrakok.cicerone.sample.mvp.animation.profile
 
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.sample.R
-import com.github.terrakok.cicerone.sample.Screens.selectPhotoScreen
+import com.github.terrakok.cicerone.sample.Screens.SelectPhoto
 import moxy.InjectViewState
 import moxy.MvpPresenter
 
@@ -28,7 +28,7 @@ class ProfilePresenter(
         router.setResultListener(RESULT_KEY) { data ->
             viewState!!.showPhoto(data as Int)
         }
-        router.navigateTo(selectPhotoScreen(RESULT_KEY))
+        router.navigateTo(SelectPhoto(RESULT_KEY))
     }
 
     fun onBackPressed() {

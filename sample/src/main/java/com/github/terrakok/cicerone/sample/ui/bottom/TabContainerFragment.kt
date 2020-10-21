@@ -11,7 +11,7 @@ import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.SampleApplication
-import com.github.terrakok.cicerone.sample.Screens.forwardScreen
+import com.github.terrakok.cicerone.sample.Screens.Forward
 import com.github.terrakok.cicerone.sample.subnavigation.LocalCiceroneHolder
 import com.github.terrakok.cicerone.sample.ui.common.BackButtonListener
 import com.github.terrakok.cicerone.sample.ui.common.RouterProvider
@@ -47,7 +47,7 @@ class TabContainerFragment : Fragment(), RouterProvider, BackButtonListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (childFragmentManager.findFragmentById(R.id.ftc_container) == null) {
-            cicerone.router.replaceScreen(forwardScreen(containerName, 0))
+            cicerone.router.replaceScreen(Forward(containerName, 0))
         }
     }
 
