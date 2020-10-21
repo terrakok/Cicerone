@@ -20,43 +20,43 @@ import com.github.terrakok.cicerone.sample.ui.start.StartActivity
  */
 object Screens {
 
-    fun sampleScreen(number: Int) = FragmentScreen("SampleScreen_$number") {
+    fun Sample(number: Int) = FragmentScreen("Sample($number)") {
         SampleFragment.getNewInstance(number)
     }
 
-    fun startScreen() = ActivityScreen("StartScreen") {
+    fun Start() = ActivityScreen("Start") {
         Intent(it, StartActivity::class.java)
     }
 
-    fun mainScreen() = ActivityScreen("MainScreen") {
+    fun Main() = ActivityScreen("Main") {
         Intent(it, MainActivity::class.java)
     }
 
-    fun bottomNavigationScreen() = ActivityScreen("BottomNavigationScreen") {
+    fun BottomNavigation() = ActivityScreen("BottomNavigation") {
         Intent(it, BottomNavigationActivity::class.java)
     }
 
-    fun tabScreen(tabName: String) = FragmentScreen("FragmentScreen") {
+    fun Tab(tabName: String) = FragmentScreen("Tab") {
         TabContainerFragment.getNewInstance(tabName)
     }
 
-    fun forwardScreen(containerName: String, number: Int) = FragmentScreen("ForwardScreen") {
+    fun Forward(containerName: String, number: Int) = FragmentScreen("Forward") {
         ForwardFragment.getNewInstance(containerName, number)
     }
 
-    fun githubScreen() = ActivityScreen("GithubScreen") {
+    fun Github() = ActivityScreen("Github") {
         Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/terrakok/Cicerone"))
     }
 
-    fun profileScreen() = ActivityScreen("ProfileScreen") {
+    fun Profile() = ActivityScreen("Profile") {
         Intent(it, ProfileActivity::class.java)
     }
 
-    fun profileInfoScreen() = FragmentScreen("ProfileInfoScreen") {
+    fun ProfileInfo() = FragmentScreen("ProfileInfo") {
         ProfileFragment()
     }
 
-    fun selectPhotoScreen(resultKey: String) = FragmentScreen("SelectPhotoScreen") {
+    fun SelectPhoto(resultKey: String) = FragmentScreen("SelectPhoto") {
         SelectPhotoFragment.getNewInstance(resultKey)
     }
 }

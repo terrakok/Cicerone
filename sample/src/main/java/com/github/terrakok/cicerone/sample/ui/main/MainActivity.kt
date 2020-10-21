@@ -11,7 +11,7 @@ import com.github.terrakok.cicerone.Replace
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.SampleApplication
-import com.github.terrakok.cicerone.sample.Screens.sampleScreen
+import com.github.terrakok.cicerone.sample.Screens.Sample
 import com.github.terrakok.cicerone.sample.ui.common.BackButtonListener
 import moxy.MvpAppCompatActivity
 import java.lang.ref.WeakReference
@@ -48,7 +48,7 @@ class MainActivity : MvpAppCompatActivity(), ChainHolder {
         screensSchemeTV = findViewById<View>(R.id.screens_scheme) as TextView
 
         if (savedInstanceState == null) {
-            navigator.applyCommands(arrayOf<Command>(Replace(sampleScreen(1))))
+            navigator.applyCommands(arrayOf<Command>(Replace(Sample(1))))
         } else {
             printScreensScheme()
         }

@@ -8,7 +8,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.SampleApplication
-import com.github.terrakok.cicerone.sample.Screens.tabScreen
+import com.github.terrakok.cicerone.sample.Screens.Tab
 import com.github.terrakok.cicerone.sample.mvp.bottom.BottomNavigationPresenter
 import com.github.terrakok.cicerone.sample.mvp.bottom.BottomNavigationView
 import com.github.terrakok.cicerone.sample.ui.common.BackButtonListener
@@ -87,7 +87,7 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView, R
         if (newFragment == null) {
             transaction.add(
                     R.id.ab_container,
-                    tabScreen(tab).createFragment.invoke(fm.fragmentFactory), tab
+                    Tab(tab).createFragment.invoke(fm.fragmentFactory), tab
             )
         }
         if (currentFragment != null) {

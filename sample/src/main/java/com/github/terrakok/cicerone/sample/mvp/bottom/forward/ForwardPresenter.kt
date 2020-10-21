@@ -1,8 +1,8 @@
 package com.github.terrakok.cicerone.sample.mvp.bottom.forward
 
 import com.github.terrakok.cicerone.Router
-import com.github.terrakok.cicerone.sample.Screens.forwardScreen
-import com.github.terrakok.cicerone.sample.Screens.githubScreen
+import com.github.terrakok.cicerone.sample.Screens.Forward
+import com.github.terrakok.cicerone.sample.Screens.Github
 import moxy.InjectViewState
 import moxy.MvpPresenter
 
@@ -25,11 +25,11 @@ class ForwardPresenter(
     }
 
     fun onForwardPressed() {
-        router.navigateTo(forwardScreen(container, number + 1))
+        router.navigateTo(Forward(container, number + 1))
     }
 
     fun onGithubPressed() {
-        router.navigateTo(githubScreen())
+        router.navigateTo(Github())
     }
 
     fun onBackPressed() {

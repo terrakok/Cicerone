@@ -3,7 +3,7 @@ package com.github.terrakok.cicerone.sample.mvp.main
 import android.os.Handler
 import android.os.Looper
 import com.github.terrakok.cicerone.Router
-import com.github.terrakok.cicerone.sample.Screens.sampleScreen
+import com.github.terrakok.cicerone.sample.Screens.Sample
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import java.util.concurrent.Executors
@@ -29,18 +29,18 @@ class SamplePresenter(
     }
 
     fun onForwardCommandClick() {
-        router.navigateTo(sampleScreen(screenNumber + 1))
+        router.navigateTo(Sample(screenNumber + 1))
     }
 
     fun onReplaceCommandClick() {
-        router.replaceScreen(sampleScreen(screenNumber + 1))
+        router.replaceScreen(Sample(screenNumber + 1))
     }
 
     fun onNewChainCommandClick() {
         router.newChain(
-                sampleScreen(screenNumber + 1),
-                sampleScreen(screenNumber + 2),
-                sampleScreen(screenNumber + 3)
+                Sample(screenNumber + 1),
+                Sample(screenNumber + 2),
+                Sample(screenNumber + 3)
         )
     }
 
@@ -49,20 +49,20 @@ class SamplePresenter(
     }
 
     fun onNewRootCommandClick() {
-        router.newRootScreen(sampleScreen(screenNumber + 1))
+        router.newRootScreen(Sample(screenNumber + 1))
     }
 
     fun onForwardWithDelayCommandClick() {
         future?.cancel(true)
         future = executorService.schedule({ //WARNING! Navigation must be only in UI thread.
             Handler(Looper.getMainLooper()).post {
-                router.navigateTo(sampleScreen(screenNumber + 1))
+                router.navigateTo(Sample(screenNumber + 1))
             }
         }, 5, TimeUnit.SECONDS)
     }
 
     fun onBackToCommandClick() {
-        router.backTo(sampleScreen(3))
+        router.backTo(Sample(3))
     }
 
     init {

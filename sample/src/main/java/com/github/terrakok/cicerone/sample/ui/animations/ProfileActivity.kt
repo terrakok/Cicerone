@@ -12,7 +12,7 @@ import com.github.terrakok.cicerone.Replace
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.SampleApplication
-import com.github.terrakok.cicerone.sample.Screens.profileInfoScreen
+import com.github.terrakok.cicerone.sample.Screens.ProfileInfo
 import com.github.terrakok.cicerone.sample.ui.animations.photos.SelectPhotoFragment
 import com.github.terrakok.cicerone.sample.ui.animations.profile.ProfileFragment
 import com.github.terrakok.cicerone.sample.ui.common.BackButtonListener
@@ -32,7 +32,7 @@ class ProfileActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_container)
         if (savedInstanceState == null) {
-            navigator.applyCommands(arrayOf<Command>(Replace(profileInfoScreen())))
+            navigator.applyCommands(arrayOf<Command>(Replace(ProfileInfo())))
         }
     }
 
