@@ -18,7 +18,7 @@ ext {
     bintrayName = 'cicerone-kotlin'
     publishedGroupId = 'com.github.terrakok'
     artifact = 'cicerone'
-    libraryVersion = '6.0'
+    libraryVersion = '6.1'
     gitUrl = 'https://github.com/terrakok/Cicerone'
     allLicenses = ['MIT']
 }
