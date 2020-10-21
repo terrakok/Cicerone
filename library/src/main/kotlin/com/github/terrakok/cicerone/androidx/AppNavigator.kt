@@ -115,8 +115,8 @@ open class AppNavigator constructor(
             fragment
         )
         when (type) {
-            ADD -> transaction.add(containerId, fragment)
-            REPLACE -> transaction.replace(containerId, fragment)
+            ADD -> transaction.add(containerId, fragment, screen.screenKey)
+            REPLACE -> transaction.replace(containerId, fragment, screen.screenKey)
         }
         if (addToBackStack) {
             val transactionInfo = TransactionInfo(screen.screenKey, type)
