@@ -70,7 +70,12 @@ open class Router : BaseRouter() {
      * @param showOnlyTopScreenView if FALSE then all screen views show together
      */
     fun newRootChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
-        val commands = screens.map { Forward(it, showOnlyTopScreenView) }
+        val commands = screens.mapIndexed { index, screen ->
+            if (index == 0)
+                Replace(screen)
+            else
+                Forward(screen, showOnlyTopScreenView)
+        }
         executeCommands(BackTo(null), *commands.toTypedArray())
     }
 
