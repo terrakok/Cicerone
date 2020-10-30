@@ -121,6 +121,7 @@
             android:layout_margin="4dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
+            android:layout_columnSpan="2"
             android:background="@color/greensea"
             android:gravity="center"
             android:text="Finish chain"
