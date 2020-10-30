@@ -54,6 +54,7 @@ class SampleFragment : BaseFragment(), SampleView, BackButtonListener {
         binding.forwardCommand.setOnClickListener { presenter.onForwardCommandClick() }
         binding.replaceCommand.setOnClickListener { presenter.onReplaceCommandClick() }
         binding.newChainCommand.setOnClickListener { presenter.onNewChainCommandClick() }
+        binding.newRootChainCommand.setOnClickListener { presenter.onNewRootChainCommandClick() }
         binding.newRootCommand.setOnClickListener { presenter.onNewRootCommandClick() }
         binding.forwardDelayCommand.setOnClickListener { presenter.onForwardWithDelayCommandClick() }
         binding.backToCommand.setOnClickListener { presenter.onBackToCommandClick() }

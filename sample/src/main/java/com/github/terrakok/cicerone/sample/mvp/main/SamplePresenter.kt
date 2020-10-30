@@ -44,6 +44,14 @@ class SamplePresenter(
         )
     }
 
+    fun onNewRootChainCommandClick() {
+        router.newRootChain(
+                Sample(screenNumber + 1),
+                Sample(screenNumber + 2),
+                Sample(screenNumber + 3)
+        )
+    }
+
     fun onFinishChainCommandClick() {
         router.finishChain()
     }
