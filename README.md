@@ -192,6 +192,17 @@ For more complex use case check out the [GitFox (Android GitLab client)](https:/
 ![](https://github.com/terrakok/Cicerone/raw/develop/media/insta_tabs.gif)
 ![](https://github.com/terrakok/Cicerone/raw/develop/media/animations.gif)
 
+## Applications with Cicerone inside
+<a href="https://play.google.com/store/apps/details?id=ru.foodfox.client" target="_blank"><img src="https://lh3.googleusercontent.com/m_8FvRusYXPUNhoP4dqLUrOjaLvXnGSNc8gXd2p-QlzO1vQZV4RBiYxXFoY8wgSnggA" width="256" height="125" alt="Яндекс.Еда — доставка еды/продуктов. Food delivery" /></a><br>
+Яндекс.Еда — доставка еды/продуктов. Food delivery
+
+<a href="https://play.google.com/store/apps/details?id=com.foodient.whisk" target="_blank"><img src="https://i.ytimg.com/vi/DSqp6tJkKkI/hqdefault.jpg" width="256" height="192" alt="Whisk: Recipe Saver, Meal Planner & Grocery List" /></a><br>
+Whisk: Recipe Saver, Meal Planner & Grocery List
+
+<a href="https://github.com/eduard1abdulmanov123/News" target="_blank"><img src="https://raw.githubusercontent.com/eduard1abdulmanov123/News/dev/screenshots/1.1%20%D0%B4%D0%BB%D1%8F%20%D0%B2%D0%B5%D1%81%D1%82%D0%B8.%D1%80%D1%83.jpg" width="256" height="125" alt="RSS Reader для Вести.Ru" /></a><br>
+RSS Reader для Вести.Ru
+
+
 ## Participants
 + idea and code - Konstantin Tskhovrebov (@terrakok)
 + architecture advice, documentation and publication - Vasili Chyrvon (@Jeevuz)
