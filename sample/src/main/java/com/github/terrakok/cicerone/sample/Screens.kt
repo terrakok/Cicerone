@@ -24,39 +24,39 @@ object Screens {
         SampleFragment.getNewInstance(number)
     }
 
-    fun Start() = ActivityScreen("Start") {
+    fun Start() = ActivityScreen {
         Intent(it, StartActivity::class.java)
     }
 
-    fun Main() = ActivityScreen("Main") {
+    fun Main() = ActivityScreen {
         Intent(it, MainActivity::class.java)
     }
 
-    fun BottomNavigation() = ActivityScreen("BottomNavigation") {
+    fun BottomNavigation() = ActivityScreen {
         Intent(it, BottomNavigationActivity::class.java)
     }
 
-    fun Tab(tabName: String) = FragmentScreen("Tab") {
+    fun Tab(tabName: String) = FragmentScreen {
         TabContainerFragment.getNewInstance(tabName)
     }
 
-    fun Forward(containerName: String, number: Int) = FragmentScreen("Forward") {
+    fun Forward(containerName: String, number: Int) = FragmentScreen {
         ForwardFragment.getNewInstance(containerName, number)
     }
 
-    fun Github() = ActivityScreen("Github") {
+    fun Github() = ActivityScreen {
         Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/terrakok/Cicerone"))
     }
 
-    fun Profile() = ActivityScreen("Profile") {
+    fun Profile() = ActivityScreen {
         Intent(it, ProfileActivity::class.java)
     }
 
-    fun ProfileInfo() = FragmentScreen("ProfileInfo") {
+    fun ProfileInfo() = FragmentScreen {
         ProfileFragment()
     }
 
-    fun SelectPhoto(resultKey: String) = FragmentScreen("SelectPhoto") {
+    fun SelectPhoto(resultKey: String) = FragmentScreen {
         SelectPhotoFragment.getNewInstance(resultKey)
     }
 }

@@ -1,8 +1,8 @@
 package com.github.terrakok.cicerone
 
 /**
- * Screen is class for description application screen.
+ * Screen is interface for description application screen.
  */
-abstract class Screen {
-    open val screenKey: String = this::class.qualifiedName!!
+interface Screen {
+    val screenKey: String get() = this::class.java.name
 }
