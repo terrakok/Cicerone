@@ -202,6 +202,12 @@ Whisk: Recipe Saver, Meal Planner & Grocery List
 <a href="https://github.com/eduard1abdulmanov123/News" target="_blank"><img src="https://raw.githubusercontent.com/eduard1abdulmanov123/News/dev/screenshots/1.1%20%D0%B4%D0%BB%D1%8F%20%D0%B2%D0%B5%D1%81%D1%82%D0%B8.%D1%80%D1%83.jpg" width="256" height="125" alt="RSS Reader для Вести.Ru" /></a><br>
 RSS Reader для Вести.Ru
 
+<a href="https://play.google.com/store/apps/details?id=com.epam.connect.android" target="_blank"><img src="https://lh3.googleusercontent.com/GLMJhNoY37C1RfiwxHb-VBsCu0PgHSVhSmNWStisuSUBt_vUTmEGW4slERP-MgKqmqI" width="256" height="125" alt="EPAM Connect" /></a><br>
+EPAM Connect
+
+<a href="https://play.google.com/store/apps/details?id=org.consumerreports.ratings" target="_blank"><img src="https://freesiteslike.com/wp-content/uploads/2017/05/consumer-reports.png" width="256" height="144" alt="Consumer Reports: Product Reviews & Ratings" /></a><br>
+Consumer Reports: Product Reviews & Ratings
+
 
 ## Participants
 + idea and code - Konstantin Tskhovrebov (@terrakok)
