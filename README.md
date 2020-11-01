@@ -6,15 +6,39 @@
 [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-250-green.svg)](http://androidweekly.net/issues/issue-250)
 [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-271-green.svg)](http://androidweekly.net/issues/issue-271)  
 
-![](https://habrastorage.org/files/644/32e/9eb/64432e9eb3664723b3ee438449dab3b0.png)
+<table>
+    <tr>
+        <td>
+            <img src="https://github.com/terrakok/Cicerone/raw/master/media/navigation.gif" width="256"/>
+        </td>
+        <td>
+            <img src="https://github.com/terrakok/Cicerone/raw/master/media/insta_tabs.gif" width="256"/>
+        </td>
+        <td>
+            <img src="https://github.com/terrakok/Cicerone/raw/master/media/animations.gif" width="256"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Power navigation
+        </td>
+        <td>
+            Multibackstack
+        </td>
+        <td>
+            Result listeners
+        </td>
+    </tr>
+</table>
 
-Cicerone (a guide, one who conducts sightseers) is a lightweight library that makes the navigation in an Android app easy.  
+Cicerone (means - a guide, one who conducts sightseers) is a lightweight library that makes the navigation in an Android app easy.  
 It was designed to be used with the MVP/MVVM/MVI patterns but will work great with any architecture.
 
 ## Main advantages
 + is not tied to Fragments
-+ not a framework
++ not a framework (very lightweight)
 + short navigation calls (no builders)
++ static typed checks for screen parameters!
 + lifecycle-safe!
 + functionality is simple to extend
 + suitable for Unit Testing
@@ -109,13 +133,13 @@ override fun onPause() {
 ## Navigation commands
 This commands set will fulfill the needs of the most applications. But if you need something special - just add it!
 + Forward - Opens new screen
-![](https://github.com/terrakok/Cicerone/raw/develop/media/forward_img.png)
+![](https://github.com/terrakok/Cicerone/raw/master/media/forward_img.png)
 + Back - Rolls back the last transition
-![](https://github.com/terrakok/Cicerone/raw/develop/media/back_img.png)
+![](https://github.com/terrakok/Cicerone/raw/master/media/back_img.png)
 + BackTo - Rolls back to the needed screen in the screens chain
-![](https://github.com/terrakok/Cicerone/raw/develop/media/backTo_img.png)
+![](https://github.com/terrakok/Cicerone/raw/master/media/backTo_img.png)
 + Replace - Replaces the current screen
-![](https://github.com/terrakok/Cicerone/raw/develop/media/replace_img.png)
+![](https://github.com/terrakok/Cicerone/raw/master/media/replace_img.png)
 
 ## Predefined navigator
 The library provides predefined navigator for _Fragments_ and _Activity_.
@@ -187,10 +211,6 @@ To see how to add, initialize and use the library and predefined navigators see 
 (thank you [@Javernaut](https://github.com/Javernaut) for support new library version and migrate sample project to Kotlin!)
 
 For more complex use case check out the [GitFox (Android GitLab client)](https://gitlab.com/terrakok/gitlab-client)
-
-![](https://github.com/terrakok/Cicerone/raw/develop/media/navigation.gif)
-![](https://github.com/terrakok/Cicerone/raw/develop/media/insta_tabs.gif)
-![](https://github.com/terrakok/Cicerone/raw/develop/media/animations.gif)
 
 ## Applications with Cicerone inside
 <a href="https://play.google.com/store/apps/details?id=ru.foodfox.client" target="_blank"><img src="https://lh3.googleusercontent.com/m_8FvRusYXPUNhoP4dqLUrOjaLvXnGSNc8gXd2p-QlzO1vQZV4RBiYxXFoY8wgSnggA" width="256" height="125" alt="Яндекс.Еда — доставка еды/продуктов. Food delivery" /></a><br>
