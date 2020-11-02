@@ -215,11 +215,12 @@ For more complex use case check out the [GitFox (Android GitLab client)](https:/
 ## Applications with Cicerone inside
 <a href="https://play.google.com/store/apps/details?id=ru.foodfox.client"><img src="https://play-lh.googleusercontent.com/gWYedIqy8QujCQOn0kzEIBEkGLBSpuKvFm-fMcfkWnJ1Oirtv847xAE4OyhAaohdcp5V=s360" width="64" /> Яндекс.Еда — доставка еды/продуктов. Food delivery</a><br>
 <a href="https://play.google.com/store/apps/details?id=com.foodient.whisk"><img src="https://play-lh.googleusercontent.com/eKotZjJcZOU2_L9t2l34EEY7aGl5zhvKVuEbF0Kc4MRs_pAC2SJgOnWMkMTFjR_e9EY=s360" width="64" /> Whisk: Recipe Saver, Meal Planner & Grocery List</a><br>
+<a href="https://play.google.com/store/apps/details?id=kz.beeline.odp"><img src="https://play-lh.googleusercontent.com/hzgjpQQpy6Z-Byye0aVKSv9P7h8yx58i6pVkQtiM6jB99iWFXjYfKeaPqJ3wm6Rtb38=s360" width="64" /> Мой Beeline (Казахстан)</a><br>
+<a href="https://play.google.com/store/apps/details?id=com.mercuryo.app"><img src="https://play-lh.googleusercontent.com/FKulXdc15r5PWX6hTZi2i3iaJjcQHwd9xParp6YPiQ2KiBqza7jwEt_b_tqLwXpyEHg=s360" width="64" /> Mercuryo Bitcoin Cryptowallet</a><br>
+<a href="https://play.google.com/store/apps/details?id=com.warefly.checkscan"><img src="https://play-lh.googleusercontent.com/2c2uuiSl2vwGgp-vdI-VArQEMdSSXk1neUK5A-Udc0WANPcvp5kBJFEugrFiXnxUc7k=s360" width="64" /> ЧекСкан - кэшбэк за чеки, цены и акции в магазинах</a><br>
 <a href="https://github.com/eduard1abdulmanov123/News"><img src="https://raw.githubusercontent.com/eduard1abdulmanov123/News/dev/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="64" /> RSS Reader для Вести.Ru</a><br>
 <a href="https://play.google.com/store/apps/details?id=com.epam.connect.android"><img src="https://play-lh.googleusercontent.com/aN7R6BiR7yt7b3oEoBI30pVwzsdzaWe3TWpw8c9igqoOj79Pm2xVh4_C4qwjSKwjVio=s360" width="64" /> EPAM Connect</a><br>
 <a href="https://play.google.com/store/apps/details?id=org.consumerreports.ratings"><img src="https://play-lh.googleusercontent.com/dEdOwZOjXAdamytxY1TgY8LS-Hc9FKCcit5HP1RyaKqRAWjDJEyFSQS1XlqQPpeY5UI=s360" width="64" /> Consumer Reports: Product Reviews & Ratings</a><br>
-<a href="https://play.google.com/store/apps/details?id=com.mercuryo.app"><img src="https://play-lh.googleusercontent.com/FKulXdc15r5PWX6hTZi2i3iaJjcQHwd9xParp6YPiQ2KiBqza7jwEt_b_tqLwXpyEHg=s360" width="64" /> Mercuryo Bitcoin Cryptowallet</a><br>
-<a href="https://play.google.com/store/apps/details?id=com.warefly.checkscan"><img src="https://play-lh.googleusercontent.com/2c2uuiSl2vwGgp-vdI-VArQEMdSSXk1neUK5A-Udc0WANPcvp5kBJFEugrFiXnxUc7k=s360" width="64" /> ЧекСкан - кэшбэк за чеки, цены и акции в магазинах</a><br>
 
 ## Participants
 + idea and code - Konstantin Tskhovrebov (@terrakok)
