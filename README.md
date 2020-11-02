@@ -225,20 +225,18 @@ For more complex use case check out the [GitFox (Android GitLab client)](https:/
                 Whisk: Recipe Saver, Meal Planner & Grocery List
             </a>
         </td>
-    </tr>
-    <tr>
         <td>     
             <a href="https://github.com/eduard1abdulmanov123/News" target="_blank"><img src="https://raw.githubusercontent.com/eduard1abdulmanov123/News/dev/screenshots/1.1%20%D0%B4%D0%BB%D1%8F%20%D0%B2%D0%B5%D1%81%D1%82%D0%B8.%D1%80%D1%83.jpg" width="256" height="125" alt="RSS Reader для Вести.Ru" /><br>
                 RSS Reader для Вести.Ru
             </a>
         </td>
+    </tr>
+    <tr>
         <td>
             <a href="https://play.google.com/store/apps/details?id=com.epam.connect.android" target="_blank"><img src="https://lh3.googleusercontent.com/GLMJhNoY37C1RfiwxHb-VBsCu0PgHSVhSmNWStisuSUBt_vUTmEGW4slERP-MgKqmqI" width="256" height="125" alt="EPAM Connect" /><br>
                 EPAM Connect
             </a>
         </td>
-    </tr>
-    <tr>
         <td>
             <a href="https://play.google.com/store/apps/details?id=org.consumerreports.ratings" target="_blank"><img src="https://freesiteslike.com/wp-content/uploads/2017/05/consumer-reports.png" width="256" height="144" alt="Consumer Reports: Product Reviews & Ratings" /><br>
                 Consumer Reports: Product Reviews & Ratings
@@ -247,6 +245,13 @@ For more complex use case check out the [GitFox (Android GitLab client)](https:/
         <td>
             <a href="https://play.google.com/store/apps/details?id=com.mercuryo.app" target="_blank"><img src="https://is4-ssl.mzstatic.com/image/thumb/Purple114/v4/b0/37/11/b037114c-1cb0-7e64-b6a5-82c4dfb932e0/source/512x512bb.jpg" width="256" height="256" alt="Mercuryo Bitcoin Cryptowallet" /><br>
                 Mercuryo Bitcoin Cryptowallet
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="https://play.google.com/store/apps/details?id=com.warefly.checkscan" target="_blank"><img src="https://lh3.googleusercontent.com/nq6wB2mXeUFXoWwvzfT_GHvN3xYibVvFXmWHPTLMClwmZBzydX7FRR7OUWgqTzrTQR8" width="256" height="125" alt="ЧекСкан - кэшбэк за чеки, цены и акции в магазинах" /><br>
+                ЧекСкан - кэшбэк за чеки, цены и акции в магазинах
             </a>
         </td>
     </tr>
