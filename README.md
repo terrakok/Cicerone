@@ -213,50 +213,13 @@ To see how to add, initialize and use the library and predefined navigators see 
 For more complex use case check out the [GitFox (Android GitLab client)](https://gitlab.com/terrakok/gitlab-client)
 
 ## Applications with Cicerone inside
-<table>
-    <tr>
-        <td>
-            <a href="https://play.google.com/store/apps/details?id=ru.foodfox.client" target="_blank"><img src="https://lh3.googleusercontent.com/m_8FvRusYXPUNhoP4dqLUrOjaLvXnGSNc8gXd2p-QlzO1vQZV4RBiYxXFoY8wgSnggA" width="256" height="125" alt="Яндекс.Еда — доставка еды/продуктов. Food delivery" /><br>
-                Яндекс.Еда — доставка еды/продуктов. Food delivery
-            </a>
-        </td>
-        <td>
-            <a href="https://play.google.com/store/apps/details?id=com.foodient.whisk" target="_blank"><img src="https://i.ytimg.com/vi/DSqp6tJkKkI/hqdefault.jpg" width="256" height="192" alt="Whisk: Recipe Saver, Meal Planner & Grocery List" /><br>
-                Whisk: Recipe Saver, Meal Planner & Grocery List
-            </a>
-        </td>
-        <td>     
-            <a href="https://github.com/eduard1abdulmanov123/News" target="_blank"><img src="https://raw.githubusercontent.com/eduard1abdulmanov123/News/dev/screenshots/1.1%20%D0%B4%D0%BB%D1%8F%20%D0%B2%D0%B5%D1%81%D1%82%D0%B8.%D1%80%D1%83.jpg" width="256" height="125" alt="RSS Reader для Вести.Ru" /><br>
-                RSS Reader для Вести.Ru
-            </a>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="https://play.google.com/store/apps/details?id=com.epam.connect.android" target="_blank"><img src="https://lh3.googleusercontent.com/GLMJhNoY37C1RfiwxHb-VBsCu0PgHSVhSmNWStisuSUBt_vUTmEGW4slERP-MgKqmqI" width="256" height="125" alt="EPAM Connect" /><br>
-                EPAM Connect
-            </a>
-        </td>
-        <td>
-            <a href="https://play.google.com/store/apps/details?id=org.consumerreports.ratings" target="_blank"><img src="https://freesiteslike.com/wp-content/uploads/2017/05/consumer-reports.png" width="256" height="144" alt="Consumer Reports: Product Reviews & Ratings" /><br>
-                Consumer Reports: Product Reviews & Ratings
-            </a>
-        </td>
-        <td>
-            <a href="https://play.google.com/store/apps/details?id=com.mercuryo.app" target="_blank"><img src="https://is4-ssl.mzstatic.com/image/thumb/Purple114/v4/b0/37/11/b037114c-1cb0-7e64-b6a5-82c4dfb932e0/source/512x512bb.jpg" width="256" height="256" alt="Mercuryo Bitcoin Cryptowallet" /><br>
-                Mercuryo Bitcoin Cryptowallet
-            </a>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="https://play.google.com/store/apps/details?id=com.warefly.checkscan" target="_blank"><img src="https://lh3.googleusercontent.com/nq6wB2mXeUFXoWwvzfT_GHvN3xYibVvFXmWHPTLMClwmZBzydX7FRR7OUWgqTzrTQR8" width="256" height="125" alt="ЧекСкан - кэшбэк за чеки, цены и акции в магазинах" /><br>
-                ЧекСкан - кэшбэк за чеки, цены и акции в магазинах
-            </a>
-        </td>
-    </tr>
-</table>
-
+<a href="https://play.google.com/store/apps/details?id=ru.foodfox.client"><img src="https://play-lh.googleusercontent.com/gWYedIqy8QujCQOn0kzEIBEkGLBSpuKvFm-fMcfkWnJ1Oirtv847xAE4OyhAaohdcp5V=s360" width="64" /> Яндекс.Еда — доставка еды/продуктов. Food delivery</a><br>
+<a href="https://play.google.com/store/apps/details?id=com.foodient.whisk"><img src="https://play-lh.googleusercontent.com/eKotZjJcZOU2_L9t2l34EEY7aGl5zhvKVuEbF0Kc4MRs_pAC2SJgOnWMkMTFjR_e9EY=s360" width="64" /> Whisk: Recipe Saver, Meal Planner & Grocery List</a><br>
+<a href="https://github.com/eduard1abdulmanov123/News"><img src="https://raw.githubusercontent.com/eduard1abdulmanov123/News/dev/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="64" /> RSS Reader для Вести.Ru</a><br>
+<a href="https://play.google.com/store/apps/details?id=com.epam.connect.android"><img src="https://play-lh.googleusercontent.com/aN7R6BiR7yt7b3oEoBI30pVwzsdzaWe3TWpw8c9igqoOj79Pm2xVh4_C4qwjSKwjVio=s360" width="64" /> EPAM Connect</a><br>
+<a href="https://play.google.com/store/apps/details?id=org.consumerreports.ratings"><img src="https://play-lh.googleusercontent.com/dEdOwZOjXAdamytxY1TgY8LS-Hc9FKCcit5HP1RyaKqRAWjDJEyFSQS1XlqQPpeY5UI=s360" width="64" /> Consumer Reports: Product Reviews & Ratings</a><br>
+<a href="https://play.google.com/store/apps/details?id=com.mercuryo.app"><img src="https://play-lh.googleusercontent.com/FKulXdc15r5PWX6hTZi2i3iaJjcQHwd9xParp6YPiQ2KiBqza7jwEt_b_tqLwXpyEHg=s360" width="64" /> Mercuryo Bitcoin Cryptowallet</a><br>
+<a href="https://play.google.com/store/apps/details?id=com.warefly.checkscan"><img src="https://play-lh.googleusercontent.com/2c2uuiSl2vwGgp-vdI-VArQEMdSSXk1neUK5A-Udc0WANPcvp5kBJFEugrFiXnxUc7k=s360" width="64" /> ЧекСкан - кэшбэк за чеки, цены и акции в магазинах</a><br>
 
 ## Participants
 + idea and code - Konstantin Tskhovrebov (@terrakok)
