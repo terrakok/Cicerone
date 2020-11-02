@@ -171,15 +171,15 @@ private val navigator = object : AppNavigator(this, R.id.container) {
 Describe your screens as you like e.g. create Kotlin `object` with all application screens:
 ```kotlin
 object Screens {
-    val Main = FragmentScreen { MainFragment() }
-    val AddressSearch = FragmentScreen { AddressSearchFragment() }
+    fun Main() = FragmentScreen { MainFragment() }
+    fun AddressSearch() = FragmentScreen { AddressSearchFragment() }
     fun Profile(userId: Long) = FragmentScreen("Profile_$userId") { ProfileFragment(userId) }
 }
 ```
 
 Additional you can use `FragmentFactory` for creating your screens:
 ```kotlin
-val SomeScreen = FragmentScreen { factory: FragmentFactory -> ... }
+fun SomeScreen() = FragmentScreen { factory: FragmentFactory -> ... }
 ```
 
 ## Screen parameters and result listener
