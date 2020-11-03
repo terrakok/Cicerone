@@ -14,7 +14,7 @@ abstract class BaseRouter {
      *
      * After first call listener will be removed.
      */
-    fun setResultListener(key: String, listener: (data: Any) -> Unit) {
+    fun setResultListener(key: String, listener: ResultListener) {
         resultWire.setResultListener(key, listener)
     }
 
@@ -34,4 +34,11 @@ abstract class BaseRouter {
         commandBuffer.executeCommands(commands)
         resultWire.flush()
     }
+}
+
+/**
+ * Interface definition for a result callback.
+ */
+fun interface ResultListener {
+    fun onResult(data: Any)
 }

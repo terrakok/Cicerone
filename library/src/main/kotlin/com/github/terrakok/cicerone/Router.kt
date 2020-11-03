@@ -14,6 +14,7 @@ open class Router : BaseRouter() {
      * @param screen screen
      * @param clearContainer if FALSE then new screen shows over previous
      */
+    @JvmOverloads
     fun navigateTo(screen: Screen, clearContainer: Boolean = true) {
         executeCommands(Forward(screen, clearContainer))
     }
@@ -58,6 +59,7 @@ open class Router : BaseRouter() {
      * @param screens
      * @param showOnlyTopScreenView if FALSE then all screen views show together
      */
+    @JvmOverloads
     fun newChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
         val commands = screens.map { Forward(it, showOnlyTopScreenView) }
         executeCommands(*commands.toTypedArray())
@@ -69,6 +71,7 @@ open class Router : BaseRouter() {
      * @param screens
      * @param showOnlyTopScreenView if FALSE then all screen views show together
      */
+    @JvmOverloads
     fun newRootChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
         val commands = screens.mapIndexed { index, screen ->
             if (index == 0)
