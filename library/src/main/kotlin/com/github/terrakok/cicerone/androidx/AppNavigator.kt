@@ -13,7 +13,7 @@ import com.github.terrakok.cicerone.androidx.TransactionInfo.Type.REPLACE
  *
  * Recommendation: most useful for Single-Activity application.
  */
-open class AppNavigator constructor(
+open class AppNavigator @JvmOverloads constructor(
     protected val activity: FragmentActivity,
     protected val containerId: Int,
     protected val fragmentManager: FragmentManager = activity.supportFragmentManager,

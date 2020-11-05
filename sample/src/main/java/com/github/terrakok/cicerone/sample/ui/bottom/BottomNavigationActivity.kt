@@ -87,7 +87,7 @@ class BottomNavigationActivity : MvpAppCompatActivity(), BottomNavigationView, R
         if (newFragment == null) {
             transaction.add(
                     R.id.ab_container,
-                    Tab(tab).createFragment.invoke(fm.fragmentFactory), tab
+                    Tab(tab).createFragment(fm.fragmentFactory), tab
             )
         }
         if (currentFragment != null) {

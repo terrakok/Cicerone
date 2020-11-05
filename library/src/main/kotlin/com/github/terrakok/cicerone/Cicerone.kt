@@ -17,12 +17,14 @@ class Cicerone<T : BaseRouter> private constructor(val router: T) {
         /**
          * Creates the Cicerone instance with the default [Router]
          */
+        @JvmStatic
         fun create() = create(Router())
 
         /**
          * Creates the Cicerone instance with the custom router.
          * @param customRouter the custom router extending [BaseRouter]
          */
+        @JvmStatic
         fun <T : BaseRouter> create(customRouter: T) = Cicerone(customRouter)
     }
 }

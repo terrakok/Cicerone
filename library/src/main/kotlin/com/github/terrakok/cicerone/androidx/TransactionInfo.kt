@@ -12,6 +12,7 @@ data class TransactionInfo(
     override fun toString() = screenKey + type.symbol
 
     companion object {
+        @JvmStatic
         fun fromString(str: String) = TransactionInfo(
             str.dropLast(1),
             if (str.last() == Type.ADD.symbol) Type.ADD else Type.REPLACE
