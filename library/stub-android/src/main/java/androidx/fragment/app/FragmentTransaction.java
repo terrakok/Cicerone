@@ -6,6 +6,10 @@ package androidx.fragment.app;
  */
 
 public class FragmentTransaction {
+    public FragmentTransaction setReorderingAllowed(boolean reorderingAllowed) {
+        throw new RuntimeException("Stub!");
+    }
+
     public FragmentTransaction add(int containerViewId, Fragment fragment, String tag) {
         throw new RuntimeException("Stub!");
     }

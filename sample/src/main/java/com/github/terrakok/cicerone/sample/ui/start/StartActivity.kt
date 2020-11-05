@@ -29,7 +29,7 @@ class StartActivity : MvpAppCompatActivity(), StartActivityView {
     @InjectPresenter
     lateinit var presenter: StartActivityPresenter
 
-    private val navigator: Navigator = AppNavigator(this, -1, supportFragmentManager, supportFragmentManager.fragmentFactory)
+    private val navigator: Navigator = AppNavigator(this, -1)
 
     @ProvidePresenter
     fun createStartActivityPresenter() = StartActivityPresenter(router)

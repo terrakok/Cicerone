@@ -23,7 +23,7 @@ import javax.inject.Inject
 class TabContainerFragment : Fragment(), RouterProvider, BackButtonListener {
 
     private val navigator: Navigator by lazy {
-        AppNavigator(activity!!, R.id.ftc_container, childFragmentManager, childFragmentManager.fragmentFactory)
+        AppNavigator(activity!!, R.id.ftc_container, childFragmentManager)
     }
 
     @Inject

@@ -46,7 +46,7 @@ class ProfileActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    private val navigator: Navigator = object : AppNavigator(this, R.id.container, supportFragmentManager, supportFragmentManager.fragmentFactory) {
+    private val navigator: Navigator = object : AppNavigator(this, R.id.container) {
 
         override fun setupFragmentTransaction(fragmentTransaction: FragmentTransaction, currentFragment: Fragment?, nextFragment: Fragment?) {
             if (currentFragment is ProfileFragment

@@ -36,6 +36,10 @@ public class FragmentManager {
         throw new RuntimeException("Stub!");
     }
 
+    public FragmentFactory getFragmentFactory() {
+        throw new RuntimeException("Stub!");
+    }
+
     public interface BackStackEntry {
         int getId();
 
