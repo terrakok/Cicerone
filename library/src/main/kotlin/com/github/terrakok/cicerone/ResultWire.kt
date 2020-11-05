@@ -2,6 +2,13 @@ package com.github.terrakok.cicerone
 
 import java.lang.ref.WeakReference
 
+/**
+ * Interface definition for a result callback.
+ */
+fun interface ResultListener {
+    fun onResult(data: Any)
+}
+
 internal class ResultWire {
     private val listeners = mutableMapOf<String, WeakReference<ResultListener>>()
 

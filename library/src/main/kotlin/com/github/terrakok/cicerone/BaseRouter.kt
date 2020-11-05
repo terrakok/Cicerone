@@ -35,10 +35,3 @@ abstract class BaseRouter {
         resultWire.flush()
     }
 }
-
-/**
- * Interface definition for a result callback.
- */
-fun interface ResultListener {
-    fun onResult(data: Any)
-}
