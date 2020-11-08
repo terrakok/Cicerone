@@ -52,6 +52,9 @@ class StartActivity : MvpAppCompatActivity(), StartActivityView {
         findViewById<View>(R.id.result_and_anim_button).setOnClickListener {
             presenter.onResultWithAnimationPressed()
         }
+        findViewById<View>(R.id.graph_button).setOnClickListener {
+            presenter.onGraphPressed()
+        }
     }
 
     override fun onResume() {

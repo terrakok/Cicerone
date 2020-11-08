@@ -10,6 +10,7 @@ import com.github.terrakok.cicerone.sample.ui.animations.profile.ProfileFragment
 import com.github.terrakok.cicerone.sample.ui.bottom.BottomNavigationActivity
 import com.github.terrakok.cicerone.sample.ui.bottom.ForwardFragment
 import com.github.terrakok.cicerone.sample.ui.bottom.TabContainerFragment
+import com.github.terrakok.cicerone.sample.ui.graph.GraphActivity
 import com.github.terrakok.cicerone.sample.ui.main.MainActivity
 import com.github.terrakok.cicerone.sample.ui.main.SampleFragment
 import com.github.terrakok.cicerone.sample.ui.start.StartActivity
@@ -58,5 +59,9 @@ object Screens {
 
     fun SelectPhoto(resultKey: String) = FragmentScreen {
         SelectPhotoFragment.getNewInstance(resultKey)
+    }
+
+    fun Graph() = ActivityScreen {
+        Intent(it, GraphActivity::class.java)
     }
 }

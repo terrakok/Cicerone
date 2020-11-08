@@ -7,6 +7,9 @@ import com.github.terrakok.cicerone.sample.ui.animations.photos.SelectPhotoFragm
 import com.github.terrakok.cicerone.sample.ui.animations.profile.ProfileFragment
 import com.github.terrakok.cicerone.sample.ui.bottom.BottomNavigationActivity
 import com.github.terrakok.cicerone.sample.ui.bottom.TabContainerFragment
+import com.github.terrakok.cicerone.sample.ui.graph.ForkFragment
+import com.github.terrakok.cicerone.sample.ui.graph.GraphActivity
+import com.github.terrakok.cicerone.sample.ui.graph.RoadFragment
 import com.github.terrakok.cicerone.sample.ui.main.MainActivity
 import com.github.terrakok.cicerone.sample.ui.main.SampleFragment
 import com.github.terrakok.cicerone.sample.ui.start.StartActivity
@@ -37,4 +40,10 @@ interface AppComponent {
     fun inject(fragment: SelectPhotoFragment)
 
     fun inject(activity: ProfileActivity)
+
+    fun inject(activity: GraphActivity)
+
+    fun inject(fragment: RoadFragment)
+
+    fun inject(fragment: ForkFragment)
 }

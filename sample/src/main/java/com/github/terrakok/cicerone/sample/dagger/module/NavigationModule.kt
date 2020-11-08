@@ -4,8 +4,11 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Cicerone.Companion.create
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
+import com.github.terrakok.cicerone.graph.GraphRouter
+import com.github.terrakok.cicerone.sample.Graph
 import dagger.Module
 import dagger.Provides
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -14,6 +17,7 @@ import javax.inject.Singleton
 @Module
 class NavigationModule {
     private val cicerone: Cicerone<Router> = create()
+    private val graphCicerone: Cicerone<GraphRouter> = create(GraphRouter(Graph()))
 
     @Provides
     @Singleton
@@ -25,5 +29,18 @@ class NavigationModule {
     @Singleton
     fun provideNavigatorHolder(): NavigatorHolder {
         return cicerone.getNavigatorHolder()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGraphRouter(): GraphRouter {
+        return graphCicerone.router
+    }
+
+    @Provides
+    @Singleton
+    @Named("graph")
+    fun provideGraphNavigatorHolder(): NavigatorHolder {
+        return graphCicerone.getNavigatorHolder()
     }
 }
