@@ -1,9 +1,7 @@
 package com.github.terrakok.cicerone.sample
 
 import com.github.terrakok.cicerone.androidx.FragmentScreen
-import com.github.terrakok.cicerone.graph.dest
-import com.github.terrakok.cicerone.graph.edge
-import com.github.terrakok.cicerone.graph.graph
+import com.github.terrakok.cicerone.graph.*
 import com.github.terrakok.cicerone.sample.ui.graph.ForkFragment
 import com.github.terrakok.cicerone.sample.ui.graph.RoadFragment
 
@@ -35,6 +33,9 @@ fun Graph() = graph {
                                 }
                                 dest("7") {
                                     screen = { id -> FragmentScreen(id) { RoadFragment.getNewInstance(id) } }
+                                    jumps = {
+                                        finish("1")
+                                    }
                                 }
                             }
                         }
@@ -49,6 +50,12 @@ fun Graph() = graph {
                     screen = { id -> FragmentScreen(id) { RoadFragment.getNewInstance(id) } }
                     edges = {
                         edge("1")
+                    }
+                    jumps = {
+                        jump("1") {
+                            backTo = ROOT_ID
+                            chain = listOf("1", "2", "3", "4", "5", "7")
+                        }
                     }
                 }
                 dest("10") {

@@ -30,10 +30,26 @@ internal class VertexLink(
     destroyPreviousView: Boolean = true
 ): Vertex(id, emptySet(), emptySet(), destroyPreviousView)
 
-data class Jump(
+class Jump(
     val id: String,
-    val reusePreviousVertexes: Boolean
-)
+    val backTo: String?,
+    val chain: List<String>
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Jump
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+}
 
 //Graph DSL
 
@@ -42,12 +58,14 @@ class GraphInfo(
     var jumps: MutableSet<Jump>.() -> Unit = {}
 )
 
+const val ROOT_ID = "graph-root"
+
 fun graph(
     setup: GraphInfo.() -> Unit
 ): Vertex {
     val info = GraphInfo().apply(setup)
     return Vertex(
-        "root",
+        ROOT_ID,
         mutableSetOf<Vertex>().apply(info.edges),
         mutableSetOf<Jump>().apply(info.jumps)
     )
@@ -81,9 +99,23 @@ fun MutableSet<Vertex>.edge(
     add(VertexLink(id, destroyPreviousView))
 }
 
+class JumpInfo(
+    var backTo: String? = null,
+    var chain: List<String> = emptyList()
+)
+
 fun MutableSet<Jump>.jump(
     id: String,
-    reusePreviousVertexes: Boolean = true
+    setup: JumpInfo.() -> Unit
 ) {
-    add(Jump(id, reusePreviousVertexes))
+    val info = JumpInfo().apply(setup)
+    add(Jump(
+        id,
+        info.backTo,
+        info.chain
+    ))
+}
+
+fun MutableSet<Jump>.finish(id: String) {
+    add(Jump(id, ROOT_ID, emptyList()))
 }

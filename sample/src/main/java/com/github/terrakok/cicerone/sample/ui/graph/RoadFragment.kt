@@ -43,6 +43,7 @@ class RoadFragment : MvpAppCompatFragment(), MvpView, BackButtonListener {
         super.onActivityCreated(savedInstanceState)
         binding.textView.text = arguments?.getString(EXTRA_NUMBER)
         binding.forwardButton.setOnClickListener { presenter.onButtonClick() }
+        binding.jumpButton.setOnClickListener { presenter.onJumpClick() }
     }
 
     override fun onBackPressed(): Boolean {

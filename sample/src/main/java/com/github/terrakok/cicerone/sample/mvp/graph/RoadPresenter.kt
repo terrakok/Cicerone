@@ -16,6 +16,12 @@ class RoadPresenter(
         }
     }
 
+    fun onJumpClick() {
+        graphRouter.currentVertex.jumps.firstOrNull()?.id?.let { id ->
+            graphRouter.jumpTo(id)
+        }
+    }
+
     fun onBackPressed() {
         graphRouter.exit()
     }

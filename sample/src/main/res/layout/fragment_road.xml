@@ -27,6 +27,15 @@
         android:text="➔"
         android:textSize="20sp"/>
 
+    <Button
+        android:id="@+id/jump_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minWidth="100dp"
+        android:text="JUMP"
+        android:textSize="20sp"/>
+
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"

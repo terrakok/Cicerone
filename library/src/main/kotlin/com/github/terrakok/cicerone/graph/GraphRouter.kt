@@ -12,78 +12,85 @@ class GraphRouter(
 
     init {
         val allVertexes = mutableMapOf<String, Vertex>()
-        val linkAndJumpIds = mutableSetOf<String>()
-        validateGraph(root, allVertexes, linkAndJumpIds)
+        val links = mutableSetOf<VertexLink>()
+        val jumps = mutableListOf<List<String>>()
+        validateGraph(root, allVertexes, links, jumps)
 
+        val linkAndJumpIds = links.map { it.id } + jumps.flatten()
         linkAndJumpIds.forEach { id ->
             require(allVertexes.containsKey(id)) { "Not found vertex for id=$id" }
         }
+
         vertexes = allVertexes
         currentPath = mutableListOf(root.id)
+
+        jumps.forEach {
+            require(validateJump(it)) { "Invalid jump path=$it" }
+        }
     }
 
     private fun validateGraph(
         vertex: Vertex,
         allVertexes: MutableMap<String, Vertex>,
-        linkAndJumpIds: MutableSet<String>
+        links: MutableSet<VertexLink>,
+        jumps: MutableList<List<String>>
     ) {
         if (allVertexes.containsKey(vertex.id)) error("Graph contains duplicate id ${vertex.id}")
         allVertexes[vertex.id] = vertex
 
-        linkAndJumpIds.addAll(vertex.edges.filterIsInstance<VertexLink>().map { it.id })
-        linkAndJumpIds.addAll(vertex.jumps.map { it.id })
+        links.addAll(vertex.edges.filterIsInstance<VertexLink>())
+        jumps.addAll(vertex.jumps.map { listOf(it.backTo ?: vertex.id, *it.chain.toTypedArray()) })
         vertex.edges.forEach {
-            if (it !is VertexLink) validateGraph(it, allVertexes, linkAndJumpIds)
+            if (it !is VertexLink) validateGraph(it, allVertexes, links, jumps)
         }
+    }
+
+    private fun validateJump(path: List<String>): Boolean {
+        if (path.isEmpty()) return false
+        if (path.size == 1) return true
+
+        val v = vertexes.getValue(path[0])
+        v.edges.firstOrNull { it.id == path[1] } ?: return false
+        return validateJump(path.subList(1, path.size))
     }
 
     fun navigateTo(
         vertexId: String,
         screenFactory: (vertexId: String) -> Screen? = { null }
     ) {
-        //check navigation availability
-        if (
-            currentVertex.edges.none { it.id == vertexId }
-            && currentVertex.jumps.none { it.id == vertexId }
-        ) {
-            error("Destination not available from vertex ${currentVertex.id}")
-        }
+        val destination = currentVertex.edges.first { it.id == vertexId }
+        val screen = createScreen(destination.id, screenFactory)
+        val command =
+            if (currentVertex.id == root.id) Replace(screen)
+            else Forward(screen, destination.destroyPreviousView)
+        currentPath.add(destination.id)
+        executeCommands(command)
+    }
 
-        //may be just new screen?
-        val edge = currentVertex.edges.firstOrNull { it.id == vertexId }
-        if (edge != null) {
-            val screen = createScreen(edge.id, screenFactory)
-            val command =
-                if (currentVertex.id == root.id) Replace(screen)
-                else Forward(screen, edge.destroyPreviousView)
-            currentPath.add(edge.id)
-            executeCommands(command)
-            return
-        }
+    fun jumpTo(
+        jumpId: String,
+        screenFactory: (vertexId: String) -> Screen? = { null }
+    ) {
+        val jump = currentVertex.jumps.first { it.id == jumpId }
 
-        //calculate jump
-        val newPath = findJumpPath(vertexId)
-
-        //is it finish jump?
-        if (newPath.backToVertexId == root.id && newPath.chain.isEmpty()) {
+        if (jump.backTo == root.id && jump.chain.isEmpty()) {
             finish()
             return
         }
 
-        //build commands for jump
         val commands = mutableListOf<Command>().apply {
-            if (newPath.backToVertexId != null) {
-                val id = newPath.backToVertexId
-                val index = currentPath.indexOfLast { it == id }
+            if (jump.backTo != null) {
+                val id = jump.backTo
+                val index = currentPath.indexOfFirst { it == id }
                 if (index == -1) error("Current path doesn't contain vertex $id")
-                val forRemove = currentPath.subList(index + 1, currentPath.size - 1)
-                currentPath.removeAll(forRemove)
-                add(BackTo(Key(id)))
+                currentPath.subList(index + 1, currentPath.size).clear()
+                if (jump.backTo == root.id) add(BackTo(null))
+                else add(BackTo(Key(id)))
             }
-            newPath.chain.forEachIndexed { index, vertexId ->
+            jump.chain.forEachIndexed { index, vertexId ->
                 val screen = createScreen(vertexId, screenFactory)
                 currentPath.add(vertexId)
-                if (index == 0 && newPath.backToVertexId == root.id) {
+                if (index == 0 && jump.backTo == root.id) {
                     add(Replace(screen))
                 } else {
                     add(Forward(screen, vertexes.getValue(vertexId).destroyPreviousView))
@@ -92,6 +99,17 @@ class GraphRouter(
         }
 
         executeCommands(*commands.toTypedArray())
+    }
+
+    fun exit() {
+        currentPath.removeLast()
+        executeCommands(Back())
+    }
+
+    private fun finish() {
+        currentPath.clear()
+        currentPath.add(root.id)
+        executeCommands(BackTo(null), Back())
     }
 
     private fun createScreen(
@@ -105,29 +123,7 @@ class GraphRouter(
         return screen
     }
 
-    fun exit() {
-        currentPath.removeLast()
-        executeCommands(Back())
-    }
-
-    fun finish() {
-        currentPath.clear()
-        currentPath.add(root.id)
-        executeCommands(BackTo(Key(root.id)), Back())
-    }
-
-    private fun findJumpPath(vertexId: String): Path {
-
-
-        TODO()
-    }
-
     private class Key(
         override val screenKey: String
     ) : Screen
-
-    private class Path(
-        val backToVertexId: String?,
-        val chain: List<String>
-    )
 }
