@@ -4,7 +4,7 @@ import com.github.terrakok.cicerone.*
 
 
 class GraphRouter(
-    private val root: Vertex
+    private val root: Root
 ) : BaseRouter() {
     private val vertexes: Map<String, Vertex>
     private val currentPath: MutableList<String>
@@ -14,7 +14,7 @@ class GraphRouter(
         val allVertexes = mutableMapOf<String, Vertex>()
         val links = mutableSetOf<VertexLink>()
         val jumps = mutableListOf<List<String>>()
-        validateGraph(root, allVertexes, links, jumps)
+        validateGraph(root.vertex, allVertexes, links, jumps)
 
         val linkAndJumpIds = links.map { it.id } + jumps.flatten()
         linkAndJumpIds.forEach { id ->
@@ -22,10 +22,15 @@ class GraphRouter(
         }
 
         vertexes = allVertexes
-        currentPath = mutableListOf(root.id)
+        currentPath = mutableListOf(root.vertex.id)
 
         jumps.forEach {
             require(validateJump(it)) { "Invalid jump path=$it" }
+        }
+
+        if (root.defaultDestination != null) {
+            require(root.vertex.edges.any { it.id == root.defaultDestination })  { "Not found default destination" }
+            navigateTo(root.defaultDestination)
         }
     }
 
@@ -61,7 +66,7 @@ class GraphRouter(
         val destination = currentVertex.edges.first { it.id == vertexId }
         val screen = createScreen(destination.id, screenFactory)
         val command =
-            if (currentVertex.id == root.id) Replace(screen)
+            if (currentVertex.id == Root.ID) Replace(screen)
             else Forward(screen, destination.destroyPreviousView)
         currentPath.add(destination.id)
         executeCommands(command)
@@ -73,7 +78,7 @@ class GraphRouter(
     ) {
         val jump = currentVertex.jumps.first { it.id == jumpId }
 
-        if (jump.backTo == root.id && jump.chain.isEmpty()) {
+        if (jump.backTo == Root.ID && jump.chain.isEmpty()) {
             finish()
             return
         }
@@ -84,13 +89,13 @@ class GraphRouter(
                 val index = currentPath.indexOfFirst { it == id }
                 if (index == -1) error("Current path doesn't contain vertex $id")
                 currentPath.subList(index + 1, currentPath.size).clear()
-                if (jump.backTo == root.id) add(BackTo(null))
+                if (jump.backTo == Root.ID) add(BackTo(null))
                 else add(BackTo(Key(id)))
             }
             jump.chain.forEachIndexed { index, vertexId ->
                 val screen = createScreen(vertexId, screenFactory)
                 currentPath.add(vertexId)
-                if (index == 0 && jump.backTo == root.id) {
+                if (index == 0 && jump.backTo == Root.ID) {
                     add(Replace(screen))
                 } else {
                     add(Forward(screen, vertexes.getValue(vertexId).destroyPreviousView))
@@ -108,7 +113,7 @@ class GraphRouter(
 
     private fun finish() {
         currentPath.clear()
-        currentPath.add(root.id)
+        currentPath.add(Root.ID)
         executeCommands(BackTo(null), Back())
     }
 

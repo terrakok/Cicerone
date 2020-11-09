@@ -58,17 +58,26 @@ class GraphInfo(
     var jumps: MutableSet<Jump>.() -> Unit = {}
 )
 
-const val ROOT_ID = "graph-root"
+class Root(
+    val vertex: Vertex,
+    val defaultDestination: String?
+) {
+    companion object {
+        const val ID = "graph-root"
+    }
+}
 
 fun graph(
+    defaultDestination: String? = null,
     setup: GraphInfo.() -> Unit
-): Vertex {
+): Root {
     val info = GraphInfo().apply(setup)
-    return Vertex(
-        ROOT_ID,
+    val v = Vertex(
+        Root.ID,
         mutableSetOf<Vertex>().apply(info.edges),
         mutableSetOf<Jump>().apply(info.jumps)
     )
+    return Root(v, defaultDestination)
 }
 
 class VertexInfo(
@@ -121,5 +130,5 @@ fun MutableSet<Jump>.jump(
 }
 
 fun MutableSet<Jump>.finish(id: String) {
-    add(Jump(id, ROOT_ID, emptyList()))
+    add(Jump(id, Root.ID, emptyList()))
 }

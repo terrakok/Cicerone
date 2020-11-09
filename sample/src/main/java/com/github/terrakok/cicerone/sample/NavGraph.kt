@@ -8,7 +8,7 @@ import com.github.terrakok.cicerone.sample.ui.graph.RoadFragment
 private val RoadScreen = { id: String -> FragmentScreen(id) { RoadFragment.getNewInstance(id) } }
 private val ForkScreen = { id: String -> FragmentScreen(id) { ForkFragment.getNewInstance(id) } }
 
-fun Graph() = graph {
+fun Graph() = graph("8") {
     edges = {
         dest("1") {
             screen = RoadScreen
@@ -55,7 +55,7 @@ fun Graph() = graph {
                     }
                     jumps = {
                         jump("1") {
-                            backTo = ROOT_ID
+                            backTo = Root.ID
                             chain("1", "2", "3", "4", "5", "7")
                         }
                     }

@@ -39,9 +39,6 @@ class GraphActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_container)
-        if (savedInstanceState == null) {
-            graphRouter.navigateTo("8")
-        }
     }
 
     override fun onResumeFragments() {
