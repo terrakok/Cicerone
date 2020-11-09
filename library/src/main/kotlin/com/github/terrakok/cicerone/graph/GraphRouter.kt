@@ -7,19 +7,34 @@ class GraphRouter(
     private val root: Vertex
 ) : BaseRouter() {
     private val vertexes: Map<String, Vertex>
-    private val currentPath = mutableListOf(root.id)
+    private val currentPath: MutableList<String>
     val currentVertex get() = vertexes.getValue(currentPath.last())
 
     init {
-        val map = mutableMapOf<String, Vertex>()
-        validateGraph(root, map)
-        vertexes = map
+        val allVertexes = mutableMapOf<String, Vertex>()
+        val linkAndJumpIds = mutableSetOf<String>()
+        validateGraph(root, allVertexes, linkAndJumpIds)
+
+        linkAndJumpIds.forEach { id ->
+            require(allVertexes.containsKey(id)) { "Not found vertex for id=$id" }
+        }
+        vertexes = allVertexes
+        currentPath = mutableListOf(root.id)
     }
 
-    private fun validateGraph(vertex: Vertex, map: MutableMap<String, Vertex>) {
-        if (map.containsKey(vertex.id)) error("Graph contains duplicate id ${vertex.id}")
-        map[vertex.id] = vertex
-        vertex.edges.forEach { validateGraph(it, map) }
+    private fun validateGraph(
+        vertex: Vertex,
+        allVertexes: MutableMap<String, Vertex>,
+        linkAndJumpIds: MutableSet<String>
+    ) {
+        if (allVertexes.containsKey(vertex.id)) error("Graph contains duplicate id ${vertex.id}")
+        allVertexes[vertex.id] = vertex
+
+        linkAndJumpIds.addAll(vertex.edges.filterIsInstance<VertexLink>().map { it.id })
+        linkAndJumpIds.addAll(vertex.jumps.map { it.id })
+        vertex.edges.forEach {
+            if (it !is VertexLink) validateGraph(it, allVertexes, linkAndJumpIds)
+        }
     }
 
     fun navigateTo(
@@ -29,7 +44,7 @@ class GraphRouter(
         //check navigation availability
         if (
             currentVertex.edges.none { it.id == vertexId }
-            && !currentVertex.jumps.contains(vertexId)
+            && currentVertex.jumps.none { it.id == vertexId }
         ) {
             error("Destination not available from vertex ${currentVertex.id}")
         }

@@ -40,7 +40,7 @@ class GraphActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_container)
         if (savedInstanceState == null) {
-            graphRouter.navigateTo("1")
+            graphRouter.navigateTo("8")
         }
     }
 

@@ -2,10 +2,10 @@ package com.github.terrakok.cicerone.graph
 
 import com.github.terrakok.cicerone.*
 
-class Vertex internal constructor(
+open class Vertex internal constructor(
     val id: String,
     val edges: Set<Vertex>,
-    val jumps: Set<String>,
+    val jumps: Set<Jump>,
     val destroyPreviousView: Boolean = true,
     val screenFactory: (id: String) -> Screen? = { null }
 ) {
@@ -25,11 +25,21 @@ class Vertex internal constructor(
     }
 }
 
+internal class VertexLink(
+    id: String,
+    destroyPreviousView: Boolean = true
+): Vertex(id, emptySet(), emptySet(), destroyPreviousView)
+
+data class Jump(
+    val id: String,
+    val reusePreviousVertexes: Boolean
+)
+
 //Graph DSL
 
 class GraphInfo(
     var edges: MutableSet<Vertex>.() -> Unit = {},
-    var jumps: MutableSet<String>.() -> Unit = {}
+    var jumps: MutableSet<Jump>.() -> Unit = {}
 )
 
 fun graph(
@@ -39,13 +49,13 @@ fun graph(
     return Vertex(
         "root",
         mutableSetOf<Vertex>().apply(info.edges),
-        mutableSetOf<String>().apply(info.jumps)
+        mutableSetOf<Jump>().apply(info.jumps)
     )
 }
 
 class VertexInfo(
     var edges: MutableSet<Vertex>.() -> Unit = {},
-    var jumps: MutableSet<String>.() -> Unit = {},
+    var jumps: MutableSet<Jump>.() -> Unit = {},
     var screen: (id: String) -> Screen? = { null }
 )
 
@@ -58,8 +68,22 @@ fun MutableSet<Vertex>.dest(
     add(Vertex(
         id,
         mutableSetOf<Vertex>().apply(info.edges),
-        mutableSetOf<String>().apply(info.jumps),
+        mutableSetOf<Jump>().apply(info.jumps),
         destroyPreviousView,
         info.screen
     ))
+}
+
+fun MutableSet<Vertex>.edge(
+    id: String,
+    destroyPreviousView: Boolean = true
+) {
+    add(VertexLink(id, destroyPreviousView))
+}
+
+fun MutableSet<Jump>.jump(
+    id: String,
+    reusePreviousVertexes: Boolean = true
+) {
+    add(Jump(id, reusePreviousVertexes))
 }
