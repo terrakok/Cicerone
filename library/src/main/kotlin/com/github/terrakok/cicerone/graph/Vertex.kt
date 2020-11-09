@@ -101,8 +101,12 @@ fun MutableSet<Vertex>.edge(
 
 class JumpInfo(
     var backTo: String? = null,
-    var chain: List<String> = emptyList()
-)
+    internal var chain: List<String> = emptyList()
+) {
+    fun chain(vararg id: String) {
+        chain = id.toList()
+    }
+}
 
 fun MutableSet<Jump>.jump(
     id: String,
