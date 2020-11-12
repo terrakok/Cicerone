@@ -9,7 +9,7 @@ import com.github.terrakok.cicerone.Screen
 
 sealed class AppScreen : Screen
 
-fun interface Creator<A, R> {
+interface Creator<A, R> {
     fun create(argument: A): R
 }
 
