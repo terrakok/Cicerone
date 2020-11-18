@@ -174,6 +174,7 @@ object Screens {
     fun Main() = FragmentScreen { MainFragment() }
     fun AddressSearch() = FragmentScreen { AddressSearchFragment() }
     fun Profile(userId: Long) = FragmentScreen("Profile_$userId") { ProfileFragment(userId) }
+    fun Browser(url: String) = ActivityScreen { Intent(Intent.ACTION_VIEW, Uri.parse(url))  }
 }
 ```
 
