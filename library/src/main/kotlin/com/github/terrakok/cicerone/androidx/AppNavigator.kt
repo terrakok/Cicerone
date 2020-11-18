@@ -1,5 +1,6 @@
 package com.github.terrakok.cicerone.androidx
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import androidx.fragment.app.*
 import com.github.terrakok.cicerone.*
@@ -171,9 +172,9 @@ open class AppNavigator @JvmOverloads constructor(
     private fun checkAndStartActivity(screen: ActivityScreen) {
         // Check if we can start activity
         val activityIntent = screen.createIntent(activity)
-        if (activityIntent.resolveActivity(activity.packageManager) != null) {
+        try {
             activity.startActivity(activityIntent, screen.startActivityOptions)
-        } else {
+        } catch (e: ActivityNotFoundException) {
             unexistingActivity(screen, activityIntent)
         }
     }
