@@ -222,6 +222,7 @@ For more complex use case check out the [GitFox (Android GitLab client)](https:/
 <a href="https://github.com/eduard1abdulmanov123/News"><img src="https://raw.githubusercontent.com/eduard1abdulmanov123/News/dev/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="64" /> RSS Reader для Вести.Ru</a><br>
 <a href="https://play.google.com/store/apps/details?id=com.epam.connect.android"><img src="https://play-lh.googleusercontent.com/aN7R6BiR7yt7b3oEoBI30pVwzsdzaWe3TWpw8c9igqoOj79Pm2xVh4_C4qwjSKwjVio=s360" width="64" /> EPAM Connect</a><br>
 <a href="https://play.google.com/store/apps/details?id=org.consumerreports.ratings"><img src="https://play-lh.googleusercontent.com/dEdOwZOjXAdamytxY1TgY8LS-Hc9FKCcit5HP1RyaKqRAWjDJEyFSQS1XlqQPpeY5UI=s360" width="64" /> Consumer Reports: Product Reviews & Ratings</a><br>
+<a href="https://play.google.com/store/apps/details?id=ru.zakaz.android"><img src="https://play-lh.googleusercontent.com/jj18yK2dB2MHZ_QdO21aXyznGXteIF2q4mgxY4ubLhFv9gwZqHVDeu1i2FmanS-0Furm=s360" width="64" /> Zakaz.ru</a><br>
 
 ## Participants
 + idea and code - Konstantin Tskhovrebov (@terrakok)
