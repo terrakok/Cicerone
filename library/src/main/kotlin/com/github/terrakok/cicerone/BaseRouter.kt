@@ -10,12 +10,16 @@ abstract class BaseRouter {
     private val resultWire = ResultWire()
 
     /**
-     * Sets data listener with given key.
+     * Sets data listener with given key
+     * and returns [ResultListenerHandler] for availability to dispose subscription.
      *
      * After first call listener will be removed.
      */
-    fun setResultListener(key: String, listener: ResultListener) {
-        resultWire.setResultListener(key, listener)
+    fun setResultListener(
+        key: String,
+        listener: ResultListener
+    ): ResultListenerHandler {
+        return resultWire.setResultListener(key, listener)
     }
 
     /**
@@ -32,6 +36,5 @@ abstract class BaseRouter {
      */
     protected fun executeCommands(vararg commands: Command) {
         commandBuffer.executeCommands(commands)
-        resultWire.flush()
     }
 }

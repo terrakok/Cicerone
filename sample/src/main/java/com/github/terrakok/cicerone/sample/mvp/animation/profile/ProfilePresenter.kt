@@ -1,5 +1,6 @@
 package com.github.terrakok.cicerone.sample.mvp.animation.profile
 
+import com.github.terrakok.cicerone.ResultListenerHandler
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.Screens.SelectPhoto
@@ -13,6 +14,7 @@ import moxy.MvpPresenter
 class ProfilePresenter(
         private val router: Router
 ) : MvpPresenter<ProfileView>() {
+    private var resultListenerHandler: ResultListenerHandler? = null
 
     companion object {
         private const val RESULT_KEY = "photo_result"
@@ -25,10 +27,15 @@ class ProfilePresenter(
     }
 
     fun onPhotoClicked() {
-        router.setResultListener(RESULT_KEY) { data ->
+        resultListenerHandler = router.setResultListener(RESULT_KEY) { data ->
             viewState!!.showPhoto(data as Int)
         }
         router.navigateTo(SelectPhoto(RESULT_KEY))
+    }
+
+    override fun onDestroy() {
+        resultListenerHandler?.dispose()
+        super.onDestroy()
     }
 
     fun onBackPressed() {

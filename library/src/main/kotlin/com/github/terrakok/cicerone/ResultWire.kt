@@ -1,7 +1,5 @@
 package com.github.terrakok.cicerone
 
-import java.lang.ref.WeakReference
-
 /**
  * Interface definition for a result callback.
  */
@@ -9,22 +7,24 @@ fun interface ResultListener {
     fun onResult(data: Any)
 }
 
+/**
+ * Handler for manual delete subscription and avoid leak
+ */
+fun interface ResultListenerHandler {
+    fun dispose()
+}
+
 internal class ResultWire {
-    private val listeners = mutableMapOf<String, WeakReference<ResultListener>>()
+    private val listeners = mutableMapOf<String, ResultListener>()
 
-    fun setResultListener(key: String, listener: ResultListener) {
-        listeners[key] = WeakReference(listener)
-    }
-
-    fun sendResult(key: String, data: Any) {
-        listeners.remove(key)?.get()?.let { listener ->
-            listener.onResult(data)
+    fun setResultListener(key: String, listener: ResultListener): ResultListenerHandler {
+        listeners[key] = listener
+        return ResultListenerHandler {
+            listeners.remove(key)
         }
     }
 
-    fun flush() {
-        listeners.entries
-            .filter { it.value.get() == null }
-            .forEach { listeners.remove(it.key) }
+    fun sendResult(key: String, data: Any) {
+        listeners.remove(key)?.onResult(data)
     }
 }
