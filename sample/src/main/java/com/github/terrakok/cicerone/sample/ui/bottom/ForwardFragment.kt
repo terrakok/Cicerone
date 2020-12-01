@@ -4,65 +4,46 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.terrakok.cicerone.sample.Screens
 import com.github.terrakok.cicerone.sample.databinding.FragmentForwardBinding
-import com.github.terrakok.cicerone.sample.mvp.bottom.forward.ForwardPresenter
-import com.github.terrakok.cicerone.sample.mvp.bottom.forward.ForwardView
-import com.github.terrakok.cicerone.sample.ui.common.BackButtonListener
-import com.github.terrakok.cicerone.sample.ui.common.RouterProvider
-import moxy.MvpAppCompatFragment
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
+import com.github.terrakok.fondazione.AppFragment
+import com.github.terrakok.fondazione.router
 
 /**
  * Created by terrakok 26.11.16
  */
-class ForwardFragment : MvpAppCompatFragment(), ForwardView, BackButtonListener {
+class ForwardFragment : AppFragment() {
     private lateinit var binding: FragmentForwardBinding
-
-    @InjectPresenter
-    lateinit var presenter: ForwardPresenter
-
-    @ProvidePresenter
-    fun provideForwardPresenter(): ForwardPresenter {
-        return ForwardPresenter(
-                arguments!!.getString(EXTRA_NAME),
-                (parentFragment as RouterProvider).router,
-                arguments!!.getInt(EXTRA_NUMBER)
-        )
-    }
+    private val containerName by lazy { arguments?.getString(EXTRA_NAME)!! }
+    private val number by lazy { arguments?.getInt(EXTRA_NUMBER)!! }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentForwardBinding.inflate(inflater)
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        binding.toolbar.title = arguments!!.getString(EXTRA_NAME)
-        binding.toolbar.setNavigationOnClickListener { presenter.onBackPressed() }
-        binding.forwardButton.setOnClickListener { presenter.onForwardPressed() }
-        binding.githubButton.setOnClickListener { presenter.onGithubPressed() }
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.toolbar.title = containerName
+        binding.toolbar.setNavigationOnClickListener { router.exit() }
+        binding.forwardButton.setOnClickListener { router.navigateTo(Screens.Forward(containerName, number + 1)) }
+        binding.githubButton.setOnClickListener { router.navigateTo(Screens.Github()) }
 
-    override fun setChainText(chainText: String) {
-        binding.chainText.text = chainText
-    }
-
-    override fun onBackPressed(): Boolean {
-        presenter.onBackPressed()
-        return true
+        var chain = "[0]"
+        for (i in 0 until number) {
+            chain += "➔" + (i + 1)
+        }
+        binding.chainText.text = chain
     }
 
     companion object {
         private const val EXTRA_NAME = "extra_name"
         private const val EXTRA_NUMBER = "extra_number"
 
-        fun getNewInstance(name: String?, number: Int): ForwardFragment {
-            return ForwardFragment().apply {
-                arguments = Bundle().apply {
-                    putString(EXTRA_NAME, name)
-                    putInt(EXTRA_NUMBER, number)
-                }
+        fun getNewInstance(name: String, number: Int) = ForwardFragment().apply {
+            arguments = Bundle().apply {
+                putString(EXTRA_NAME, name)
+                putInt(EXTRA_NUMBER, number)
             }
         }
     }

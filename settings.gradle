@@ -1,2 +1,2 @@
-include ':library', ':stub-android', ':sample'
+include ':library', ':stub-android', ':sample', ':fondazione'
 project(':stub-android').projectDir = new File('library/stub-android')
