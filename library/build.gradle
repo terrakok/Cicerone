@@ -56,6 +56,14 @@ publishing {
             artifact sourcesJar
             artifact javadocJar
             from components.java
+            pom {
+                licenses {
+                    license {
+                        name = "MIT"
+                        url = "https://opensource.org/licenses/MIT"
+                    }
+                }
+            }
         }
     }
 }
