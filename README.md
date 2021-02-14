@@ -1,5 +1,5 @@
 # Cicerone
-[![jCenter](https://api.bintray.com/packages/terrakok/terramaven/cicerone-kotlin/images/download.svg)](https://bintray.com/terrakok/terramaven/cicerone-kotlin/_latestVersion)
+![Maven Central](https://img.shields.io/maven-central/v/com.github.terrakok/cicerone)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Cicerone-green.svg?style=true)](https://android-arsenal.com/details/1/4700)
