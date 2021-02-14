@@ -1,5 +1,5 @@
 # Cicerone
-![Maven Central](https://img.shields.io/maven-central/v/com.github.terrakok/cicerone)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.terrakok/cicerone)](https://repo1.maven.org/maven2/com/github/terrakok/cicerone/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Cicerone-green.svg?style=true)](https://android-arsenal.com/details/1/4700)
