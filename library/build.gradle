@@ -1,5 +1,4 @@
 apply plugin: 'kotlin'
-apply plugin: 'maven-publish'
 
 // This is important even if Android Studio claims it isn't
 // used. Android can't interpret Java 8 byte code.
@@ -13,57 +12,12 @@ dependencies {
 }
 
 ext {
-    // This params is for the library uploading to the Bintray
-    bintrayRepo = 'terramaven'
-    bintrayName = 'cicerone-kotlin'
     publishedGroupId = 'com.github.terrakok'
     artifact = 'cicerone'
     libraryVersion = '6.6'
-    gitUrl = 'https://github.com/terrakok/Cicerone'
-    allLicenses = ['MIT']
 }
 
-// Configuration of the library uploading to the Bintray
-// Note: Call 'bintrayUpload' task (it will execute 'install' task first)
-// I try to include as little properties as possible in these files
-project.archivesBaseName = 'cicerone' // to fix that project name different from artifact name
-apply from: 'androidmaven.gradle'
-apply from: 'bintray.gradle'
+project.archivesBaseName = artifact // to fix that project name different from artifact name
 
-// Tasks for sources and javadocs jars
-task sourcesJar(type: Jar) {
-    from sourceSets.main.kotlin.srcDirs
-    classifier = 'sources'
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = publishedGroupId
-            artifactId = artifact
-            version = libraryVersion
-
-            artifact sourcesJar
-            artifact javadocJar
-            from components.java
-            pom {
-                licenses {
-                    license {
-                        name = "MIT"
-                        url = "https://opensource.org/licenses/MIT"
-                    }
-                }
-            }
-        }
-    }
-}
+apply from: 'publish-mavencentral.gradle'
+//for publication use './gradlew publishReleasePublicationToSonatypeRepository'

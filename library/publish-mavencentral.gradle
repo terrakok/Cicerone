@@ -1,0 +1,92 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+properties.each { name, value -> ext[name] = value }
+
+group = publishedGroupId
+version = libraryVersion
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.kotlin.srcDirs
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = publishedGroupId
+            artifactId = artifact
+            version = libraryVersion
+
+            artifact("$buildDir/libs/${artifact}-${version}.jar")
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = artifact
+                description = 'Cicerone is a lightweight library that makes the navigation in an Android app easy.'
+                url = 'https://github.com/terrakok/Cicerone'
+
+                licenses {
+                    license {
+                        name = "MIT"
+                        url = "https://opensource.org/licenses/MIT"
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'terrakok'
+                        name = 'Konstantin Tskhovrebov'
+                        email = 'terrakok@gmail.com'
+                    }
+                }
+
+                scm {
+                    developerConnection = 'scm:git:ssh://github.com/terrakok/Cicerone.git'
+                    url = 'https://github.com/terrakok/Cicerone'
+                }
+
+                // A slightly hacky fix so that your POM will include any transitive dependencies
+                // that your library builds upon
+                withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+
+                    project.configurations.implementation.allDependencies.each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications
+}
