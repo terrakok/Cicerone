@@ -15,7 +15,7 @@ open class Router : BaseRouter() {
      * @param clearContainer if FALSE then new screen shows over previous
      */
     @JvmOverloads
-    fun navigateTo(screen: Screen, clearContainer: Boolean = true) {
+    open fun navigateTo(screen: Screen, clearContainer: Boolean = true) {
         executeCommands(Forward(screen, clearContainer))
     }
 
@@ -24,7 +24,7 @@ open class Router : BaseRouter() {
      *
      * @param screen screen
      */
-    fun newRootScreen(screen: Screen) {
+    open fun newRootScreen(screen: Screen) {
         executeCommands(BackTo(null), Replace(screen))
     }
 
@@ -37,7 +37,7 @@ open class Router : BaseRouter() {
      *
      * @param screen screen
      */
-    fun replaceScreen(screen: Screen) {
+    open fun replaceScreen(screen: Screen) {
         executeCommands(Replace(screen))
     }
 
@@ -49,7 +49,7 @@ open class Router : BaseRouter() {
      *
      * @param screen screen
      */
-    fun backTo(screen: Screen?) {
+    open fun backTo(screen: Screen?) {
         executeCommands(BackTo(screen))
     }
 
@@ -60,7 +60,7 @@ open class Router : BaseRouter() {
      * @param showOnlyTopScreenView if FALSE then all screen views show together
      */
     @JvmOverloads
-    fun newChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
+    open fun newChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
         val commands = screens.map { Forward(it, showOnlyTopScreenView) }
         executeCommands(*commands.toTypedArray())
     }
@@ -72,7 +72,7 @@ open class Router : BaseRouter() {
      * @param showOnlyTopScreenView if FALSE then all screen views show together
      */
     @JvmOverloads
-    fun newRootChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
+    open fun newRootChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
         val commands = screens.mapIndexed { index, screen ->
             if (index == 0)
                 Replace(screen)
@@ -87,7 +87,7 @@ open class Router : BaseRouter() {
      *
      * It's mostly used to finish the application or close a supplementary navigation chain.
      */
-    fun finishChain() {
+    open fun finishChain() {
         executeCommands(BackTo(null), Back())
     }
 
@@ -97,7 +97,7 @@ open class Router : BaseRouter() {
      * Behavior in the case when the current screen is the root depends on
      * the processing of the [Back] command in a [Navigator] implementation.
      */
-    fun exit() {
+    open fun exit() {
         executeCommands(Back())
     }
 }
