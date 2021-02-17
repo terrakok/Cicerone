@@ -8,7 +8,9 @@ import com.github.terrakok.cicerone.Command
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Replace
+import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.SampleApplication
 import com.github.terrakok.cicerone.sample.Screens.Sample
@@ -31,6 +33,9 @@ class MainActivity : MvpAppCompatActivity(), ChainHolder {
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
 
+    @Inject
+    lateinit var router: Router
+
     private val navigator: Navigator = object : AppNavigator(this, R.id.main_container) {
 
         override fun applyCommands(commands: Array<out Command>) {
@@ -48,7 +53,9 @@ class MainActivity : MvpAppCompatActivity(), ChainHolder {
         screensSchemeTV = findViewById<View>(R.id.screens_scheme) as TextView
 
         if (savedInstanceState == null) {
-            navigator.applyCommands(arrayOf<Command>(Replace(Sample(1))))
+            // Just for sample of deserialization
+            val sampleScreen = intent.getSerializableExtra("sampleScreen") as FragmentScreen
+            router.replaceScreen(sampleScreen)
         } else {
             printScreensScheme()
         }

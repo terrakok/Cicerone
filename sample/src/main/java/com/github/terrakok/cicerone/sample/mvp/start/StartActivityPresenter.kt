@@ -1,8 +1,8 @@
 package com.github.terrakok.cicerone.sample.mvp.start
 
 import com.github.terrakok.cicerone.Router
+import com.github.terrakok.cicerone.sample.Screens
 import com.github.terrakok.cicerone.sample.Screens.BottomNavigation
-import com.github.terrakok.cicerone.sample.Screens.Main
 import com.github.terrakok.cicerone.sample.Screens.Profile
 import moxy.MvpPresenter
 
@@ -12,7 +12,7 @@ import moxy.MvpPresenter
 class StartActivityPresenter(private val router: Router) : MvpPresenter<StartActivityView>() {
 
     fun onOrdinaryPressed() {
-        router.navigateTo(Main())
+        router.navigateTo(Screens.MAIN)
     }
 
     fun onMultiPressed() {

@@ -6,10 +6,11 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import com.github.terrakok.cicerone.Screen
+import java.io.Serializable
 
-sealed class AppScreen : Screen
+sealed class AppScreen : Screen, Serializable
 
-fun interface Creator<A, R> {
+fun interface Creator<A, R>: Serializable {
     fun create(argument: A): R
 }
 

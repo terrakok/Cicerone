@@ -28,8 +28,11 @@ object Screens {
         Intent(it, StartActivity::class.java)
     }
 
-    fun Main() = ActivityScreen {
-        Intent(it, MainActivity::class.java)
+    // Consider to use val and upper-case naming
+    val MAIN = ActivityScreen {
+        Intent(it, MainActivity::class.java).apply {
+            putExtra("sampleScreen", Sample(1))
+        }
     }
 
     fun BottomNavigation() = ActivityScreen {
