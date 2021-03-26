@@ -110,6 +110,7 @@ open class AppNavigator @JvmOverloads constructor(
     ) {
         val fragment = screen.createFragment(fragmentFactory)
         val transaction = fragmentManager.beginTransaction()
+        var addToBackStackLocal = addToBackStack
         transaction.setReorderingAllowed(true)
         setupFragmentTransaction(
             transaction,
@@ -120,12 +121,16 @@ open class AppNavigator @JvmOverloads constructor(
             ADD -> transaction.add(containerId, fragment, screen.screenKey)
             REPLACE -> transaction.replace(containerId, fragment, screen.screenKey)
         }
-        if (addToBackStack) {
+        if (type == TransactionInfo.Type.REPLACE && fragmentManager.backStackEntryCount == 0) {
+            addToBackStackLocal = true
+        }
+        if (addToBackStackLocal) {
             val transactionInfo = TransactionInfo(screen.screenKey, type)
             transaction.addToBackStack(transactionInfo.toString())
             localStackCopy.add(transactionInfo)
         }
         transaction.commit()
+        copyStackToLocal()
     }
 
     /**
@@ -150,6 +155,7 @@ open class AppNavigator @JvmOverloads constructor(
     private fun backToRoot() {
         localStackCopy.clear()
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        copyStackToLocal()
     }
 
     /**
