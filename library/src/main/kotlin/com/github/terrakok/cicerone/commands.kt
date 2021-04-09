@@ -10,10 +10,7 @@ interface Command
 /**
  * Opens new screen.
  */
-data class Forward(
-    val screen: Screen,
-    val clearContainer: Boolean
-) : Command
+data class Forward(val screen: Screen) : Command
 
 /**
  * Replaces the current screen.

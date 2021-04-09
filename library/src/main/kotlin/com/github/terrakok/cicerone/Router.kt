@@ -12,11 +12,9 @@ open class Router : BaseRouter() {
      * Open new screen and add it to the screens chain.
      *
      * @param screen screen
-     * @param clearContainer if FALSE then new screen shows over previous
      */
-    @JvmOverloads
-    fun navigateTo(screen: Screen, clearContainer: Boolean = true) {
-        executeCommands(Forward(screen, clearContainer))
+    fun navigateTo(screen: Screen) {
+        executeCommands(Forward(screen))
     }
 
     /**
@@ -57,11 +55,9 @@ open class Router : BaseRouter() {
      * Opens several screens inside single transaction.
      *
      * @param screens
-     * @param showOnlyTopScreenView if FALSE then all screen views show together
      */
-    @JvmOverloads
-    fun newChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
-        val commands = screens.map { Forward(it, showOnlyTopScreenView) }
+    fun newChain(vararg screens: Screen) {
+        val commands = screens.map { Forward(it) }
         executeCommands(*commands.toTypedArray())
     }
 
@@ -69,15 +65,13 @@ open class Router : BaseRouter() {
      * Clear current stack and open several screens inside single transaction.
      *
      * @param screens
-     * @param showOnlyTopScreenView if FALSE then all screen views show together
      */
-    @JvmOverloads
-    fun newRootChain(vararg screens: Screen, showOnlyTopScreenView: Boolean = true) {
+    fun newRootChain(vararg screens: Screen) {
         val commands = screens.mapIndexed { index, screen ->
             if (index == 0)
                 Replace(screen)
             else
-                Forward(screen, showOnlyTopScreenView)
+                Forward(screen)
         }
         executeCommands(BackTo(null), *commands.toTypedArray())
     }

@@ -15,6 +15,7 @@ fun interface Creator<A, R> {
 
 open class FragmentScreen @JvmOverloads constructor(
     private val key: String? = null,
+    val clearContainer: Boolean = true,
     private val fragmentCreator: Creator<FragmentFactory, Fragment>
 ) : AppScreen() {
     override val screenKey: String get() = key ?: super.screenKey

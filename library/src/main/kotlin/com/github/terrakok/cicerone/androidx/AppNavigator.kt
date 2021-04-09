@@ -6,8 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.*
 import com.github.terrakok.cicerone.*
-import com.github.terrakok.cicerone.androidx.TransactionInfo.Type.ADD
-import com.github.terrakok.cicerone.androidx.TransactionInfo.Type.REPLACE
 
 /**
  * Navigator implementation for launch fragments and activities.
@@ -23,7 +21,7 @@ open class AppNavigator @JvmOverloads constructor(
     protected val fragmentFactory: FragmentFactory = fragmentManager.fragmentFactory
 ) : Navigator {
 
-    protected val localStackCopy = mutableListOf<TransactionInfo>()
+    protected val localStackCopy = mutableListOf<String>()
     private val mainHandler = Handler(Looper.getMainLooper())
 
     override fun applyCommands(commands: Array<out Command>) {
@@ -50,8 +48,7 @@ open class AppNavigator @JvmOverloads constructor(
     private fun copyStackToLocal() {
         localStackCopy.clear()
         for (i in 0 until fragmentManager.backStackEntryCount) {
-            val str = fragmentManager.getBackStackEntryAt(i).name
-            localStackCopy.add(TransactionInfo.fromString(str))
+            localStackCopy.add(fragmentManager.getBackStackEntryAt(i).name)
         }
     }
 
@@ -75,8 +72,7 @@ open class AppNavigator @JvmOverloads constructor(
                 checkAndStartActivity(screen)
             }
             is FragmentScreen -> {
-                val type = if (command.clearContainer) REPLACE else ADD
-                commitNewFragmentScreen(screen, type, true)
+                commitNewFragmentScreen(screen, true)
             }
         }
     }
@@ -90,10 +86,10 @@ open class AppNavigator @JvmOverloads constructor(
             is FragmentScreen -> {
                 if (localStackCopy.isNotEmpty()) {
                     fragmentManager.popBackStack()
-                    val removed = localStackCopy.removeAt(localStackCopy.lastIndex)
-                    commitNewFragmentScreen(screen, removed.type, true)
+                    localStackCopy.removeAt(localStackCopy.lastIndex)
+                    commitNewFragmentScreen(screen, true)
                 } else {
-                    commitNewFragmentScreen(screen, REPLACE, false)
+                    commitNewFragmentScreen(screen, false)
                 }
             }
         }
@@ -114,7 +110,6 @@ open class AppNavigator @JvmOverloads constructor(
 
     protected open fun commitNewFragmentScreen(
         screen: FragmentScreen,
-        type: TransactionInfo.Type,
         addToBackStack: Boolean
     ) {
         val fragment = screen.createFragment(fragmentFactory)
@@ -125,14 +120,14 @@ open class AppNavigator @JvmOverloads constructor(
             fragmentManager.findFragmentById(containerId),
             fragment
         )
-        when (type) {
-            ADD -> transaction.add(containerId, fragment, screen.screenKey)
-            REPLACE -> transaction.replace(containerId, fragment, screen.screenKey)
+        if (screen.clearContainer) {
+            transaction.replace(containerId, fragment, screen.screenKey)
+        } else {
+            transaction.add(containerId, fragment, screen.screenKey)
         }
         if (addToBackStack) {
-            val transactionInfo = TransactionInfo(screen.screenKey, type)
-            transaction.addToBackStack(transactionInfo.toString())
-            localStackCopy.add(transactionInfo)
+            transaction.addToBackStack(screen.screenKey)
+            localStackCopy.add(screen.screenKey)
         }
         transaction.commit()
     }
@@ -145,7 +140,7 @@ open class AppNavigator @JvmOverloads constructor(
             backToRoot()
         } else {
             val screenKey = command.screen.screenKey
-            val index = localStackCopy.indexOfFirst { it.screenKey == screenKey }
+            val index = localStackCopy.indexOfFirst { it == screenKey }
             if (index != -1) {
                 val forRemove = localStackCopy.subList(index, localStackCopy.size)
                 fragmentManager.popBackStack(forRemove.first().toString(), 0)
