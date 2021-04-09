@@ -116,6 +116,7 @@ open class AppNavigator @JvmOverloads constructor(
         val transaction = fragmentManager.beginTransaction()
         transaction.setReorderingAllowed(true)
         setupFragmentTransaction(
+            screen,
             transaction,
             fragmentManager.findFragmentById(containerId),
             fragment
@@ -166,9 +167,10 @@ open class AppNavigator @JvmOverloads constructor(
      * @param nextFragment        next screen fragment
      */
     protected open fun setupFragmentTransaction(
+        screen: FragmentScreen,
         fragmentTransaction: FragmentTransaction,
         currentFragment: Fragment?,
-        nextFragment: Fragment?
+        nextFragment: Fragment
     ) {
         // Do nothing by default
     }
