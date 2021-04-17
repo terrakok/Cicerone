@@ -10,6 +10,7 @@ import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Replace
 import com.github.terrakok.cicerone.androidx.AppNavigator
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.SampleApplication
 import com.github.terrakok.cicerone.sample.Screens.ProfileInfo
@@ -47,14 +48,18 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private val navigator: Navigator = object : AppNavigator(this, R.id.container) {
-
-        override fun setupFragmentTransaction(fragmentTransaction: FragmentTransaction, currentFragment: Fragment?, nextFragment: Fragment?) {
+        override fun setupFragmentTransaction(
+            screen: FragmentScreen,
+            fragmentTransaction: FragmentTransaction,
+            currentFragment: Fragment?,
+            nextFragment: Fragment
+        ) {
             if (currentFragment is ProfileFragment
-                    && nextFragment is SelectPhotoFragment) {
+                && nextFragment is SelectPhotoFragment) {
                 setupSharedElementForProfileToSelectPhoto(
-                        currentFragment,
-                        nextFragment,
-                        fragmentTransaction
+                    currentFragment,
+                    nextFragment,
+                    fragmentTransaction
                 )
             }
         }
