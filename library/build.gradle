@@ -14,10 +14,10 @@ dependencies {
 ext {
     publishedGroupId = 'com.github.terrakok'
     artifact = 'cicerone'
-    libraryVersion = '6.6'
+    libraryVersion = '7.0'
 }
 
 project.archivesBaseName = artifact // to fix that project name different from artifact name
 
-apply from: 'publish-mavencentral.gradle'
+//apply from: 'publish-mavencentral.gradle'
 //for publication use './gradlew publishReleasePublicationToSonatypeRepository'

@@ -90,3 +90,5 @@ publishing {
 signing {
     sign publishing.publications
 }
+
+tasks.getByName("publishReleasePublicationToSonatypeRepository").dependsOn("assemble", "sourcesJar", "javadocJar")
