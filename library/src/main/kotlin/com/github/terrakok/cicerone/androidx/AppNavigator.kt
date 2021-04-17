@@ -67,7 +67,7 @@ open class AppNavigator @JvmOverloads constructor(
     }
 
     protected open fun forward(command: Forward) {
-        when (val screen = command.screen as AppScreen) {
+        when (val screen = command.screen) {
             is ActivityScreen -> {
                 checkAndStartActivity(screen)
             }
@@ -78,7 +78,7 @@ open class AppNavigator @JvmOverloads constructor(
     }
 
     protected open fun replace(command: Replace) {
-        when (val screen = command.screen as AppScreen) {
+        when (val screen = command.screen) {
             is ActivityScreen -> {
                 checkAndStartActivity(screen)
                 activity.finish()
@@ -147,7 +147,7 @@ open class AppNavigator @JvmOverloads constructor(
                 fragmentManager.popBackStack(forRemove.first().toString(), 0)
                 forRemove.clear()
             } else {
-                backToUnexisting(command.screen as AppScreen)
+                backToUnexisting(command.screen)
             }
         }
     }
@@ -204,7 +204,7 @@ open class AppNavigator @JvmOverloads constructor(
      *
      * @param screen screen
      */
-    protected open fun backToUnexisting(screen: AppScreen) {
+    protected open fun backToUnexisting(screen: Screen) {
         backToRoot()
     }
 

@@ -7,26 +7,40 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import com.github.terrakok.cicerone.Screen
 
-sealed class AppScreen : Screen
-
 fun interface Creator<A, R> {
     fun create(argument: A): R
 }
 
-open class FragmentScreen @JvmOverloads constructor(
-    private val key: String? = null,
-    val clearContainer: Boolean = true,
-    private val fragmentCreator: Creator<FragmentFactory, Fragment>
-) : AppScreen() {
-    override val screenKey: String get() = key ?: fragmentCreator::class.java.name
-    fun createFragment(factory: FragmentFactory) = fragmentCreator.create(factory)
+interface FragmentScreen : Screen {
+    val clearContainer: Boolean get() = true
+    fun createFragment(factory: FragmentFactory): Fragment
+
+    companion object {
+        operator fun invoke(
+            key: String? = null,
+            clearContainer: Boolean = true,
+            fragmentCreator: Creator<FragmentFactory, Fragment>
+        ) = object : FragmentScreen {
+            override val screenKey = key ?: fragmentCreator::class.java.name
+            override val clearContainer = clearContainer
+            override fun createFragment(factory: FragmentFactory) = fragmentCreator.create(factory)
+        }
+    }
 }
 
-open class ActivityScreen @JvmOverloads constructor(
-    private val key: String? = null,
-    private val intentCreator: Creator<Context, Intent>
-) : AppScreen() {
-    override val screenKey: String get() = key ?: intentCreator::class.java.name
-    open val startActivityOptions: Bundle? = null
-    fun createIntent(context: Context) = intentCreator.create(context)
+interface ActivityScreen : Screen {
+    val startActivityOptions: Bundle? get() = null
+    fun createIntent(context: Context): Intent
+
+    companion object {
+        operator fun invoke(
+            key: String? = null,
+            startActivityOptions: Bundle? = null,
+            intentCreator: Creator<Context, Intent>
+        ) = object : ActivityScreen {
+            override val screenKey = key ?: intentCreator::class.java.name
+            override val startActivityOptions = startActivityOptions
+            override fun createIntent(context: Context) = intentCreator.create(context)
+        }
+    }
 }
