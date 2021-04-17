@@ -18,7 +18,7 @@ open class FragmentScreen @JvmOverloads constructor(
     val clearContainer: Boolean = true,
     private val fragmentCreator: Creator<FragmentFactory, Fragment>
 ) : AppScreen() {
-    override val screenKey: String get() = key ?: super.screenKey
+    override val screenKey: String get() = key ?: fragmentCreator::class.java.name
     fun createFragment(factory: FragmentFactory) = fragmentCreator.create(factory)
 }
 
@@ -26,7 +26,7 @@ open class ActivityScreen @JvmOverloads constructor(
     private val key: String? = null,
     private val intentCreator: Creator<Context, Intent>
 ) : AppScreen() {
-    override val screenKey: String get() = key ?: super.screenKey
+    override val screenKey: String get() = key ?: intentCreator::class.java.name
     open val startActivityOptions: Bundle? = null
     fun createIntent(context: Context) = intentCreator.create(context)
 }
