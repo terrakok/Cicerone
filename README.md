@@ -152,12 +152,12 @@ Custom navigator can be useful sometimes:
 ```kotlin
 private val navigator = object : AppNavigator(this, R.id.container) {
     override fun setupFragmentTransaction(
+        screen: FragmentScreen,
         fragmentTransaction: FragmentTransaction,
         currentFragment: Fragment?,
-        nextFragment: Fragment?
+        nextFragment: Fragment
     ) {
-        super.setupFragmentTransaction(fragmentTransaction, currentFragment, nextFragment)
-        fragmentTransaction.setReorderingAllowed(true)
+        //setup your animation
     }
 
     override fun applyCommands(commands: Array<out Command>) {
