@@ -12,6 +12,7 @@ import com.github.terrakok.cicerone.sample.ui.bottom.ForwardFragment
 import com.github.terrakok.cicerone.sample.ui.bottom.TabContainerFragment
 import com.github.terrakok.cicerone.sample.ui.main.MainActivity
 import com.github.terrakok.cicerone.sample.ui.main.SampleFragment
+import com.github.terrakok.cicerone.sample.ui.main.SemiTransparentFragment
 import com.github.terrakok.cicerone.sample.ui.start.StartActivity
 
 /**
@@ -58,5 +59,9 @@ object Screens {
 
     fun SelectPhoto(resultKey: String) = FragmentScreen {
         SelectPhotoFragment.getNewInstance(resultKey)
+    }
+
+    fun SemiTransparent() = FragmentScreen(clearContainer = false) {
+        SemiTransparentFragment()
     }
 }
