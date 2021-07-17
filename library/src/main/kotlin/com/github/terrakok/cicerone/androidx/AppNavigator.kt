@@ -2,8 +2,6 @@ package com.github.terrakok.cicerone.androidx
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.*
 import com.github.terrakok.cicerone.*
 
@@ -22,15 +20,8 @@ open class AppNavigator @JvmOverloads constructor(
 ) : Navigator {
 
     protected val localStackCopy = mutableListOf<String>()
-    private val mainHandler = Handler(Looper.getMainLooper())
 
     override fun applyCommands(commands: Array<out Command>) {
-        mainHandler.post {
-            applyCommandsSync(commands)
-        }
-    }
-
-    protected open fun applyCommandsSync(commands: Array<out Command>) {
         fragmentManager.executePendingTransactions()
 
         //copy stack before apply commands

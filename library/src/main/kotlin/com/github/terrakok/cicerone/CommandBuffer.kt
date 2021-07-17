@@ -1,5 +1,8 @@
 package com.github.terrakok.cicerone
 
+import android.os.Handler
+import android.os.Looper
+
 /**
  * Passes navigation command to an active [Navigator]
  * or stores it in the pending commands queue to pass it later.
@@ -7,6 +10,7 @@ package com.github.terrakok.cicerone
 internal class CommandBuffer : NavigatorHolder {
     private var navigator: Navigator? = null
     private val pendingCommands = mutableListOf<Array<out Command>>()
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     override fun setNavigator(navigator: Navigator) {
         this.navigator = navigator
@@ -24,6 +28,8 @@ internal class CommandBuffer : NavigatorHolder {
      * @param commands navigation command array
      */
     fun executeCommands(commands: Array<out Command>) {
-        navigator?.applyCommands(commands) ?: pendingCommands.add(commands)
+        mainHandler.post {
+            navigator?.applyCommands(commands) ?: pendingCommands.add(commands)
+        }
     }
 }
