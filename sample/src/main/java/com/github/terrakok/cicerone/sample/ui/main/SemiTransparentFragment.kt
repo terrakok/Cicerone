@@ -1,6 +1,8 @@
 package com.github.terrakok.cicerone.sample.ui.main
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.sample.R
 import com.github.terrakok.cicerone.sample.SampleApplication
@@ -17,6 +19,11 @@ class SemiTransparentFragment : MvpAppCompatFragment(R.layout.fragment_semitrans
     override fun onCreate(savedInstanceState: Bundle?) {
         SampleApplication.INSTANCE.appComponent.inject(this)
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<Button>(R.id.back_button).setOnClickListener { onBackPressed() }
     }
 
     override fun onBackPressed(): Boolean {
