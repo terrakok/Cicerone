@@ -4,6 +4,8 @@
     <color name="primary_dark">#c0392b</color>
     <color name="accent">#e67e22</color>
 
+    <color name="semitransparent">#99000000</color>
+
 
     <color name="alizarin">#e74c3c</color>
     <color name="carrot">#e67e22</color>

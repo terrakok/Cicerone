@@ -9,6 +9,7 @@ import com.github.terrakok.cicerone.sample.ui.bottom.BottomNavigationActivity
 import com.github.terrakok.cicerone.sample.ui.bottom.TabContainerFragment
 import com.github.terrakok.cicerone.sample.ui.main.MainActivity
 import com.github.terrakok.cicerone.sample.ui.main.SampleFragment
+import com.github.terrakok.cicerone.sample.ui.main.SemiTransparentFragment
 import com.github.terrakok.cicerone.sample.ui.start.StartActivity
 import dagger.Component
 import javax.inject.Singleton
@@ -37,4 +38,6 @@ interface AppComponent {
     fun inject(fragment: SelectPhotoFragment)
 
     fun inject(activity: ProfileActivity)
+
+    fun inject(fragment: SemiTransparentFragment)
 }

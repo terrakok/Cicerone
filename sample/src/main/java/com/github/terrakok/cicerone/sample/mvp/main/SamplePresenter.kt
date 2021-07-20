@@ -3,6 +3,7 @@ package com.github.terrakok.cicerone.sample.mvp.main
 import android.os.Handler
 import android.os.Looper
 import com.github.terrakok.cicerone.Router
+import com.github.terrakok.cicerone.sample.Screens
 import com.github.terrakok.cicerone.sample.Screens.Sample
 import moxy.InjectViewState
 import moxy.MvpPresenter
@@ -54,6 +55,10 @@ class SamplePresenter(
 
     fun onFinishChainCommandClick() {
         router.finishChain()
+    }
+
+    fun onForwardNccCommandClick() {
+        router.navigateTo(Screens.SemiTransparent())
     }
 
     fun onNewRootCommandClick() {

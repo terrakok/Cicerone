@@ -59,6 +59,7 @@ class SampleFragment : BaseFragment(), SampleView, BackButtonListener {
         binding.forwardDelayCommand.setOnClickListener { presenter.onForwardWithDelayCommandClick() }
         binding.backToCommand.setOnClickListener { presenter.onBackToCommandClick() }
         binding.finishChainCommand.setOnClickListener { presenter.onFinishChainCommandClick() }
+        binding.forwardNccCommand.setOnClickListener { presenter.onForwardNccCommandClick() }
     }
 
     override fun setTitle(title: String) {
