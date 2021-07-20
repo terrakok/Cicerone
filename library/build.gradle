@@ -14,7 +14,7 @@ dependencies {
 ext {
     publishedGroupId = 'com.github.terrakok'
     artifact = 'cicerone'
-    libraryVersion = '7.0'
+    libraryVersion = '7.1'
 }
 
 project.archivesBaseName = artifact // to fix that project name different from artifact name
