@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import moxy.MvpAppCompatFragment
 import java.lang.ref.WeakReference
 
-abstract class BaseFragment : MvpAppCompatFragment() {
+abstract class BaseFragment : MvpAppCompatFragment(), ChainScreen {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 

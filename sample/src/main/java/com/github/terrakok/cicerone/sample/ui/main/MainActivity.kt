@@ -75,10 +75,10 @@ class MainActivity : MvpAppCompatActivity(), ChainHolder {
     }
 
     private fun printScreensScheme() {
-        val fragments = ArrayList<SampleFragment>()
+        val fragments = ArrayList<ChainScreen>()
         for (fragmentReference in chain) {
             val fragment = fragmentReference.get()
-            if (fragment != null && fragment is SampleFragment) {
+            if (fragment != null && fragment is ChainScreen) {
                 fragments.add(fragment)
             }
         }
@@ -86,9 +86,9 @@ class MainActivity : MvpAppCompatActivity(), ChainHolder {
             val t = f1.creationTime - f2.creationTime
             if (t > 0) 1 else if (t < 0) -1 else 0
         }
-        val keys = ArrayList<Int>()
+        val keys = ArrayList<String>()
         for (fragment in fragments) {
-            keys.add(fragment.number)
+            keys.add(fragment.name)
         }
         screensSchemeTV.text = "Chain: $keys"
     }

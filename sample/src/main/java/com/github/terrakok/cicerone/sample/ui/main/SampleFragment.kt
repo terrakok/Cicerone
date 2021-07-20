@@ -31,9 +31,9 @@ class SampleFragment : BaseFragment(), SampleView, BackButtonListener {
     @ProvidePresenter
     fun createSamplePresenter() = SamplePresenter(router, arguments!!.getInt(EXTRA_NUMBER))
 
-    val number: Int
-        get() = arguments!!.getInt(EXTRA_NUMBER)
-    val creationTime: Long
+    override val name: String
+        get() = arguments!!.getInt(EXTRA_NUMBER).toString()
+    override val creationTime: Long
         get() = arguments!!.getLong(EXTRA_TIME, 0L)
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,35 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/semitransparent"
-    tools:ignore="HardcodedText" >
+    android:clickable="true"
+    android:focusable="true"
+    tools:ignore="HardcodedText">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="40dp"
         android:background="@color/accent"
         android:orientation="vertical"
-        android:layout_margin="40dp">
+        android:padding="16dp">
+
         <TextView
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="16dp"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
             android:text="This is not a dialog.\n This is a regular screen."
-            />
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="16dp"
             android:minWidth="100dp"
             android:text="Back"
-            android:textAllCaps="false"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </LinearLayout>
 </FrameLayout>
