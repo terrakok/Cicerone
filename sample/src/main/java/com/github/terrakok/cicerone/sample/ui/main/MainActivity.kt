@@ -33,8 +33,8 @@ class MainActivity : MvpAppCompatActivity(), ChainHolder {
 
     private val navigator: Navigator = object : AppNavigator(this, R.id.main_container) {
 
-        override fun applyCommandsSync(commands: Array<out Command>) {
-            super.applyCommandsSync(commands)
+        override fun applyCommands(commands: Array<out Command>) {
+            super.applyCommands(commands)
             supportFragmentManager.executePendingTransactions()
             printScreensScheme()
         }
