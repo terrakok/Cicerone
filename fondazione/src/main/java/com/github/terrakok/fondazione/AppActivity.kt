@@ -3,12 +3,12 @@ package com.github.terrakok.fondazione
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.Screen
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import kotlin.random.Random
 
 open class AppActivity : AppCompatActivity() {
     private lateinit var ciceroneKey: String
@@ -24,7 +24,7 @@ open class AppActivity : AppCompatActivity() {
     private val navigator by lazy { createNavigator() }
     protected open fun createNavigator(): Navigator = AppNavigator(this, navigationContainerId)
 
-    protected open val navigationContainerId: Int = Random.nextInt()
+    protected open val navigationContainerId: Int = ViewCompat.generateViewId()
     protected open val rootScreen: Screen? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
