@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.ViewCompat
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.Screen
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import kotlin.random.Random
 
 open class NavigationFragment : AppFragment() {
     private lateinit var ciceroneKey: String
@@ -31,7 +31,7 @@ open class NavigationFragment : AppFragment() {
             }
         }
 
-    protected open val navigationContainerId: Int = Random.nextInt()
+    protected open val navigationContainerId: Int = ViewCompat.generateViewId()
     protected open val rootScreen: Screen? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
