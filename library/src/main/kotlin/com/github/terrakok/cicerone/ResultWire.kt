@@ -14,7 +14,7 @@ fun interface ResultListenerHandler {
     fun dispose()
 }
 
-internal class ResultWire {
+class ResultWire {
     private val listeners = mutableMapOf<String, ResultListener>()
 
     fun setResultListener(key: String, listener: ResultListener): ResultListenerHandler {
