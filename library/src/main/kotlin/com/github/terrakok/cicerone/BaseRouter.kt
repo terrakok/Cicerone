@@ -5,7 +5,7 @@ package com.github.terrakok.cicerone
  *
  * Extend it to add needed transition methods.
  */
-abstract class BaseRouter(private val resultWire: ResultWire) {
+abstract class BaseRouter(private val resultWire: ResultWire = ResultWire()) {
     internal val commandBuffer = CommandBuffer()
 
 
