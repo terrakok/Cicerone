@@ -35,21 +35,21 @@ Cicerone (means - a guide, one who conducts sightseers) is a lightweight library
 It was designed to be used with the MVP/MVVM/MVI patterns but will work great with any architecture.
 
 ## Main advantages
-+ is not tied to Fragments
-+ not a framework (very lightweight)
-+ short navigation calls (no builders)
-+ static typed checks for screen parameters!
-+ lifecycle-safe!
-+ functionality is simple to extend
-+ suitable for Unit Testing
++ Is not tied to Fragments
++ Not a framework (very lightweight)
++ Short navigation calls (no builders)
++ Static typed checks for screen parameters!
++ Lifecycle-safe!
++ Functionality is simple to extend
++ Suitable for Unit Testing
 
 ## Additional features
-+ opening several screens inside single call (for example: deeplink)
-+ provides `FragmentFactory` if it needed
++ Opening several screens inside single call (for example: deeplink)
++ Provides `FragmentFactory` if it needed
 + `add` or `replace` strategy for opening next screen (see `router.navigateTo` last parameter)
-+ implementation of parallel navigation (Instagram like)
-+ predefined navigator ready for Single-Activity apps
-+ predefined navigator ready for setup transition animation
++ Implementation of parallel navigation (Instagram like)
++ Predefined navigator ready for Single-Activity apps
++ Predefined navigator ready for setup transition animation
 
 ## How to add
 Add the dependency in your build.gradle:
