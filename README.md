@@ -31,27 +31,27 @@
     </tr>
 </table>
 
-Cicerone (means - a guide, one who conducts sightseers) is a lightweight library that makes the navigation in an Android app easy.  
+Cicerone (a guide who gives information about antiquities and places of interest to sightseers) is a lightweight library that makes the navigation in an Android app easy.  
 It was designed to be used with the MVP/MVVM/MVI patterns but will work great with any architecture.
 
 ## Main advantages
-+ is not tied to Fragments
-+ not a framework (very lightweight)
-+ short navigation calls (no builders)
-+ static typed checks for screen parameters!
-+ lifecycle-safe!
-+ functionality is simple to extend
-+ suitable for Unit Testing
++ Is not tied to Fragments
++ Not a framework (very lightweight)
++ Short navigation calls (no builders)
++ Static typed checks for screen parameters!
++ Lifecycle-safe!
++ Functionality is simple to extend
++ Suitable for Unit Testing
 
 ## Additional features
-+ opening several screens inside single call (for example: deeplink)
-+ provides `FragmentFactory` if it needed
++ Opening several screens inside single call (for example: deeplink)
++ Provides `FragmentFactory` if it needed
 + `add` or `replace` strategy for opening next screen (see `router.navigateTo` last parameter)
-+ implementation of parallel navigation (Instagram like)
-+ predefined navigator ready for Single-Activity apps
-+ predefined navigator ready for setup transition animation
++ Implementation of parallel navigation (Instagram like)
++ Predefined navigator ready for Single-Activity apps
++ Predefined navigator ready for setup transition animation
 
-## How to add
+## How to add Cicerone to your application
 Add the dependency in your build.gradle:
 ```kotlin
 dependencies {
@@ -79,10 +79,10 @@ class App : Application() {
 }
 ```
 
-## How it works?
+## How does it work?
 <img src="https://github.com/terrakok/Cicerone/blob/master/media/CiceroneDiagram.png" alt="CiceroneDiagram.png" width="800"/>
 
-Presenter calls navigation method of Router.
+The `Presenter` calls the navigation method of `Router`.
 
 ```kotlin
 class SamplePresenter(
@@ -99,11 +99,11 @@ class SamplePresenter(
 }
 ```
 
-Router converts the navigation call to the set of Commands and sends them to CommandBuffer.
+`Router` converts the navigation call to the set of commands and sends them to `CommandBuffer`.
 
-CommandBuffer checks whether there are _"active"_ Navigator:
-- If yes, it passes the commands to the Navigator. Navigator will process them to achive the desired transition.
-- If no, then CommandBuffer saves the commands in a queue, and will apply them as soon as new _"active"_ Navigator will appear.
+`CommandBuffer` checks whether there are the `_"active"_ Navigator`:
+- If yes, it passes the commands to the Navigator. `Navigator` will process them to achive the desired transition.
+- If no, then `CommandBuffer` saves the commands in a queue, and will apply them as soon as a new `_"active"_ Navigator` will appear.
 
 ```kotlin
 fun executeCommands(commands: Array<out Command>) {
@@ -111,10 +111,10 @@ fun executeCommands(commands: Array<out Command>) {
 }
 ```
 
-Navigator processes the navigation commands. Usually it is an anonymous class inside the Activity.
-Activity provides Navigator to the CommandBuffer in _onResume_ and removes it in _onPause_.
+`Navigator` processes the navigation commands. Usually it is an anonymous class inside `Activity`.
+`Activity` provides `Navigator` to the `CommandBuffer` in `_onResume_` and removes it in `_onPause_`.
 
-**Attention**: Use _onResumeFragments()_ with FragmentActivity ([more info](https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()))
+**Attention**: Use `_onResumeFragments()_` with `FragmentActivity` ([more info](https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html#onResume()))
 
 ```kotlin
 private val navigator = AppNavigator(this, R.id.container)
@@ -131,7 +131,7 @@ override fun onPause() {
 ```
 
 ## Navigation commands
-This commands set will fulfill the needs of the most applications. But if you need something special - just add it!
+These commands will fulfill the needs of the most applications. But if you need something special - just add it!
 + Forward - Opens new screen
 ![](https://github.com/terrakok/Cicerone/raw/master/media/forward_img.png)
 + Back - Rolls back the last transition
@@ -148,7 +148,7 @@ To use, just provide it with the container and _FragmentManager_.
 private val navigator = AppNavigator(this, R.id.container)
 ```
 
-Custom navigator can be useful sometimes:
+A custom navigator can be useful sometimes:
 ```kotlin
 private val navigator = object : AppNavigator(this, R.id.container) {
     override fun setupFragmentTransaction(
@@ -168,7 +168,7 @@ private val navigator = object : AppNavigator(this, R.id.container) {
 ```
 
 ## Screens
-Describe your screens as you like e.g. create Kotlin `object` with all application screens:
+Describe your screens as you like e.g. create a Kotlin `object` with all application screens:
 ```kotlin
 object Screens {
     fun Main() = FragmentScreen { MainFragment() }
@@ -208,12 +208,12 @@ fun onPhotoClick(photo: Bitmap) {
 ```
 
 ## Sample
-To see how to add, initialize and use the library and predefined navigators see **sample project**  
+To see how to add, initialize and use the library and predefined navigators see the **sample project**  
 (thank you [@Javernaut](https://github.com/Javernaut) for support new library version and migrate sample project to Kotlin!)
 
 For more complex use case check out the [GitFox (Android GitLab client)](https://gitlab.com/terrakok/gitlab-client)
 
-## Applications with Cicerone inside
+## Applications that use Cicerone
 <a href="https://play.google.com/store/apps/details?id=ru.foodfox.client"><img src="https://play-lh.googleusercontent.com/gWYedIqy8QujCQOn0kzEIBEkGLBSpuKvFm-fMcfkWnJ1Oirtv847xAE4OyhAaohdcp5V=s360" width="64" /> Яндекс.Еда — доставка еды/продуктов. Food delivery</a><br>
 <a href="https://play.google.com/store/apps/details?id=com.kms.me"><img src="https://play-lh.googleusercontent.com/IBzu0tlHd_amw2HbjBLOZiCfK-0tn0CnwkMdOd1toP23rdHUV-i7L2ViNKgIg687=s360" width="64" /> Kaspersky Internet Security</a><br>
 <a href="https://play.google.com/store/apps/details?id=com.deliveryclub"><img src="https://play-lh.googleusercontent.com/m6-gFunvj7aQD5fdv8EdJZBN5M4REIobTaPZPYS0K5Td7CNYnazN7fOKiPwwaY3hJw=s360" width="64" /> Delivery Club – Доставка еды и продуктов</a><br>
@@ -228,8 +228,8 @@ For more complex use case check out the [GitFox (Android GitLab client)](https:/
 <a href="https://play.google.com/store/apps/details?id=ru.zakaz.android"><img src="https://play-lh.googleusercontent.com/jj18yK2dB2MHZ_QdO21aXyznGXteIF2q4mgxY4ubLhFv9gwZqHVDeu1i2FmanS-0Furm=s360" width="64" /> Zakaz.ru</a><br>
 
 ## Participants
-+ idea and code - Konstantin Tskhovrebov (@terrakok)
-+ architecture advice, documentation and publication - Vasili Chyrvon (@Jeevuz)
++ Idea and code - Konstantin Tskhovrebov (@terrakok)
++ Architecture advice, documentation and publication - Vasili Chyrvon (@Jeevuz)
 
 ## License
 ```
