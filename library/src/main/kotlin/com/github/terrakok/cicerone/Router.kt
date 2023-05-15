@@ -7,7 +7,7 @@ package com.github.terrakok.cicerone
  * This implementation covers almost all cases needed for the average app.
  * Extend it if you need some tricky navigation.
  */
-open class Router : BaseRouter() {
+open class Router(resultWire: ResultWire = ResultWire()) : BaseRouter(resultWire) {
     /**
      * Open new screen and add it to the screens chain.
      *
