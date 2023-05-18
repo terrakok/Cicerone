@@ -22,6 +22,10 @@ internal class CommandBuffer : NavigatorHolder {
         navigator = null
     }
 
+    override fun clearPendingCommands() {
+        pendingCommands.clear()
+    }
+
     /**
      * Passes `commands` to the [Navigator] if it available.
      * Else puts it to the pending commands queue to pass it later.

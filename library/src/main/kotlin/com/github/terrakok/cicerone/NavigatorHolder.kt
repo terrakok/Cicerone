@@ -17,4 +17,9 @@ interface NavigatorHolder {
      * Remove the current Navigator and stop receive commands.
      */
     fun removeNavigator()
+
+    /**
+     * Clear pending commands.
+     */
+    fun clearPendingCommands()
 }
